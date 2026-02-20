@@ -370,30 +370,8 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
     <div style="margin-top:44px;max-width:460px;opacity:0;animation:fadeUp .7s 1.2s forwards;">
       <p class="mono" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--t2);margin-bottom:11px;">Request Specification Sheet / Notify on Launch</p>
       <div style="display:flex;">
-        <script>
-document.getElementById("waitlist-form").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const fullname = document.getElementById("fullname").value;
-  const email = document.getElementById("email").value;
-
-  fetch("https://script.google.com/macros/s/AKfycbx8pV154mYChTje3yDfadN-U3tMrR9pTYxWrsTPhAsTc6IR3ITb7eFWoSt7n4MAPha4VA/exec", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ fullname, email })
-  })
-  .then(response => response.json())
-  .then(data => {
-    document.getElementById("response-msg").innerText = "Successfully registered.";
-    document.getElementById("waitlist-form").reset();
-  })
-  .catch(error => {
-    document.getElementById("response-msg").innerText = "Something went wrong.";
-  });
-});
-</script>
+        <input class="fi" type="email" placeholder="engineer@domain.com" style="flex:1;">
+        <button class="fb">Register</button>
       </div>
       <p class="mono" style="font-size:10px;color:var(--t2);margin-top:9px;">No marketing. Specification updates only.</p>
     </div>
@@ -844,46 +822,8 @@ document.getElementById("waitlist-form").addEventListener("submit", function(e) 
       <hr class="rule" style="margin:44px 0;max-width:640px;">
       <p style="color:var(--t1);font-size:15px;max-width:480px;line-height:1.85;margin-bottom:44px;">We are not racing to market. Every phase is gated on validated outputs. No previews. No hype. Specification updates when each phase closes.</p>
       <div style="display:flex;max-width:460px;">
-        <form id="waitlist-form" style="display:flex; gap:10px;">
-  <input 
-    class="fi" 
-    type="email" 
-    id="email"
-    placeholder="engineer@domain.com"
-    required
-    style="flex:1;"
-  >
-  <button class="fb" type="submit">Notify Me</button>
-</form>
-
-<p id="response-msg" style="margin-top:8px; font-size:14px;"></p>
-
-<script>
-document.getElementById("waitlist-form").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const email = document.getElementById("email").value;
-
-  fetch("https://script.google.com/macros/s/AKfycbx8pV154mYChTje3yDfadN-U3tMrR9pTYxWrsTPhAsTc6IR3ITb7eFWoSt7n4MAPha4VA/exec", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ 
-      fullname: "Not Provided",
-      email: email 
-    })
-  })
-  .then(response => response.json())
-  .then(data => {
-    document.getElementById("response-msg").innerText = "Successfully registered.";
-    document.getElementById("waitlist-form").reset();
-  })
-  .catch(error => {
-    document.getElementById("response-msg").innerText = "Submission failed.";
-  });
-});
-</script>
+        <input class="fi" type="email" placeholder="engineer@domain.com" style="flex:1;">
+        <button class="fb">Notify Me</button>
       </div>
     </div>
   </div>

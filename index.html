@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SYSTEM THREADS — Engineered Outerwear</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Cormorant:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..500&display=swap" rel="stylesheet"/>
+<style>
+/* ─── RESET ───────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+
+/* ─── TOKENS ──────────────────────────────────────────── */
+:root{
+  --bg0:#09090b;--bg1:#0f1014;--bg2:#141719;
+  --b0:#1e2128;--b1:#272c36;
+  --t0:#e4e6ea;--t1:#7d8390;--t2:#40454f;
+  --ac:#7c9ab5;--acd:#3a5870;--acg:rgba(124,154,181,.08);
+  --ac2:rgba(124,154,181,.5);
+}
+
+/* ─── BASE ────────────────────────────────────────────── */
+body{font-family:'DM Sans','Segoe UI',sans-serif;font-weight:300;
+  font-size:15px;line-height:1.7;background:var(--bg0);color:var(--t0);
+  overflow-x:hidden;cursor:none;}
+a{text-decoration:none;color:inherit;}
+
+/* ─── CUSTOM CURSOR ───────────────────────────────────── */
+#cursor{position:fixed;width:8px;height:8px;background:var(--ac);border-radius:50%;
+  pointer-events:none;z-index:9999;transform:translate(-50%,-50%);
+  transition:width .2s,height .2s,opacity .2s;}
+#cursor-ring{position:fixed;width:32px;height:32px;border:1px solid var(--ac2);
+  border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);
+  transition:transform .12s ease,width .2s,height .2s,opacity .2s;}
+
+/* ─── GRAIN OVERLAY ───────────────────────────────────── */
+.grain{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:180px 180px;}
+
+/* ─── TYPE ────────────────────────────────────────────── */
+.mono{font-family:'IBM Plex Mono',monospace;}
+.serif{font-family:'Cormorant',Georgia,serif;}
+.lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ac);}
+.h2{font-family:'Cormorant',Georgia,serif;font-weight:300;font-size:clamp(28px,4.5vw,52px);line-height:1.1;letter-spacing:-.01em;}
+.wm{font-family:'IBM Plex Mono',monospace;font-weight:600;letter-spacing:.25em;font-size:13px;text-transform:uppercase;}
+
+/* ─── PHOTO BASE TREATMENT ────────────────────────────── */
+/* All photos: grayscale, controlled darkness, unified feel */
+.p-img{width:100%;height:100%;object-fit:cover;display:block;
+  filter:grayscale(100%) contrast(1.08) brightness(.6);}
+.p-img-dark{filter:grayscale(100%) contrast(1.1) brightness(.35);}
+.p-img-mid{filter:grayscale(100%) contrast(1.05) brightness(.55);}
+
+/* ─── NAV ─────────────────────────────────────────────── */
+#nav{position:fixed;top:0;left:0;right:0;z-index:500;
+  background:rgba(9,9,11,.9);border-bottom:1px solid var(--b0);backdrop-filter:blur(16px);}
+#nav .ni{max-width:1320px;margin:0 auto;padding:0 40px;
+  display:flex;align-items:center;justify-content:space-between;height:56px;}
+.nav-a{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--t2);transition:color .25s;}
+.nav-a:hover,.nav-a.active{color:var(--ac);}
+.nav-links{display:flex;gap:28px;}
+
+/* ─── SECTION WRAPPER ─────────────────────────────────── */
+.sec{padding:120px 40px;}
+.ct{max-width:1320px;margin:0 auto;}
+.rule{border:none;border-top:1px solid var(--b0);}
+.rule-ac{border:none;border-top:1px solid var(--acd);}
+
+/* ─── CHIPS ───────────────────────────────────────────── */
+.chip{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;
+  border:1px solid var(--b1);background:rgba(9,9,11,.8);
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--t1);}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--ac);
+  animation:pulse 2.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.3;transform:scale(.6);}}
+
+/* ─── FORM ELEMENTS ───────────────────────────────────── */
+.fi{background:rgba(20,23,26,.95);border:1px solid var(--b1);color:var(--t0);
+  font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;
+  padding:14px 18px;outline:none;width:100%;transition:border-color .25s;}
+.fi::placeholder{color:var(--t2);}.fi:focus{border-color:var(--ac);}
+.fb{background:var(--ac);color:var(--bg0);font-family:'IBM Plex Mono',monospace;
+  font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+  padding:14px 28px;border:none;cursor:none;
+  transition:background .25s,transform .15s;white-space:nowrap;}
+.fb:hover{background:#9ab8d0;transform:translateY(-1px);}
+.fbg{background:transparent;border:1px solid var(--ac);color:var(--ac);
+  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;padding:14px 28px;
+  cursor:none;transition:background .25s;white-space:nowrap;}
+.fbg:hover{background:var(--acg);}
+
+/* ─── CARD ────────────────────────────────────────────── */
+.card{background:var(--bg2);border:1px solid var(--b0);transition:border-color .3s;}
+.card:hover{border-color:var(--acd);}
+.tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;
+  padding:4px 10px;border:1px solid var(--b1);color:var(--t1);}
+.tac{border-color:var(--acd);color:var(--ac);background:var(--acg);}
+
+/* ─── FADE UP ─────────────────────────────────────────── */
+.fu{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+.fu.on{opacity:1;transform:none;}
+
+/* ═══════════════════════════════════════════════════════
+   SECTION 01 — HERO
+═══════════════════════════════════════════════════════ */
+#hero{position:relative;height:100vh;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-end;}
+#hero-photo{position:absolute;inset:0;z-index:0;
+  will-change:transform;}
+#hero-photo img{width:100%;height:110%;object-fit:cover;
+  filter:grayscale(100%) contrast(1.1) brightness(.12);
+  display:block;}
+#hcv{position:absolute;inset:0;width:100%;height:100%;z-index:1;}
+.hero-c{position:relative;z-index:3;max-width:1320px;
+  margin:0 auto;width:100%;padding:0 40px 80px;}
+.hero-hl{font-family:'Cormorant',Georgia,serif;font-weight:300;font-style:italic;
+  font-size:clamp(42px,7.5vw,96px);line-height:1.03;color:var(--t0);letter-spacing:-.015em;}
+
+/* ═══════════════════════════════════════════════════════
+   STAT ZOOM SECTIONS (Apple-style scroll reveal)
+═══════════════════════════════════════════════════════ */
+.stat-scene{position:relative;}
+.stat-sticky{position:sticky;top:0;height:100vh;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;}
+.stat-bg-img{position:absolute;inset:0;z-index:0;}
+.stat-bg-img img{width:100%;height:100%;object-fit:cover;}
+.stat-bg-overlay{position:absolute;inset:0;z-index:1;background:rgba(9,9,11,.82);}
+.stat-num{font-family:'Cormorant',Georgia,serif;font-weight:300;
+  font-size:clamp(80px,16vw,220px);line-height:.9;color:var(--t0);
+  letter-spacing:-.03em;will-change:transform,opacity;position:relative;z-index:3;
+  text-align:center;}
+.stat-unit{font-family:'IBM Plex Mono',monospace;font-size:clamp(12px,2vw,18px);
+  color:var(--ac);letter-spacing:.25em;text-transform:uppercase;
+  position:relative;z-index:3;margin-top:20px;text-align:center;}
+.stat-desc{font-family:'IBM Plex Mono',monospace;font-size:11px;
+  color:var(--t2);letter-spacing:.14em;text-transform:uppercase;
+  position:relative;z-index:3;margin-top:14px;text-align:center;
+  max-width:400px;}
+
+/* Horizontal rule marker on stat sections */
+.stat-marker{position:absolute;top:50%;left:40px;z-index:4;
+  display:flex;align-items:center;gap:14px;transform:translateY(-50%);}
+.stat-marker-line{width:32px;height:1px;background:var(--acd);}
+
+/* ═══════════════════════════════════════════════════════
+   PROBLEM SECTION
+═══════════════════════════════════════════════════════ */
+.pb{border-left:2px solid var(--b1);padding-left:24px;transition:border-color .3s;}
+.pb:hover{border-left-color:var(--ac);}
+
+/* ═══════════════════════════════════════════════════════
+   ENGINEERING STORY (single long sticky section)
+═══════════════════════════════════════════════════════ */
+#eng-scene{position:relative;}
+#eng-sticky{position:sticky;top:0;height:100vh;overflow:hidden;
+  display:grid;grid-template-columns:1fr 1fr;background:var(--bg0);}
+
+/* Left text panel */
+#eng-left{position:relative;z-index:2;display:flex;flex-direction:column;
+  justify-content:center;padding:80px 60px;border-right:1px solid var(--b0);}
+#eng-chapter-num{font-family:'IBM Plex Mono',monospace;font-size:11px;
+  color:var(--ac);letter-spacing:.2em;margin-bottom:24px;
+  transition:opacity .5s ease;}
+#eng-title{font-family:'Cormorant',Georgia,serif;font-size:clamp(32px,3.5vw,48px);
+  font-weight:300;line-height:1.1;margin-bottom:24px;
+  transition:opacity .5s ease,transform .5s ease;}
+#eng-accent{width:36px;height:1px;background:var(--ac);margin-bottom:24px;
+  transition:opacity .5s ease;}
+#eng-body{color:var(--t1);font-size:14px;line-height:1.85;max-width:440px;
+  transition:opacity .5s ease;}
+#eng-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:28px;
+  transition:opacity .5s ease;}
+#eng-spec{margin-top:32px;padding:16px 20px;border:1px solid var(--acd);
+  background:var(--acg);display:flex;align-items:baseline;gap:8px;
+  max-width:280px;transition:opacity .5s ease;}
+#eng-spec-val{font-family:'Cormorant',Georgia,serif;font-size:36px;font-weight:300;color:var(--ac);}
+#eng-spec-lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--t2);letter-spacing:.1em;}
+
+/* Progress tracker */
+#eng-progress-bar{position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:var(--b0);z-index:5;}
+#eng-progress-fill{height:100%;background:var(--ac);width:0%;transition:width .1s linear;}
+#eng-chapter-dots{position:absolute;bottom:20px;left:60px;display:flex;gap:10px;z-index:5;}
+.eng-dot{width:6px;height:6px;border-radius:50%;background:var(--b1);
+  transition:background .3s,transform .3s;}
+.eng-dot.a{background:var(--ac);transform:scale(1.3);}
+
+/* Right photo panel */
+#eng-right{position:relative;overflow:hidden;}
+.eng-photo-layer{position:absolute;inset:0;
+  transition:opacity .6s ease;opacity:0;}
+.eng-photo-layer.visible{opacity:1;}
+.eng-photo-layer img{width:100%;height:100%;object-fit:cover;
+  filter:grayscale(100%) contrast(1.08) brightness(.65);
+  display:block;will-change:transform;}
+/* Photo annotation */
+.eng-annotation{position:absolute;z-index:3;bottom:32px;right:32px;
+  text-align:right;}
+.eng-annotation p{font-family:'IBM Plex Mono',monospace;font-size:9px;
+  color:rgba(124,154,181,.6);letter-spacing:.12em;line-height:1.8;}
+/* Accent corner lines on photo */
+#eng-right::before{content:'';position:absolute;top:24px;right:24px;
+  width:24px;height:24px;border-top:1px solid var(--acd);
+  border-right:1px solid var(--acd);z-index:3;}
+#eng-right::after{content:'';position:absolute;bottom:24px;left:24px;
+  width:24px;height:24px;border-bottom:1px solid var(--acd);
+  border-left:1px solid var(--acd);z-index:3;}
+
+/* ═══════════════════════════════════════════════════════
+   SIRCILLA — CLIP-PATH REVEAL
+═══════════════════════════════════════════════════════ */
+.sir-scene{position:relative;}
+.sir-sticky{position:sticky;top:0;height:100vh;overflow:hidden;
+  display:grid;grid-template-columns:1fr 1fr;}
+.sir-photo{position:relative;overflow:hidden;background:var(--bg1);}
+.sir-photo-inner{position:absolute;inset:0;will-change:clip-path;}
+.sir-photo-inner img{width:100%;height:100%;object-fit:cover;
+  filter:grayscale(100%) contrast(1.1) brightness(.55);display:block;
+  will-change:transform;}
+/* Measurement markers on photo */
+.sir-mark{position:absolute;z-index:4;font-family:'IBM Plex Mono',monospace;
+  font-size:9px;color:rgba(124,154,181,.65);letter-spacing:.12em;}
+.sir-mark.tl{top:24px;left:24px;border-left:1px solid var(--acd);padding-left:10px;}
+.sir-mark.br{bottom:24px;right:24px;text-align:right;border-right:1px solid var(--acd);padding-right:10px;}
+.sir-text{background:var(--bg1);padding:80px 60px;
+  display:flex;flex-direction:column;justify-content:center;
+  border-left:1px solid var(--b0);}
+
+/* ═══════════════════════════════════════════════════════
+   ROADMAP
+═══════════════════════════════════════════════════════ */
+.rmt{position:relative;display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;margin-bottom:56px;}
+.rmt::before{content:'';position:absolute;top:4px;left:0;right:0;height:1px;background:var(--b1);}
+.pd{width:10px;height:10px;border-radius:50%;border:2px solid var(--b1);background:var(--bg0);
+  margin:0 auto 20px;position:relative;z-index:1;transition:border-color .3s,box-shadow .3s;}
+.pd.a{border-color:var(--ac);background:var(--ac);box-shadow:0 0 16px rgba(124,154,181,.5);}
+
+/* ═══════════════════════════════════════════════════════
+   METRICS
+═══════════════════════════════════════════════════════ */
+.metrics-wrap{position:relative;}
+.metrics-bg{position:absolute;right:0;top:0;bottom:0;width:42%;overflow:hidden;opacity:.08;}
+.metrics-bg img{width:100%;height:100%;object-fit:cover;filter:grayscale(100%);}
+.mr{display:grid;grid-template-columns:1fr 140px auto;align-items:center;
+  gap:20px;padding:20px 0;border-bottom:1px solid var(--b0);}
+.mr:last-child{border-bottom:none;}
+.mbt{width:100%;height:2px;background:var(--b1);position:relative;overflow:hidden;}
+.mbf{position:absolute;top:0;left:0;height:100%;background:var(--ac);
+  width:0;transition:width 1.4s cubic-bezier(.16,1,.3,1);}
+.mbf.go{width:var(--w);}
+
+/* Count-up number */
+.count-val{font-family:'Cormorant',Georgia,serif;font-size:42px;font-weight:300;
+  color:var(--ac);line-height:1;}
+
+/* ═══════════════════════════════════════════════════════
+   CLOSING PARALLAX
+═══════════════════════════════════════════════════════ */
+.closing-scene{position:relative;height:100vh;overflow:hidden;
+  display:flex;align-items:flex-end;}
+.closing-bg{position:absolute;inset:0;z-index:0;will-change:transform;}
+.closing-bg img{width:100%;height:115%;object-fit:cover;
+  filter:grayscale(100%) brightness(.2) contrast(1.1);display:block;}
+.closing-grad{position:absolute;inset:0;z-index:1;
+  background:linear-gradient(to bottom,rgba(9,9,11,.3) 0%,rgba(9,9,11,.9) 70%,var(--bg0) 100%);}
+.closing-content{position:relative;z-index:2;width:100%;padding:0 40px 80px;}
+.chl{font-family:'Cormorant',Georgia,serif;font-weight:300;
+  font-size:clamp(36px,6.5vw,84px);line-height:1.02;letter-spacing:-.02em;}
+
+/* ═══════════════════════════════════════════════════════
+   PRINCIPAL
+═══════════════════════════════════════════════════════ */
+.ct2{padding:10px 14px;border:1px solid var(--b0);display:flex;flex-direction:column;gap:2px;}
+.ct2.h{border-color:var(--acd);background:var(--acg);}
+.er{display:grid;grid-template-columns:170px 1fr auto;gap:28px;
+  align-items:start;padding:24px 0;border-bottom:1px solid var(--b0);}
+.er:last-child{border-bottom:none;}
+.etg{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0;}
+.stg{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.gauto{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px;}
+
+/* ─── GRID BACKGROUNDS ────────────────────────────────── */
+.gbg{background-image:linear-gradient(var(--b0) 1px,transparent 1px),
+  linear-gradient(90deg,var(--b0) 1px,transparent 1px);background-size:60px 60px;}
+.gbgf{background-image:linear-gradient(rgba(30,33,40,.7) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(30,33,40,.7) 1px,transparent 1px);background-size:20px 20px;}
+
+/* ─── FOOTER ──────────────────────────────────────────── */
+footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
+.fi2{max-width:1320px;margin:0 auto;display:grid;
+  grid-template-columns:1fr auto 1fr;align-items:center;gap:32px;}
+
+/* ─── RESPONSIVE ──────────────────────────────────────── */
+@media(max-width:960px){
+  #eng-sticky,.sir-sticky{grid-template-columns:1fr;}
+  #eng-right,.sir-photo{display:none;}
+  .sec{padding:80px 24px;}
+  .hero-c{padding:0 24px 60px;}
+  .nav-links{display:none;}
+  .mr{grid-template-columns:1fr auto;}.mbt{display:none;}
+  .fi2{grid-template-columns:1fr;text-align:center;}
+  .rmt{grid-template-columns:1fr;}.rmt::before{display:none;}
+  .er{grid-template-columns:1fr;}.etg{display:none;}
+  .stat-marker{display:none;}
+  .closing-content{padding:0 24px 60px;}
+}
+@media(max-width:600px){
+  .gauto{grid-template-columns:1fr;}
+  .stat-num{font-size:clamp(60px,18vw,120px);}
+}
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- ══════════════════════════════════════════════════════
+     NAV
+══════════════════════════════════════════════════════ -->
+<nav id="nav">
+  <div class="ni">
+    <span class="wm">SYSTEM THREADS</span>
+    <div class="nav-links">
+      <a href="#problem" class="nav-a">Problem</a>
+      <a href="#engineering" class="nav-a">Approach</a>
+      <a href="#sircilla" class="nav-a">Origin</a>
+      <a href="#roadmap" class="nav-a">Roadmap</a>
+      <a href="#metrics" class="nav-a">Metrics</a>
+      <a href="#principal" class="nav-a">Principal</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div id="hero-photo">
+    <!-- Unsplash: Pittsburgh / dark city skyline. Free to use. -->
+    <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1920&auto=format&fit=crop&q=80"
+         alt="Urban nightscape" loading="eager">
+  </div>
+  <canvas id="hcv"></canvas>
+  <div class="grain"></div>
+
+  <div class="hero-c">
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:56px;" id="hero-chips">
+      <span class="chip"><span class="dot"></span>Pre-launch · Validation 2025–26</span>
+      <span class="chip">Sircilla, Telangana — 18.3851°N 78.8232°E</span>
+      <span class="chip">Target Markets: US / EU</span>
+    </div>
+    <div style="max-width:860px;">
+      <p class="lbl" style="margin-bottom:20px;opacity:0;animation:fadeUp .8s .3s forwards;">REF-001 / Brand System Overview</p>
+      <h1 class="hero-hl" style="opacity:0;animation:fadeUp .9s .5s forwards;">
+        Engineered Outerwear<br>for Urban Variability.
+      </h1>
+      <hr class="rule" style="margin:28px 0;opacity:0;animation:fadeUp .6s .8s forwards;">
+      <p style="color:var(--t1);font-size:15px;max-width:540px;line-height:1.85;opacity:0;animation:fadeUp .7s 1s forwards;">
+        SYSTEM THREADS applies systems engineering methodology to outerwear — treating every garment as an assembly of interdependent performance modules. Form is a derivative of function.
+      </p>
+    </div>
+    <div style="margin-top:44px;max-width:460px;opacity:0;animation:fadeUp .7s 1.2s forwards;">
+      <p class="mono" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--t2);margin-bottom:11px;">Request Specification Sheet / Notify on Launch</p>
+      <div style="display:flex;">
+        <input class="fi" type="email" placeholder="engineer@domain.com" style="flex:1;">
+        <button class="fb">Register</button>
+      </div>
+      <p class="mono" style="font-size:10px;color:var(--t2);margin-top:9px;">No marketing. Specification updates only.</p>
+    </div>
+    <hr class="rule" style="margin-top:60px;opacity:0;animation:fadeUp .5s 1.4s forwards;">
+    <div style="display:flex;justify-content:space-between;padding-top:16px;flex-wrap:wrap;gap:10px;opacity:0;animation:fadeUp .5s 1.5s forwards;">
+      <span class="mono" style="font-size:10px;color:var(--t2);letter-spacing:.1em;">SYSTEM THREADS™ — BRAND SYSTEM v0.1</span>
+      <span class="mono" style="font-size:10px;color:var(--t2);letter-spacing:.1em;">LAUNCHING 2026 — BUILT DELIBERATELY</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     STAT ZOOM 01 — Climate Variability (Apple scroll moment)
+══════════════════════════════════════════════════════ -->
+<div class="stat-scene" id="stat1" style="height:260vh;background:var(--bg0);">
+  <div class="stat-sticky">
+    <div class="stat-bg-img">
+      <!-- Unsplash: rainy urban street. Free to use. -->
+      <img src="https://images.unsplash.com/photo-1519744346361-7a029b427a59?w=1920&auto=format&fit=crop&q=80"
+           class="p-img-dark" alt="Urban rain" loading="lazy">
+    </div>
+    <div class="stat-bg-overlay"></div>
+    <div class="grain"></div>
+
+    <!-- Left annotation marker -->
+    <div class="stat-marker">
+      <div class="stat-marker-line"></div>
+      <span class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.18em;text-transform:uppercase;">OBSERVED / CLIMATE</span>
+    </div>
+    <!-- Right reference -->
+    <div style="position:absolute;right:40px;top:50%;transform:translateY(-50%);z-index:5;text-align:right;">
+      <p class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;">REF — VAR.01</p>
+      <p class="mono" style="font-size:10px;color:var(--t1);line-height:1.8;">Urban thermal range<br>Single commute window<br>~4h exposure cycle</p>
+    </div>
+
+    <div id="s1-num" class="stat-num" style="will-change:transform,opacity;">8–14</div>
+    <div id="s1-unit" class="stat-unit" style="opacity:0;">°C</div>
+    <div id="s1-desc" class="stat-desc" style="opacity:0;">urban thermal variability per single commute cycle</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PROBLEM SECTION
+══════════════════════════════════════════════════════ -->
+<section id="problem" class="sec" style="background:var(--bg1);border-top:1px solid var(--b0);border-bottom:1px solid var(--b0);">
+  <div class="ct">
+    <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:72px;align-items:start;">
+      <div class="fu">
+        <p class="lbl" style="margin-bottom:14px;">SECTION 02 / Problem Frame</p>
+        <h2 class="h2">The Friction of<br>Modern Outerwear.</h2>
+        <hr class="rule-ac" style="margin:28px 0;">
+        <p class="mono" style="font-size:11px;color:var(--t2);line-height:1.85;">Urban environments expose a structural gap between what outerwear claims to solve and what it actually addresses. This is not a design problem. It is a systems failure.</p>
+
+        <!-- Embedded figure photo -->
+        <div style="margin-top:36px;position:relative;overflow:hidden;border:1px solid var(--b0);">
+          <div style="height:240px;overflow:hidden;position:relative;">
+            <!-- Unsplash: jacket/outerwear detail. Free to use. -->
+            <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&auto=format&fit=crop&q=80"
+                 class="p-img" style="transition:transform .8s ease;" loading="lazy"
+                 onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          </div>
+          <!-- Photo annotation overlay -->
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:12px 14px;background:linear-gradient(to top,rgba(9,9,11,.95),transparent);z-index:2;">
+            <p class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.12em;">FIG.01 — Conventional construction. Zero performance specification applied to thermal management or moisture response.</p>
+          </div>
+          <!-- Corner markers -->
+          <div style="position:absolute;top:10px;right:10px;width:16px;height:16px;border-top:1px solid var(--acd);border-right:1px solid var(--acd);z-index:3;"></div>
+          <div style="position:absolute;bottom:40px;left:10px;width:16px;height:16px;border-bottom:1px solid var(--acd);border-left:1px solid var(--acd);z-index:3;"></div>
+        </div>
+        <p class="mono" style="font-size:9px;color:var(--t2);margin-top:8px;letter-spacing:.1em;padding-left:2px;">CLASSIFICATION: Fashion outerwear. Thermal performance: unspecified.</p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:36px;">
+        <div class="pb fu">
+          <p class="mono" style="font-size:10px;letter-spacing:.14em;color:var(--ac);margin-bottom:9px;text-transform:uppercase;">Variable 01 — Climate Variability</p>
+          <p style="color:var(--t1);font-size:14px;line-height:1.8;">Urban microclimates shift 8–14°C within a single commute cycle. Most outerwear is spec'd for a static thermal scenario — offering zero adaptability across that range. The result: layering chaos or comfort compromise.</p>
+        </div>
+        <div class="pb fu">
+          <p class="mono" style="font-size:10px;letter-spacing:.14em;color:var(--ac);margin-bottom:9px;text-transform:uppercase;">Variable 02 — Over-engineered Outdoor Gear</p>
+          <p style="color:var(--t1);font-size:14px;line-height:1.8;">Technical outdoor brands optimize for 6,000m altitude that 99.3% of purchasers never encounter. Structural redundancy built into every seam — weight and bulk without proportional urban utility. Misaligned specification targets.</p>
+        </div>
+        <div class="pb fu">
+          <p class="mono" style="font-size:10px;letter-spacing:.14em;color:var(--ac);margin-bottom:9px;text-transform:uppercase;">Variable 03 — Under-engineered Fashion Jackets</p>
+          <p style="color:var(--t1);font-size:14px;line-height:1.8;">Premium fashion outerwear treats construction as aesthetic variable. Seam integrity, thermal retention, and abrasion resistance are afterthoughts — subordinated to 18-month silhouette season cycles with no performance specification targets.</p>
+        </div>
+        <div class="pb fu">
+          <p class="mono" style="font-size:10px;letter-spacing:.14em;color:var(--ac);margin-bottom:9px;text-transform:uppercase;">Variable 04 — Absence of System Thinking</p>
+          <p style="color:var(--t1);font-size:14px;line-height:1.8;">The modern wardrobe is assembled, not designed. No consideration for thermal layering stacks, modular compatibility, or performance interaction between garments. Each purchase is a standalone artifact in a space that demands a coherent system.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     STAT ZOOM 02 — Hydrostatic Target
+══════════════════════════════════════════════════════ -->
+<div class="stat-scene" id="stat2" style="height:240vh;background:var(--bg0);">
+  <div class="stat-sticky">
+    <div class="stat-bg-img">
+      <!-- Unsplash: fabric/textile macro. Free to use. -->
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&auto=format&fit=crop&q=80"
+           class="p-img-dark" alt="Fabric macro" loading="lazy">
+    </div>
+    <div class="stat-bg-overlay"></div>
+    <div class="grain"></div>
+    <div class="stat-marker">
+      <div class="stat-marker-line"></div>
+      <span class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.18em;text-transform:uppercase;">TARGET / MATERIAL SPEC</span>
+    </div>
+    <div style="position:absolute;right:40px;bottom:40px;z-index:5;text-align:right;">
+      <p class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.12em;">ISO 811 / Hydrostatic pressure<br>test protocol applied</p>
+    </div>
+
+    <div style="position:relative;z-index:3;text-align:center;">
+      <p class="mono" id="s2-pre" style="font-size:clamp(16px,2.5vw,24px);color:var(--ac);letter-spacing:.3em;margin-bottom:8px;opacity:0;">≥</p>
+      <div id="s2-num" class="stat-num" style="will-change:transform,opacity;">15,000</div>
+      <div id="s2-unit" class="stat-unit" style="opacity:0;">mm — Hydrostatic Pressure Resistance</div>
+      <div id="s2-desc" class="stat-desc" style="opacity:0;">minimum target · ISO 811 water column test · laminate system</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     ENGINEERING STORY — Single sticky 4-chapter section
+══════════════════════════════════════════════════════ -->
+<div id="engineering"></div><!-- nav anchor -->
+<div id="eng-scene" style="height:520vh;background:var(--bg0);">
+  <div id="eng-sticky">
+    <div class="grain" style="z-index:4;"></div>
+
+    <!-- LEFT: Text panel -->
+    <div id="eng-left">
+      <p class="lbl" style="margin-bottom:6px;">SECTION 03 / Engineering Approach</p>
+      <p id="eng-chapter-num" class="mono" style="font-size:11px;color:var(--t2);letter-spacing:.2em;margin-bottom:22px;">01 / 04 — MATERIAL SCIENCE</p>
+      <div id="eng-accent" style="width:36px;height:1px;background:var(--ac);margin-bottom:22px;"></div>
+      <h3 id="eng-title" class="serif" style="font-size:clamp(30px,3.2vw,44px);font-weight:300;line-height:1.1;margin-bottom:22px;">Material Science</h3>
+      <p id="eng-body" style="color:var(--t1);font-size:14px;line-height:1.85;max-width:440px;">
+        Fabric selection driven by measurable performance matrices: hydrostatic pressure resistance (≥15,000mm), moisture vapor transmission rate (MVTR ≥10,000 g/m²/24h), and UV degradation coefficients. No material enters the spec until lab-validated against ISO standards. Face fabric, membrane, and backer are treated as a laminated system — not individual layers.
+      </p>
+      <div id="eng-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:24px;">
+        <span class="tag">Laminate Architecture</span>
+        <span class="tag">DWR Chemistry</span>
+        <span class="tag">Fiber Denier</span>
+      </div>
+      <div id="eng-spec" style="margin-top:28px;padding:14px 18px;border:1px solid var(--acd);background:var(--acg);display:flex;align-items:baseline;gap:8px;max-width:260px;">
+        <span id="eng-spec-val" class="serif" style="font-size:34px;font-weight:300;color:var(--ac);">≥15,000mm</span>
+        <span class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.1em;">ISO 811</span>
+      </div>
+
+      <!-- Chapter dots -->
+      <div id="eng-chapter-dots" style="position:absolute;bottom:28px;left:60px;display:flex;gap:10px;z-index:5;">
+        <div class="eng-dot a" id="edot0"></div>
+        <div class="eng-dot" id="edot1"></div>
+        <div class="eng-dot" id="edot2"></div>
+        <div class="eng-dot" id="edot3"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Photo panel -->
+    <div id="eng-right">
+      <!-- Chapter 0: Fabric texture -->
+      <div class="eng-photo-layer visible" id="ep0">
+        <!-- Unsplash: textile/fabric weave. Free to use. -->
+        <img src="https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=1200&auto=format&fit=crop&q=80"
+             alt="Textile fabric weave" id="ep0-img" loading="eager">
+        <div class="eng-annotation">
+          <p>FACE FABRIC — LAMINATE SYSTEM</p>
+          <p>Denier: TBD / Weave: TBD</p>
+          <p>ISO 811 CERTIFIED MEMBRANE</p>
+        </div>
+      </div>
+      <!-- Chapter 1: Pattern/technical drawing -->
+      <div class="eng-photo-layer" id="ep1">
+        <!-- Unsplash: technical drawing / engineering lines. Free to use. -->
+        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&auto=format&fit=crop&q=80"
+             alt="Technical pattern engineering" id="ep1-img" loading="lazy">
+        <div class="eng-annotation">
+          <p>PATTERN GRADE — TECHNICAL REVIEW</p>
+          <p>Seam axis: motion-capture derived</p>
+          <p>TOLERANCE: ±3mm ALL POINTS</p>
+        </div>
+      </div>
+      <!-- Chapter 2: Architectural grid / thermal abstraction -->
+      <div class="eng-photo-layer" id="ep2">
+        <!-- Unsplash: architectural lines, climate abstraction. Free to use. -->
+        <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1200&auto=format&fit=crop&q=80"
+             alt="Climate adaptation zones" id="ep2-img" loading="lazy">
+        <div class="eng-annotation">
+          <p>THERMAL ZONE MAPPING</p>
+          <p>Operative range: −5°C to +22°C</p>
+          <p>MODULAR INSULATION SYSTEM</p>
+        </div>
+      </div>
+      <!-- Chapter 3: Manufacturing / sewing -->
+      <div class="eng-photo-layer" id="ep3">
+        <!-- Unsplash: sewing / manufacturing precision. Free to use. -->
+        <img src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=1200&auto=format&fit=crop&q=80"
+             alt="Precision manufacturing sewing" id="ep3-img" loading="lazy">
+        <div class="eng-annotation">
+          <p>STRUCTURAL SEAM — SPI 12–14</p>
+          <p>Double-fell construction</p>
+          <p>ISO 13934-1 TENSILE TESTED</p>
+        </div>
+      </div>
+
+      <!-- Progress bar along bottom of photo -->
+      <div id="eng-progress-bar">
+        <div id="eng-progress-fill"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     STAT ZOOM 03 — Stitch Density
+══════════════════════════════════════════════════════ -->
+<div class="stat-scene" id="stat3" style="height:220vh;background:var(--bg0);">
+  <div class="stat-sticky">
+    <div class="stat-bg-img">
+      <!-- Unsplash: close-up stitch / manufacturing. Free to use. -->
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&auto=format&fit=crop&q=80"
+           class="p-img-dark" alt="Stitch precision" loading="lazy">
+    </div>
+    <div class="stat-bg-overlay"></div>
+    <div class="grain"></div>
+    <div class="stat-marker">
+      <div class="stat-marker-line"></div>
+      <span class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.18em;text-transform:uppercase;">SPEC / MANUFACTURING</span>
+    </div>
+
+    <div style="position:relative;z-index:3;text-align:center;">
+      <div id="s3-num" class="stat-num" style="will-change:transform,opacity;">12–14</div>
+      <div id="s3-unit" class="stat-unit" style="opacity:0;">SPI — Stitches Per Inch</div>
+      <div id="s3-desc" class="stat-desc" style="opacity:0;">structural seam density target · all load-bearing seam classes</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SIRCILLA — Clip-path horizontal reveal
+══════════════════════════════════════════════════════ -->
+<div id="sircilla" style="position:relative;">
+  <div class="sir-scene" style="height:320vh;">
+    <div class="sir-sticky">
+
+      <!-- LEFT: Photo reveals on scroll -->
+      <div class="sir-photo">
+        <div class="sir-photo-inner" id="sir-photo-inner">
+          <!-- Unsplash: textile loom / weaving. Free to use. -->
+          <img src="https://images.unsplash.com/photo-1544441892-794166f1e3be?w=1200&auto=format&fit=crop&q=80"
+               alt="Textile loom Sircilla" id="sir-img" loading="lazy">
+        </div>
+        <!-- Annotation marks -->
+        <div class="sir-mark tl">18.3851° N<br>78.8232° E<br>SIRCILLA</div>
+        <div class="sir-mark br">CLUSTER WORKFORCE<br>~120,000<br>TELANGANA, IN</div>
+        <!-- Corner markers -->
+        <div style="position:absolute;top:20px;right:20px;width:20px;height:20px;border-top:1px solid var(--acd);border-right:1px solid var(--acd);z-index:5;"></div>
+        <div style="position:absolute;bottom:20px;left:20px;width:20px;height:20px;border-bottom:1px solid var(--acd);border-left:1px solid var(--acd);z-index:5;"></div>
+        <div class="grain"></div>
+      </div>
+
+      <!-- RIGHT: Text -->
+      <div class="sir-text">
+        <div id="sir-text-content">
+          <p class="lbl" style="margin-bottom:14px;">SECTION 04 / Manufacturing Origin</p>
+          <h2 class="h2" style="margin-bottom:28px;">Built Where Textile<br>Legacy Meets<br>Modern Precision.</h2>
+          <hr class="rule-ac" style="margin-bottom:28px;">
+          <p class="mono" style="font-size:10px;color:var(--t2);line-height:2;margin-bottom:24px;">
+            18.3851° N, 78.8232° E — Sircilla, Telangana<br>
+            Established textile cluster: ~2,000 registered looms<br>
+            Powerloom heritage: post-1970s industrialization
+          </p>
+          <p style="color:var(--t1);font-size:14px;line-height:1.85;margin-bottom:36px;">
+            Sircilla operates as one of India's most concentrated powerloom economies — a district whose industrial identity is inseparable from textile production. Decades of accumulated craft knowledge, combined with a skilled workforce, make it the logical anchor for a precision manufacturing operation positioned for global quality standards.
+          </p>
+          <div style="display:flex;flex-direction:column;gap:2px;">
+            <div style="border:1px solid var(--b0);padding:18px 20px;background:var(--bg2);">
+              <p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;margin-bottom:6px;">01 — Existing Skill Base</p>
+              <p style="color:var(--t1);font-size:13px;line-height:1.7;">Generational expertise in fabric construction, loom calibration, and finishing operations. Retrainable to technical outerwear standards with targeted upskilling in seam engineering and quality control systems.</p>
+            </div>
+            <div style="border:1px solid var(--b0);padding:18px 20px;background:var(--bg2);">
+              <p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;margin-bottom:6px;">02 — Modernization Intent</p>
+              <p style="color:var(--t1);font-size:13px;line-height:1.7;">Phase-wise introduction of automated cutting, CAD pattern digitization, and ISO-aligned QC infrastructure. Augmentation of existing capability — not replacement.</p>
+            </div>
+            <div style="border:1px solid var(--b0);padding:18px 20px;background:var(--bg2);">
+              <p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;margin-bottom:6px;">03 — Vertical Integration Target</p>
+              <p style="color:var(--t1);font-size:13px;line-height:1.7;">Consolidated facility integrating raw material processing, lamination, cut-and-sew, and QA within a single controlled environment. Reduces variability. Compresses lead times. Tighter tolerance enforcement.</p>
+            </div>
+          </div>
+          <!-- Data grid -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-top:2px;background:var(--b0);">
+            <div style="background:var(--bg0);padding:16px;"><p class="mono" style="font-size:9px;color:var(--t2);margin-bottom:4px;">PORT DISTANCE</p><p class="mono" style="font-size:14px;color:var(--t0);">~340 km</p><p class="mono" style="font-size:9px;color:var(--t2);">Chennai (MAA)</p></div>
+            <div style="background:var(--bg0);padding:16px;"><p class="mono" style="font-size:9px;color:var(--t2);margin-bottom:4px;">STATUS</p><p class="mono" style="font-size:14px;color:var(--t0);">Phase 1</p><p class="mono" style="font-size:9px;color:var(--t2);">Vendor Assessment</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     ROADMAP
+══════════════════════════════════════════════════════ -->
+<section id="roadmap" class="sec" style="background:var(--bg1);border-top:1px solid var(--b0);border-bottom:1px solid var(--b0);">
+  <div class="ct">
+    <div class="fu" style="margin-bottom:68px;">
+      <p class="lbl" style="margin-bottom:14px;">SECTION 05 / Development Phases</p>
+      <h2 class="h2">Product Roadmap.</h2>
+      <p style="color:var(--t1);font-size:14px;margin-top:16px;max-width:480px;line-height:1.8;">Three structured phases. Each gate-controlled. No acceleration without evidence from the prior phase.</p>
+    </div>
+    <div class="rmt fu">
+      <div style="text-align:center;"><div class="pd a"></div></div>
+      <div style="text-align:center;"><div class="pd"></div></div>
+      <div style="text-align:center;"><div class="pd"></div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;">
+      <div class="card fu" style="padding:36px 28px;border-top:2px solid var(--ac);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
+          <div><p class="mono" style="font-size:9px;letter-spacing:.18em;color:var(--ac);text-transform:uppercase;margin-bottom:4px;">Phase 01 — Active</p><h3 class="serif" style="font-size:24px;font-weight:400;">Validation</h3></div>
+          <span class="mono" style="font-size:10px;color:var(--t2);">2025–26</span>
+        </div>
+        <hr class="rule" style="margin-bottom:20px;">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Market signal collection — professional interviews, wardrobe audit data, size curve research</p></div>
+          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Vendor assessment in Sircilla — capability audit, stitch quality sampling, compliance check</p></div>
+          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Prototype build: 3 silhouettes × 2 fabric systems — internal destructive testing</p></div>
+          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Brand system architecture — positioning, visual language, spec sheet framework</p></div>
+        </div>
+        <div style="margin-top:22px;padding:11px 14px;background:var(--acg);border:1px solid var(--acd);">
+          <p class="mono" style="font-size:10px;color:var(--ac);">GATE: Prototype approval + 2 confirmed production partners</p>
+        </div>
+      </div>
+      <div class="card fu" style="padding:36px 28px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
+          <div><p class="mono" style="font-size:9px;letter-spacing:.18em;color:var(--t2);text-transform:uppercase;margin-bottom:4px;">Phase 02 — Pending</p><h3 class="serif" style="font-size:24px;font-weight:400;">Controlled Production</h3></div>
+          <span class="mono" style="font-size:10px;color:var(--t2);">2026–27</span>
+        </div>
+        <hr class="rule" style="margin-bottom:20px;">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--t2);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t2);font-size:13px;line-height:1.6;">Initial run: 150–300 units. SKU-controlled. Direct-to-professional distribution (US/EU)</p></div>
+          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--t2);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t2);font-size:13px;line-height:1.6;">Dimensional QC — 100% batch inspection against tolerance spec. ±3mm on all measured points</p></div>
+          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--t2);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t2);font-size:13px;line-height:1.6;">Post-purchase feedback loop — structured 90-day, 180-day user data collection</p></div>
+          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--t2);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t2);font-size:13px;line-height:1.6;">Financial model validation — landed cost, margin stack, pricing elasticity by market</p></div>
+        </div>
+        <div style="margin-top:22px;padding:11px 14px;border:1px solid var(--b0);">
+          <p class="mono" style="font-size:10px;color:var(--t2);">GATE: ≥85% QC pass rate + positive unit economics confirmed</p>
+        </div>
+      </div>
+      <div class="card fu" style="padding:36px 28px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
+          <div><p class="mono" style="font-size:9px;letter-spacing:.18em;color:var(--t2);text-transform:uppercase;margin-bottom:4px;">Phase 03 — Planned</p><h3 class="serif" style="font-size:24px;font-weight:400;">Vertical Integration</h3></div>
+          <span class="mono" style="font-size:10px;color:var(--t2);">2028–30</span>
+        </div>
+        <hr class="rule" style="margin-bottom:20px;">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--t2);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t2);font-size:13px;line-height:1.6;">Consolidated Sircilla facility — fabric treatment, lamination, cut-and-sew, finishing under one roof</p></div>
+          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--t2);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t2);font-size:13px;line-height:1.6;">Automated CAD/CAM cutting integration — ±1.5mm tolerance target on critical seams</p></div>
+          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--t2);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t2);font-size:13px;line-height:1.6;">Proprietary fabric blends with regional fiber suppliers. IP registration.</p></div>
+          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--t2);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t2);font-size:13px;line-height:1.6;">Export infrastructure: FTZ registration, CE compliance, B2B wholesale activation</p></div>
+        </div>
+        <div style="margin-top:22px;padding:11px 14px;border:1px solid var(--b0);">
+          <p class="mono" style="font-size:10px;color:var(--t2);">GATE: Series A / strategic partnership closed</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     METRICS
+══════════════════════════════════════════════════════ -->
+<section id="metrics" class="sec" style="background:var(--bg0);position:relative;border-top:1px solid var(--b0);">
+  <!-- Background fabric photo, ultra-dark -->
+  <div class="metrics-bg">
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop&q=60"
+         alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;filter:grayscale(100%);">
+  </div>
+  <div class="ct" style="position:relative;z-index:1;">
+    <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:80px;align-items:start;">
+      <div class="fu">
+        <p class="lbl" style="margin-bottom:14px;">SECTION 06 / Quality Specification</p>
+        <h2 class="h2">Measured,<br>Not Marketed.</h2>
+        <hr class="rule-ac" style="margin:28px 0;">
+        <p style="color:var(--t1);font-size:14px;line-height:1.8;margin-bottom:28px;">Performance claims are quantified or they don't exist. Every metric maps to a standardized test protocol. Target values are floors, not aspirations.</p>
+        <p class="mono" style="font-size:10px;color:var(--t2);margin-bottom:10px;">TESTING STANDARDS</p>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <p class="mono" style="font-size:11px;color:var(--t1);">ISO 811 — Water resistance</p>
+          <p class="mono" style="font-size:11px;color:var(--t1);">ISO 13934-1 — Tensile strength</p>
+          <p class="mono" style="font-size:11px;color:var(--t1);">ASTM D4966 — Abrasion (Martindale)</p>
+          <p class="mono" style="font-size:11px;color:var(--t1);">ISO 6941 — Seam integrity</p>
+          <p class="mono" style="font-size:11px;color:var(--t1);">AATCC 135 — Dimensional stability</p>
+        </div>
+      </div>
+      <div id="mets" class="fu">
+        <div class="mr"><div><p style="font-size:14px;color:var(--t0);margin-bottom:2px;">Hydrostatic Pressure Resistance</p><p class="mono" style="font-size:10px;color:var(--t2);">ISO 811 · Water column (mm)</p></div><div class="mbt"><div class="mbf" style="--w:88%;"></div></div><p class="mono" style="font-size:13px;color:var(--ac);white-space:nowrap;">≥ 15,000 mm</p></div>
+        <div class="mr"><div><p style="font-size:14px;color:var(--t0);margin-bottom:2px;">Moisture Vapor Transmission Rate</p><p class="mono" style="font-size:10px;color:var(--t2);">ISO 11092 · g/m²/24h</p></div><div class="mbt"><div class="mbf" style="--w:72%;"></div></div><p class="mono" style="font-size:13px;color:var(--ac);white-space:nowrap;">≥ 10,000 g</p></div>
+        <div class="mr"><div><p style="font-size:14px;color:var(--t0);margin-bottom:2px;">Abrasion Resistance — Face Fabric</p><p class="mono" style="font-size:10px;color:var(--t2);">ASTM D4966 · Martindale cycles</p></div><div class="mbt"><div class="mbf" style="--w:80%;"></div></div><p class="mono" style="font-size:13px;color:var(--ac);white-space:nowrap;">≥ 50,000 cy</p></div>
+        <div class="mr"><div><p style="font-size:14px;color:var(--t0);margin-bottom:2px;">Stitch Density — Structural Seams</p><p class="mono" style="font-size:10px;color:var(--t2);">SPI · Stitches per inch</p></div><div class="mbt"><div class="mbf" style="--w:65%;"></div></div><p class="mono" style="font-size:13px;color:var(--ac);white-space:nowrap;">12–14 SPI</p></div>
+        <div class="mr"><div><p style="font-size:14px;color:var(--t0);margin-bottom:2px;">Seam Tensile Strength</p><p class="mono" style="font-size:10px;color:var(--t2);">ISO 13934-1 · Newtons (N)</p></div><div class="mbt"><div class="mbf" style="--w:76%;"></div></div><p class="mono" style="font-size:13px;color:var(--ac);white-space:nowrap;">≥ 450 N</p></div>
+        <div class="mr"><div><p style="font-size:14px;color:var(--t0);margin-bottom:2px;">DWR Retention — Post 20 Washes</p><p class="mono" style="font-size:10px;color:var(--t2);">AATCC 22 · Rating /100</p></div><div class="mbt"><div class="mbf" style="--w:60%;"></div></div><p class="mono" style="font-size:13px;color:var(--ac);white-space:nowrap;">≥ 80/100</p></div>
+        <div class="mr"><div><p style="font-size:14px;color:var(--t0);margin-bottom:2px;">Lifecycle Durability Target</p><p class="mono" style="font-size:10px;color:var(--t2);">Simulated wear · Urban use profile</p></div><div class="mbt"><div class="mbf" style="--w:95%;"></div></div><p class="mono" style="font-size:13px;color:var(--ac);white-space:nowrap;">7+ years</p></div>
+        <div class="mr"><div><p style="font-size:14px;color:var(--t0);margin-bottom:2px;">Dimensional Tolerance — All Points</p><p class="mono" style="font-size:10px;color:var(--t2);">Batch QC · Millimetre deviation</p></div><div class="mbt"><div class="mbf" style="--w:100%;"></div></div><p class="mono" style="font-size:13px;color:var(--ac);white-space:nowrap;">± 3 mm max</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     STAT ZOOM 04 — Lifecycle
+══════════════════════════════════════════════════════ -->
+<div class="stat-scene" id="stat4" style="height:220vh;background:var(--bg0);">
+  <div class="stat-sticky">
+    <div class="stat-bg-img">
+      <!-- Unsplash: dark industrial/architectural. Free to use. -->
+      <img src="https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=1920&auto=format&fit=crop&q=80"
+           class="p-img-dark" alt="Durability" loading="lazy">
+    </div>
+    <div class="stat-bg-overlay"></div>
+    <div class="grain"></div>
+    <div class="stat-marker">
+      <div class="stat-marker-line"></div>
+      <span class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.18em;text-transform:uppercase;">TARGET / LIFECYCLE</span>
+    </div>
+    <div id="s4-num" class="stat-num" style="will-change:transform,opacity;">7+</div>
+    <div id="s4-unit" class="stat-unit" style="opacity:0;">Years — Lifecycle Durability</div>
+    <div id="s4-desc" class="stat-desc" style="opacity:0;">simulated wear cycles · urban use profile · anti-planned-obsolescence</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CLOSING
+══════════════════════════════════════════════════════ -->
+<div class="closing-scene">
+  <div class="closing-bg" id="closing-bg">
+    <!-- Unsplash: Tokyo night street. Free to use. -->
+    <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1920&auto=format&fit=crop&q=80"
+         alt="Urban night" loading="lazy">
+  </div>
+  <div class="closing-grad"></div>
+  <div class="grain" style="z-index:2;opacity:.025;"></div>
+
+  <div class="closing-content ct" style="max-width:none;">
+    <div style="max-width:1320px;margin:0 auto;">
+      <p class="lbl" style="margin-bottom:24px;">SECTION 07 / Launch Status</p>
+      <p class="chl" style="color:var(--t0);">Launching 2026.<br><span style="color:var(--t2);font-style:italic;">Built Deliberately.</span></p>
+      <hr class="rule" style="margin:44px 0;max-width:640px;">
+      <p style="color:var(--t1);font-size:15px;max-width:480px;line-height:1.85;margin-bottom:44px;">We are not racing to market. Every phase is gated on validated outputs. No previews. No hype. Specification updates when each phase closes.</p>
+      <div style="display:flex;max-width:460px;">
+        <input class="fi" type="email" placeholder="engineer@domain.com" style="flex:1;">
+        <button class="fb">Notify Me</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PRINCIPAL
+══════════════════════════════════════════════════════ -->
+<section id="principal" class="sec" style="background:var(--bg1);border-top:1px solid var(--b0);">
+  <div class="ct">
+    <div class="fu" style="margin-bottom:52px;">
+      <p class="lbl" style="margin-bottom:14px;">SECTION 08 / Principal</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:end;">
+        <h2 class="h2">The Operator<br>Behind the System.</h2>
+        <p style="color:var(--t1);font-size:14px;line-height:1.85;">SYSTEM THREADS is designed and led by a product operations and business systems professional with 5+ years translating complex technical requirements into structured, scalable solutions — across enterprise software, aerospace manufacturing, and cloud infrastructure. The same methodology applied here.</p>
+      </div>
+    </div>
+
+    <!-- Identity block -->
+    <div class="fu" style="border:1px solid var(--b0);background:var(--bg2);padding:36px;margin-bottom:2px;">
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;align-items:start;">
+        <div>
+          <p class="mono" style="font-size:9px;letter-spacing:.18em;color:var(--ac);text-transform:uppercase;margin-bottom:10px;">Principal Identifier</p>
+          <p class="serif" style="font-size:30px;font-weight:300;color:var(--t0);letter-spacing:-.01em;margin-bottom:6px;">Sumith Gorityala</p>
+          <p class="mono" style="font-size:11px;color:var(--t1);margin-bottom:16px;">Business Systems Analyst · Product Operations · Data-Driven Solutions</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span class="tag">Cleveland, OH</span>
+            <a href="mailto:sumithgorityala23@gmail.com"><span class="tag" style="cursor:none;">sumithgorityala23@gmail.com</span></a>
+            <span class="tag">(216) 415-4617</span>
+          </div>
+        </div>
+        <div>
+          <p class="mono" style="font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px;">Education</p>
+          <p class="mono" style="font-size:12px;color:var(--t0);margin-bottom:2px;">MS, Information Systems</p>
+          <p class="mono" style="font-size:10px;color:var(--ac);margin-bottom:2px;">STEM · Dec 2025</p>
+          <p class="mono" style="font-size:10px;color:var(--t2);margin-bottom:14px;">Cleveland State University</p>
+          <p class="mono" style="font-size:12px;color:var(--t0);margin-bottom:2px;">BTech, Mechanical Eng.</p>
+          <p class="mono" style="font-size:10px;color:var(--t2);">JNTU Hyderabad</p>
+        </div>
+        <div>
+          <p class="mono" style="font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px;">Certifications</p>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="ct2 h"><span class="mono" style="font-size:11px;color:var(--ac);">CSPO®</span><span class="mono" style="font-size:9px;color:var(--t2);">Scrum Alliance · 2026</span></div>
+            <div class="ct2"><span class="mono" style="font-size:11px;color:var(--t1);">AWS SAA</span><span class="mono" style="font-size:9px;color:var(--t2);">In Progress</span></div>
+            <div class="ct2"><span class="mono" style="font-size:11px;color:var(--t1);">AZ-900 / OCI</span><span class="mono" style="font-size:9px;color:var(--t2);">In Progress</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills -->
+    <div class="fu" style="border:1px solid var(--b0);border-top:none;background:var(--bg0);padding:28px 36px;margin-bottom:2px;">
+      <p class="mono" style="font-size:9px;letter-spacing:.18em;color:var(--t2);text-transform:uppercase;margin-bottom:22px;">Technical Capability Stack</p>
+      <div class="gauto">
+        <div><p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;letter-spacing:.12em;">Product &amp; Agile</p><div class="stg"><span class="tag">Jira</span><span class="tag">Azure DevOps</span><span class="tag">Confluence</span><span class="tag">Figma</span><span class="tag">RICE / MoSCoW</span><span class="tag">Scrum</span><span class="tag">Backlog Mgmt</span><span class="tag">Wireframing</span></div></div>
+        <div><p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;letter-spacing:.12em;">Enterprise Systems</p><div class="stg"><span class="tag">SAP</span><span class="tag">Oracle ERP</span><span class="tag">Salesforce</span><span class="tag">AWS</span><span class="tag">Azure</span><span class="tag">T2 Systems</span><span class="tag">VDI</span></div></div>
+        <div><p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;letter-spacing:.12em;">Data &amp; Analytics</p><div class="stg"><span class="tag">SQL</span><span class="tag">Python</span><span class="tag">Power BI</span><span class="tag">Tableau</span><span class="tag">Excel / VBA</span><span class="tag">A/B Testing</span><span class="tag">KPI Tracking</span></div></div>
+      </div>
+    </div>
+
+    <!-- Experience -->
+    <div class="fu" style="border:1px solid var(--b0);border-top:none;background:var(--bg2);padding:28px 36px;margin-bottom:2px;">
+      <p class="mono" style="font-size:9px;letter-spacing:.18em;color:var(--t2);text-transform:uppercase;margin-bottom:24px;">Operational Deployments — 5+ Years</p>
+      <div class="er">
+        <div><p class="mono" style="font-size:10px;color:var(--ac);">Jan 2024 – Dec 2025</p><p class="mono" style="font-size:9px;color:var(--t2);margin-top:3px;">Cleveland, OH</p></div>
+        <div>
+          <p style="font-size:14px;color:var(--t0);font-weight:400;margin-bottom:2px;">Business Systems Analyst</p>
+          <p class="mono" style="font-size:11px;color:var(--t1);margin-bottom:12px;">Cleveland State University</p>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Owned end-to-end operations for multi-platform enterprise parking ecosystem (T2 Systems SaaS, LPR cameras, custom web apps) serving 5,000+ daily users — improved operational efficiency 30%</p></div>
+            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Reduced average incident resolution time 75% (48h → 12h) via systems analysis, workflow audits, and data-driven process redesign</p></div>
+            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Maintained 99.5%+ system uptime for 15,000+ campus users; reduced support ticket volume 40% through documentation and self-service tooling</p></div>
+          </div>
+        </div>
+        <div class="etg"><span class="tag tac">Enterprise SaaS</span><span class="tag">Agile / Scrum</span><span class="tag">Stakeholder Mgmt</span></div>
+      </div>
+      <div class="er">
+        <div><p class="mono" style="font-size:10px;color:var(--ac);">Nov 2022 – Jul 2023</p><p class="mono" style="font-size:9px;color:var(--t2);margin-top:3px;">Hyderabad, India</p></div>
+        <div>
+          <p style="font-size:14px;color:var(--t0);font-weight:400;margin-bottom:2px;">Solutions Analyst</p>
+          <p class="mono" style="font-size:11px;color:var(--t1);margin-bottom:12px;">Aerotronic Technologies</p>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Translated enterprise requirements into technical specifications for aerospace/defense products — temperature sensors, wiring harnesses, CNC-machined components</p></div>
+            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Competitive analysis across industrial, railway, and aerospace segments contributed to 25% enterprise revenue growth</p></div>
+          </div>
+        </div>
+        <div class="etg"><span class="tag">Aerospace / Defense</span><span class="tag">Req. Engineering</span></div>
+      </div>
+      <div class="er">
+        <div><p class="mono" style="font-size:10px;color:var(--ac);">Sep 2021 – Nov 2022</p><p class="mono" style="font-size:9px;color:var(--t2);margin-top:3px;">Hyderabad, India</p></div>
+        <div>
+          <p style="font-size:14px;color:var(--t0);font-weight:400;margin-bottom:2px;">IT Systems Analyst</p>
+          <p class="mono" style="font-size:11px;color:var(--t1);margin-bottom:12px;">Ampler Technologies Pvt Ltd</p>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Delivered cloud migration (AWS/Azure), VDI, networking and endpoint security solutions to 50+ enterprise clients</p></div>
+            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Expanded solution portfolio via OEM onboarding; informed product positioning through usage analysis and market research</p></div>
+          </div>
+        </div>
+        <div class="etg"><span class="tag">Cloud / Infra</span><span class="tag">AWS · Azure</span></div>
+      </div>
+      <div class="er" style="border-bottom:none;">
+        <div><p class="mono" style="font-size:10px;color:var(--ac);">Dec 2019 – Aug 2021</p><p class="mono" style="font-size:9px;color:var(--t2);margin-top:3px;">Bangalore, India</p></div>
+        <div>
+          <p style="font-size:14px;color:var(--t0);font-weight:400;margin-bottom:2px;">Product Analyst</p>
+          <p class="mono" style="font-size:11px;color:var(--t1);margin-bottom:12px;">Well Ergon</p>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Built integrated workplace wellness product ecosystem via strategic tech partnerships — Freespace, Dormakaba, Shycocan</p></div>
+            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Drove 35% increase in enterprise client base through market research, competitive positioning, and stakeholder-driven requirements translation</p></div>
+          </div>
+        </div>
+        <div class="etg"><span class="tag">Product Strategy</span><span class="tag">Smart Office / IoT</span></div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="fu" style="border:1px solid var(--b0);border-top:none;padding:22px 36px;display:flex;justify-content:space-between;align-items:center;background:var(--acg);flex-wrap:wrap;gap:18px;">
+      <div>
+        <p class="mono" style="font-size:10px;color:var(--t2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;">Seeking — Product Owner · Business Systems · Product Operations</p>
+        <p style="font-size:13px;color:var(--t1);">Available for high-growth environments where systems thinking, operational rigor, and engineering fluency are non-negotiable.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-shrink:0;">
+        <a href="mailto:sumithgorityala23@gmail.com"><button class="fb">Email</button></a>
+        <a href="https://linkedin.com/in/sumith-gorityala" target="_blank"><button class="fbg">LinkedIn →</button></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════ -->
+<footer>
+  <div class="fi2">
+    <div><p class="wm" style="font-size:12px;margin-bottom:7px;">SYSTEM THREADS™</p><p class="mono" style="font-size:10px;color:var(--t2);">Engineered Outerwear · Pre-Launch 2025</p></div>
+    <div style="text-align:center;"><p class="mono" style="font-size:10px;color:var(--t2);line-height:1.9;">sumithgorityala23@gmail.com<br>Sircilla, Telangana, India<br>Designed for Global Markets</p></div>
+    <div style="text-align:right;"><p class="mono" style="font-size:10px;color:var(--t2);line-height:1.9;">US · EU · IN<br>Brand System v0.1 · 2025<br>All rights reserved</p></div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════
+     KEYFRAMES
+══════════════════════════════════════════════════════ -->
+<style>
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+</style>
+
+<!-- ══════════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ── Custom Cursor ────────────────────────────────────── */
+(function(){
+  var cur=document.getElementById('cursor');
+  var ring=document.getElementById('cursor-ring');
+  var mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',function(e){
+    mx=e.clientX;my=e.clientY;
+    cur.style.left=mx+'px';cur.style.top=my+'px';
+  },{passive:true});
+  function followRing(){
+    rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+    ring.style.left=rx+'px';ring.style.top=ry+'px';
+    requestAnimationFrame(followRing);
+  }
+  followRing();
+  document.querySelectorAll('a,button,input').forEach(function(el){
+    el.addEventListener('mouseenter',function(){
+      cur.style.width='4px';cur.style.height='4px';
+      ring.style.width='48px';ring.style.height='48px';
+    });
+    el.addEventListener('mouseleave',function(){
+      cur.style.width='8px';cur.style.height='8px';
+      ring.style.width='32px';ring.style.height='32px';
+    });
+  });
+})();
+
+/* ── Hero Canvas Grid ─────────────────────────────────── */
+(function(){
+  var cv=document.getElementById('hcv');
+  if(!cv)return;
+  var ctx=cv.getContext('2d');
+  var W,H,fr=0;
+  function rsz(){W=cv.width=cv.offsetWidth||window.innerWidth;H=cv.height=cv.offsetHeight||window.innerHeight;}
+  function drw(){
+    ctx.clearRect(0,0,W,H);
+    var cell=60,t=fr*0.0025,cols=Math.ceil(W/cell)+1,rows=Math.ceil(H/cell)+1;
+    ctx.strokeStyle='rgba(30,33,40,0.8)';ctx.lineWidth=1;
+    for(var x=0;x<=cols;x++){ctx.beginPath();ctx.moveTo(x*cell,0);ctx.lineTo(x*cell,H);ctx.stroke();}
+    for(var y=0;y<=rows;y++){ctx.beginPath();ctx.moveTo(0,y*cell);ctx.lineTo(W,y*cell);ctx.stroke();}
+    for(var x=0;x<=cols;x++){for(var y=0;y<=rows;y++){
+      var v=Math.sin(t+x*0.45+y*0.3);
+      if(v>0.86){ctx.beginPath();ctx.arc(x*cell,y*cell,1.5,0,Math.PI*2);
+        ctx.fillStyle='rgba(124,154,181,'+(((v-0.86)/0.14)*0.55)+')';ctx.fill();}
+    }}
+    var sx=((fr*0.35)%(W+200))-100;
+    var sg=ctx.createLinearGradient(sx-80,0,sx+80,0);
+    sg.addColorStop(0,'rgba(124,154,181,0)');sg.addColorStop(.5,'rgba(124,154,181,0.022)');sg.addColorStop(1,'rgba(124,154,181,0)');
+    ctx.fillStyle=sg;ctx.fillRect(sx-80,0,160,H);
+    var fg=ctx.createLinearGradient(0,H*.35,0,H);
+    fg.addColorStop(0,'rgba(9,9,11,0)');fg.addColorStop(1,'rgba(9,9,11,1)');
+    ctx.fillStyle=fg;ctx.fillRect(0,0,W,H);
+    fr++;requestAnimationFrame(drw);
+  }
+  window.addEventListener('resize',rsz);rsz();drw();
+})();
+
+/* ── Scroll Engine ────────────────────────────────────── */
+var bindings=[];
+function bind(el,fn){if(el)bindings.push({el:el,fn:fn});}
+
+function getP(el,s,e){
+  var r=el.getBoundingClientRect(),vh=window.innerHeight;
+  var raw=(vh-r.top)/(vh+r.height);
+  var clamped=Math.max(0,Math.min(1,raw));
+  if(s===undefined)return clamped;
+  return Math.max(0,Math.min(1,(clamped-s)/(e-s)));
+}
+
+var ticking=false;
+function onScroll(){
+  if(!ticking){
+    requestAnimationFrame(function(){
+      var vh=window.innerHeight;
+      bindings.forEach(function(b){
+        var r=b.el.getBoundingClientRect();
+        var raw=(vh-r.top)/(vh+r.height);
+        b.fn(Math.max(0,Math.min(1,raw)),r,vh);
+      });
+      ticking=false;
+    });
+    ticking=true;
+  }
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+// Initial call
+setTimeout(onScroll,100);
+
+/* ── Hero Photo Parallax ──────────────────────────────── */
+(function(){
+  var hp=document.getElementById('hero-photo');
+  bind(hp,function(p){
+    hp.style.transform='translateY('+(p*60)+'px)';
+  });
+})();
+
+/* ── STAT ZOOM function ───────────────────────────────── */
+function makeStatZoom(sceneId,numId,unitId,descId,preId){
+  var scene=document.getElementById(sceneId);
+  var num=document.getElementById(numId);
+  var unit=document.getElementById(unitId);
+  var desc=document.getElementById(descId);
+  var pre=preId?document.getElementById(preId):null;
+  if(!scene||!num)return;
+
+  bind(scene,function(p){
+    var scale,opNum,opSub;
+    // p=0: enter from bottom, p=1: exit from top
+    if(p<0.08){
+      scale=0.25;opNum=0;opSub=0;
+    } else if(p<0.35){
+      var pp=(p-0.08)/0.27;
+      scale=0.25+pp*0.75; // 0.25→1.0
+      opNum=pp;opSub=0;
+    } else if(p<0.6){
+      scale=1;opNum=1;opSub=Math.min(1,(p-0.35)/0.15);
+    } else if(p<0.85){
+      var pp=(p-0.6)/0.25;
+      scale=1+pp*4.5; // 1→5.5 (zoom through)
+      opNum=1-pp*1.3;opSub=1-pp;
+    } else {
+      scale=5.5;opNum=0;opSub=0;
+    }
+    num.style.transform='scale('+Math.max(0.1,scale)+')';
+    num.style.opacity=Math.max(0,opNum);
+    if(unit){unit.style.opacity=Math.max(0,opSub);}
+    if(desc){desc.style.opacity=Math.max(0,opSub*0.8);}
+    if(pre){pre.style.opacity=Math.max(0,opNum);}
+  });
+}
+
+makeStatZoom('stat1','s1-num','s1-unit','s1-desc');
+makeStatZoom('stat2','s2-num','s2-unit','s2-desc','s2-pre');
+makeStatZoom('stat3','s3-num','s3-unit','s3-desc');
+makeStatZoom('stat4','s4-num','s4-unit','s4-desc');
+
+/* ── Engineering Story ────────────────────────────────── */
+(function(){
+  var scene=document.getElementById('eng-scene');
+  if(!scene)return;
+
+  var chapters=[
+    {
+      num:'01 / 04 — MATERIAL SCIENCE',
+      title:'Material Science',
+      body:'Fabric selection driven by measurable performance matrices: hydrostatic pressure resistance (≥15,000mm), moisture vapor transmission rate (MVTR ≥10,000 g/m²/24h), and UV degradation coefficients. No material enters the spec until lab-validated against ISO standards. Face fabric, membrane, and backer treated as a laminated system — not individual layers.',
+      tags:['Laminate Architecture','DWR Chemistry','Fiber Denier Optimization'],
+      spec:'≥15,000mm',specLbl:'ISO 811',
+      photoId:'ep0'
+    },
+    {
+      num:'02 / 04 — PATTERN ENGINEERING',
+      title:'Pattern Engineering',
+      body:'Construction patterns derived from motion-capture data of urban use cases: seated transit, cycling posture, shoulder bag load distribution, elevated arm reach. Seam placement calculated around strain axes, not aesthetic convention. Pattern grading accounts for thermal expansion of composite fabrics across a −5°C to +22°C operating window.',
+      tags:['Ergonomic Seam Mapping','Motion Axis Analysis','Grade Logic'],
+      spec:'±3mm',specLbl:'Dimensional Tolerance',
+      photoId:'ep1'
+    },
+    {
+      num:'03 / 04 — CLIMATE ADAPTATION',
+      title:'Climate Adaptation',
+      body:'Each garment addresses a defined thermal band with modular extension capability. Ventilation zones positioned at mapped heat-flux points. Insulation baffles follow body heat distribution models, not symmetrical aesthetic grids. Target operative temperature range is treated as a specification requirement, not a marketing claim.',
+      tags:['Thermal Band Zoning','Venting Architecture','Modular Insulation'],
+      spec:'−5°C to +22°C',specLbl:'Operating Window',
+      photoId:'ep2'
+    },
+    {
+      num:'04 / 04 — MANUFACTURING PRECISION',
+      title:'Manufacturing Precision',
+      body:'Stitch density targets of 12–14 SPI across all structural seams. Critical stress points reinforced with double-fell construction minimum. ISO 13934-1 tensile testing protocols applied at each seam class. Every batch sampled against a dimensional spec sheet — tolerances held to ±3mm on all measured points across the garment.',
+      tags:['SPI Standards','ISO 13934-1','Dimensional QC Protocol'],
+      spec:'12–14 SPI',specLbl:'Stitch Density',
+      photoId:'ep3'
+    }
+  ];
+
+  var numEl=document.getElementById('eng-chapter-num');
+  var titleEl=document.getElementById('eng-title');
+  var bodyEl=document.getElementById('eng-body');
+  var tagsEl=document.getElementById('eng-tags');
+  var specValEl=document.getElementById('eng-spec-val');
+  var specLblEl=document.querySelector('#eng-spec .mono');
+  var progressFill=document.getElementById('eng-progress-fill');
+  var dots=[
+    document.getElementById('edot0'),document.getElementById('edot1'),
+    document.getElementById('edot2'),document.getElementById('edot3')
+  ];
+  var currentChapter=-1;
+
+  function setChapter(idx){
+    if(idx===currentChapter)return;
+    currentChapter=idx;
+    var ch=chapters[idx];
+
+    // Fade out, update, fade in
+    var els=[numEl,titleEl,bodyEl,tagsEl,specValEl];
+    els.forEach(function(el){if(el){el.style.opacity='0';el.style.transform='translateY(12px)';}});
+
+    setTimeout(function(){
+      if(numEl)numEl.textContent=ch.num;
+      if(titleEl)titleEl.textContent=ch.title;
+      if(bodyEl)bodyEl.textContent=ch.body;
+      if(tagsEl){
+        tagsEl.innerHTML='';
+        ch.tags.forEach(function(t){
+          var s=document.createElement('span');s.className='tag';s.textContent=t;
+          tagsEl.appendChild(s);
+        });
+      }
+      if(specValEl)specValEl.textContent=ch.spec;
+      if(specLblEl)specLblEl.textContent=ch.specLbl;
+
+      // Photo crossfade
+      chapters.forEach(function(c,i){
+        var ph=document.getElementById(c.photoId);
+        if(ph){ph.classList.toggle('visible',i===idx);}
+      });
+
+      // Dots
+      dots.forEach(function(d,i){if(d)d.classList.toggle('a',i===idx);});
+
+      setTimeout(function(){
+        els.forEach(function(el){if(el){el.style.transition='opacity .5s ease,transform .5s ease';el.style.opacity='1';el.style.transform='none';}});
+      },30);
+    },220);
+  }
+
+  // Photo zoom on scroll
+  function zoomPhoto(photoId,p){
+    var img=document.querySelector('#'+photoId+' img');
+    if(img){img.style.transform='scale('+(1.15-p*0.15)+')';}
+  }
+
+  bind(scene,function(p){
+    // Chapter selection — each takes 25% of scroll
+    var chIdx=Math.min(3,Math.floor(p*4));
+    setChapter(chIdx);
+
+    // Progress bar
+    if(progressFill)progressFill.style.width=(p*100)+'%';
+
+    // Photo zoom within current chapter
+    var chP=(p*4)%1;
+    zoomPhoto(chapters[chIdx].photoId,chP);
+  });
+})();
+
+/* ── Sircilla Clip-path reveal ────────────────────────── */
+(function(){
+  var scene=document.querySelector('.sir-scene');
+  var inner=document.getElementById('sir-photo-inner');
+  var img=document.getElementById('sir-img');
+  if(!scene||!inner)return;
+
+  bind(scene,function(p){
+    var reveal=Math.min(1,p*3.5); // fast reveal
+    inner.style.clipPath='inset(0 '+(100-reveal*100)+'% 0 0)';
+    if(img){img.style.transform='scale('+(1.1-reveal*0.1)+')';}
+  });
+})();
+
+/* ── Closing Parallax ─────────────────────────────────── */
+(function(){
+  var cb=document.getElementById('closing-bg');
+  if(!cb)return;
+  bind(cb,function(p){
+    cb.style.transform='translateY('+(p*-60)+'px)';
+  });
+})();
+
+/* ── Fade-up on scroll ────────────────────────────────── */
+(function(){
+  var fels=document.querySelectorAll('.fu');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e,i){
+        if(e.isIntersecting){setTimeout(function(){e.target.classList.add('on');},i*70);io.unobserve(e.target);}
+      });
+    },{threshold:0.07});
+    fels.forEach(function(el){io.observe(el);});
+  } else {fels.forEach(function(el){el.classList.add('on');});}
+})();
+
+/* ── Metric bars ──────────────────────────────────────── */
+(function(){
+  var mt=document.getElementById('mets');
+  if(!mt)return;
+  if('IntersectionObserver' in window){
+    var mio=new IntersectionObserver(function(entries){
+      if(entries[0].isIntersecting){
+        document.querySelectorAll('.mbf').forEach(function(b,i){setTimeout(function(){b.classList.add('go');},i*120);});
+        mio.disconnect();
+      }
+    },{threshold:0.15});
+    mio.observe(mt);
+  } else {document.querySelectorAll('.mbf').forEach(function(b){b.classList.add('go');});}
+})();
+
+/* ── Active nav ───────────────────────────────────────── */
+(function(){
+  var secs=document.querySelectorAll('section[id],div[id]');
+  var links=document.querySelectorAll('.nav-a');
+  if(!('IntersectionObserver' in window))return;
+  var nio=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(l){
+          l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id);
+        });
+      }
+    });
+  },{rootMargin:'-45% 0px -45% 0px'});
+  secs.forEach(function(s){if(s.id)nio.observe(s);});
+})();
+</script>
+</body>
+</html>

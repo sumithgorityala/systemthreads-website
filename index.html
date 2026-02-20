@@ -48,7 +48,6 @@ a{text-decoration:none;color:inherit;}
 .wm{font-family:'IBM Plex Mono',monospace;font-weight:600;letter-spacing:.25em;font-size:13px;text-transform:uppercase;}
 
 /* ─── PHOTO BASE TREATMENT ────────────────────────────── */
-/* All photos: grayscale, controlled darkness, unified feel */
 .p-img{width:100%;height:100%;object-fit:cover;display:block;
   filter:grayscale(100%) contrast(1.08) brightness(.6);}
 .p-img-dark{filter:grayscale(100%) contrast(1.1) brightness(.35);}
@@ -86,14 +85,19 @@ a{text-decoration:none;color:inherit;}
 .fi::placeholder{color:var(--t2);}.fi:focus{border-color:var(--ac);}
 .fb{background:var(--ac);color:var(--bg0);font-family:'IBM Plex Mono',monospace;
   font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
-  padding:14px 28px;border:none;cursor:none;
+  padding:14px 28px;border:none;cursor:pointer;
   transition:background .25s,transform .15s;white-space:nowrap;}
 .fb:hover{background:#9ab8d0;transform:translateY(-1px);}
+.fb:disabled{opacity:.5;cursor:default;transform:none;}
 .fbg{background:transparent;border:1px solid var(--ac);color:var(--ac);
   font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;
   letter-spacing:.18em;text-transform:uppercase;padding:14px 28px;
   cursor:none;transition:background .25s;white-space:nowrap;}
 .fbg:hover{background:var(--acg);}
+
+/* ─── FORM FEEDBACK ───────────────────────────────────── */
+.form-success{display:none;padding:13px 18px;border:1px solid var(--acd);background:var(--acg);margin-top:2px;}
+.form-error{display:none;padding:13px 18px;border:1px solid rgba(180,80,80,.4);background:rgba(180,80,80,.06);margin-top:2px;}
 
 /* ─── CARD ────────────────────────────────────────────── */
 .card{background:var(--bg2);border:1px solid var(--b0);transition:border-color .3s;}
@@ -107,15 +111,13 @@ a{text-decoration:none;color:inherit;}
 .fu.on{opacity:1;transform:none;}
 
 /* ═══════════════════════════════════════════════════════
-   SECTION 01 — HERO
+   HERO
 ═══════════════════════════════════════════════════════ */
 #hero{position:relative;height:100vh;overflow:hidden;
   display:flex;flex-direction:column;justify-content:flex-end;}
-#hero-photo{position:absolute;inset:0;z-index:0;
-  will-change:transform;}
+#hero-photo{position:absolute;inset:0;z-index:0;will-change:transform;}
 #hero-photo img{width:100%;height:110%;object-fit:cover;
-  filter:grayscale(100%) contrast(1.1) brightness(.12);
-  display:block;}
+  filter:grayscale(100%) contrast(1.1) brightness(.12);display:block;}
 #hcv{position:absolute;inset:0;width:100%;height:100%;z-index:1;}
 .hero-c{position:relative;z-index:3;max-width:1320px;
   margin:0 auto;width:100%;padding:0 40px 80px;}
@@ -123,7 +125,7 @@ a{text-decoration:none;color:inherit;}
   font-size:clamp(42px,7.5vw,96px);line-height:1.03;color:var(--t0);letter-spacing:-.015em;}
 
 /* ═══════════════════════════════════════════════════════
-   STAT ZOOM SECTIONS (Apple-style scroll reveal)
+   STAT ZOOM SECTIONS
 ═══════════════════════════════════════════════════════ */
 .stat-scene{position:relative;}
 .stat-sticky{position:sticky;top:0;height:100vh;overflow:hidden;
@@ -140,97 +142,71 @@ a{text-decoration:none;color:inherit;}
   position:relative;z-index:3;margin-top:20px;text-align:center;}
 .stat-desc{font-family:'IBM Plex Mono',monospace;font-size:11px;
   color:var(--t2);letter-spacing:.14em;text-transform:uppercase;
-  position:relative;z-index:3;margin-top:14px;text-align:center;
-  max-width:400px;}
-
-/* Horizontal rule marker on stat sections */
+  position:relative;z-index:3;margin-top:14px;text-align:center;max-width:400px;}
 .stat-marker{position:absolute;top:50%;left:40px;z-index:4;
   display:flex;align-items:center;gap:14px;transform:translateY(-50%);}
 .stat-marker-line{width:32px;height:1px;background:var(--acd);}
 
 /* ═══════════════════════════════════════════════════════
-   PROBLEM SECTION
+   PROBLEM
 ═══════════════════════════════════════════════════════ */
 .pb{border-left:2px solid var(--b1);padding-left:24px;transition:border-color .3s;}
 .pb:hover{border-left-color:var(--ac);}
 
 /* ═══════════════════════════════════════════════════════
-   ENGINEERING STORY (single long sticky section)
+   ENGINEERING STORY
 ═══════════════════════════════════════════════════════ */
 #eng-scene{position:relative;}
 #eng-sticky{position:sticky;top:0;height:100vh;overflow:hidden;
   display:grid;grid-template-columns:1fr 1fr;background:var(--bg0);}
-
-/* Left text panel */
 #eng-left{position:relative;z-index:2;display:flex;flex-direction:column;
   justify-content:center;padding:80px 60px;border-right:1px solid var(--b0);}
 #eng-chapter-num{font-family:'IBM Plex Mono',monospace;font-size:11px;
-  color:var(--ac);letter-spacing:.2em;margin-bottom:24px;
-  transition:opacity .5s ease;}
+  color:var(--ac);letter-spacing:.2em;margin-bottom:24px;transition:opacity .5s ease;}
 #eng-title{font-family:'Cormorant',Georgia,serif;font-size:clamp(32px,3.5vw,48px);
   font-weight:300;line-height:1.1;margin-bottom:24px;
   transition:opacity .5s ease,transform .5s ease;}
-#eng-accent{width:36px;height:1px;background:var(--ac);margin-bottom:24px;
-  transition:opacity .5s ease;}
-#eng-body{color:var(--t1);font-size:14px;line-height:1.85;max-width:440px;
-  transition:opacity .5s ease;}
-#eng-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:28px;
-  transition:opacity .5s ease;}
+#eng-accent{width:36px;height:1px;background:var(--ac);margin-bottom:24px;transition:opacity .5s ease;}
+#eng-body{color:var(--t1);font-size:14px;line-height:1.85;max-width:440px;transition:opacity .5s ease;}
+#eng-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:28px;transition:opacity .5s ease;}
 #eng-spec{margin-top:32px;padding:16px 20px;border:1px solid var(--acd);
   background:var(--acg);display:flex;align-items:baseline;gap:8px;
   max-width:280px;transition:opacity .5s ease;}
 #eng-spec-val{font-family:'Cormorant',Georgia,serif;font-size:36px;font-weight:300;color:var(--ac);}
 #eng-spec-lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--t2);letter-spacing:.1em;}
-
-/* Progress tracker */
-#eng-progress-bar{position:absolute;bottom:0;left:0;right:0;height:2px;
-  background:var(--b0);z-index:5;}
+#eng-progress-bar{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--b0);z-index:5;}
 #eng-progress-fill{height:100%;background:var(--ac);width:0%;transition:width .1s linear;}
 #eng-chapter-dots{position:absolute;bottom:20px;left:60px;display:flex;gap:10px;z-index:5;}
-.eng-dot{width:6px;height:6px;border-radius:50%;background:var(--b1);
-  transition:background .3s,transform .3s;}
+.eng-dot{width:6px;height:6px;border-radius:50%;background:var(--b1);transition:background .3s,transform .3s;}
 .eng-dot.a{background:var(--ac);transform:scale(1.3);}
-
-/* Right photo panel */
 #eng-right{position:relative;overflow:hidden;}
-.eng-photo-layer{position:absolute;inset:0;
-  transition:opacity .6s ease;opacity:0;}
+.eng-photo-layer{position:absolute;inset:0;transition:opacity .6s ease;opacity:0;}
 .eng-photo-layer.visible{opacity:1;}
 .eng-photo-layer img{width:100%;height:100%;object-fit:cover;
-  filter:grayscale(100%) contrast(1.08) brightness(.65);
-  display:block;will-change:transform;}
-/* Photo annotation */
-.eng-annotation{position:absolute;z-index:3;bottom:32px;right:32px;
-  text-align:right;}
+  filter:grayscale(100%) contrast(1.08) brightness(.65);display:block;will-change:transform;}
+.eng-annotation{position:absolute;z-index:3;bottom:32px;right:32px;text-align:right;}
 .eng-annotation p{font-family:'IBM Plex Mono',monospace;font-size:9px;
   color:rgba(124,154,181,.6);letter-spacing:.12em;line-height:1.8;}
-/* Accent corner lines on photo */
 #eng-right::before{content:'';position:absolute;top:24px;right:24px;
-  width:24px;height:24px;border-top:1px solid var(--acd);
-  border-right:1px solid var(--acd);z-index:3;}
+  width:24px;height:24px;border-top:1px solid var(--acd);border-right:1px solid var(--acd);z-index:3;}
 #eng-right::after{content:'';position:absolute;bottom:24px;left:24px;
-  width:24px;height:24px;border-bottom:1px solid var(--acd);
-  border-left:1px solid var(--acd);z-index:3;}
+  width:24px;height:24px;border-bottom:1px solid var(--acd);border-left:1px solid var(--acd);z-index:3;}
 
 /* ═══════════════════════════════════════════════════════
-   SIRCILLA — CLIP-PATH REVEAL
+   SIRCILLA
 ═══════════════════════════════════════════════════════ */
 .sir-scene{position:relative;}
-.sir-sticky{position:sticky;top:0;height:100vh;overflow:hidden;
-  display:grid;grid-template-columns:1fr 1fr;}
+.sir-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;}
 .sir-photo{position:relative;overflow:hidden;background:var(--bg1);}
 .sir-photo-inner{position:absolute;inset:0;will-change:clip-path;}
 .sir-photo-inner img{width:100%;height:100%;object-fit:cover;
-  filter:grayscale(100%) contrast(1.1) brightness(.55);display:block;
-  will-change:transform;}
-/* Measurement markers on photo */
+  filter:grayscale(100%) contrast(1.1) brightness(.55);display:block;will-change:transform;}
 .sir-mark{position:absolute;z-index:4;font-family:'IBM Plex Mono',monospace;
   font-size:9px;color:rgba(124,154,181,.65);letter-spacing:.12em;}
 .sir-mark.tl{top:24px;left:24px;border-left:1px solid var(--acd);padding-left:10px;}
 .sir-mark.br{bottom:24px;right:24px;text-align:right;border-right:1px solid var(--acd);padding-right:10px;}
 .sir-text{background:var(--bg1);padding:80px 60px;
-  display:flex;flex-direction:column;justify-content:center;
-  border-left:1px solid var(--b0);}
+  display:flex;flex-direction:column;justify-content:center;border-left:1px solid var(--b0);}
 
 /* ═══════════════════════════════════════════════════════
    ROADMAP
@@ -255,15 +231,10 @@ a{text-decoration:none;color:inherit;}
   width:0;transition:width 1.4s cubic-bezier(.16,1,.3,1);}
 .mbf.go{width:var(--w);}
 
-/* Count-up number */
-.count-val{font-family:'Cormorant',Georgia,serif;font-size:42px;font-weight:300;
-  color:var(--ac);line-height:1;}
-
 /* ═══════════════════════════════════════════════════════
-   CLOSING PARALLAX
+   CLOSING
 ═══════════════════════════════════════════════════════ */
-.closing-scene{position:relative;height:100vh;overflow:hidden;
-  display:flex;align-items:flex-end;}
+.closing-scene{position:relative;height:100vh;overflow:hidden;display:flex;align-items:flex-end;}
 .closing-bg{position:absolute;inset:0;z-index:0;will-change:transform;}
 .closing-bg img{width:100%;height:115%;object-fit:cover;
   filter:grayscale(100%) brightness(.2) contrast(1.1);display:block;}
@@ -318,13 +289,10 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
 </head>
 <body>
 
-<!-- Custom cursor -->
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
 
-<!-- ══════════════════════════════════════════════════════
-     NAV
-══════════════════════════════════════════════════════ -->
+<!-- ══ NAV ═══════════════════════════════════════════════ -->
 <nav id="nav">
   <div class="ni">
     <span class="wm">SYSTEM THREADS</span>
@@ -339,12 +307,9 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
   </div>
 </nav>
 
-<!-- ══════════════════════════════════════════════════════
-     HERO
-══════════════════════════════════════════════════════ -->
+<!-- ══ HERO ══════════════════════════════════════════════ -->
 <section id="hero">
   <div id="hero-photo">
-    <!-- Unsplash: Pittsburgh / dark city skyline. Free to use. -->
     <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1920&auto=format&fit=crop&q=80"
          alt="Urban nightscape" loading="eager">
   </div>
@@ -352,7 +317,7 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
   <div class="grain"></div>
 
   <div class="hero-c">
-    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:56px;" id="hero-chips">
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:56px;">
       <span class="chip"><span class="dot"></span>Pre-launch · Validation 2026</span>
       <span class="chip">Telangana, India — 18.3851°N 78.8232°E</span>
       <span class="chip">Target Markets: US / EU / IN</span>
@@ -367,55 +332,58 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
         SYSTEM THREADS applies systems engineering methodology to outerwear — treating every garment as an assembly of interdependent performance modules. Form is a derivative of function.
       </p>
     </div>
+
+    <!-- HERO FORM — functional via Apps Script -->
     <div style="margin-top:44px;max-width:460px;opacity:0;animation:fadeUp .7s 1.2s forwards;">
       <p class="mono" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--t2);margin-bottom:11px;">Request Specification Sheet / Notify on Launch</p>
-      <div style="display:flex;">
-        <input class="fi" type="email" placeholder="engineer@domain.com" style="flex:1;">
-        <button class="fb">Register</button>
+      <div id="hero-form-wrap">
+        <input class="fi" type="text" id="hero-name" placeholder="Full name (optional)" style="margin-bottom:2px;">
+        <div style="display:flex;">
+          <input class="fi" type="email" id="hero-email" placeholder="engineer@domain.com" style="flex:1;">
+          <button class="fb" id="hero-btn" onclick="submitForm('hero')">Register</button>
+        </div>
+      </div>
+      <div class="form-success" id="hero-success">
+        <p class="mono" style="font-size:11px;color:var(--ac);letter-spacing:.1em;">✓ REGISTERED — Specification updates will follow.</p>
+      </div>
+      <div class="form-error" id="hero-error">
+        <p class="mono" style="font-size:11px;color:#c07878;letter-spacing:.1em;" id="hero-err-msg">Submission failed. Please try again.</p>
       </div>
       <p class="mono" style="font-size:10px;color:var(--t2);margin-top:9px;">No marketing. Specification updates only.</p>
     </div>
+
     <hr class="rule" style="margin-top:60px;opacity:0;animation:fadeUp .5s 1.4s forwards;">
     <div style="display:flex;justify-content:space-between;padding-top:16px;flex-wrap:wrap;gap:10px;opacity:0;animation:fadeUp .5s 1.5s forwards;">
       <span class="mono" style="font-size:10px;color:var(--t2);letter-spacing:.1em;">SYSTEM THREADS™ — BRAND SYSTEM v0.1</span>
-      <span class="mono" style="font-size:10px;color:var(--t2);letter-spacing:.1em;">LAUNCHING 2026 — BUILT DELIBERATELY</span>
+      <span class="mono" style="font-size:10px;color:var(--t2);letter-spacing:.1em;">LAUNCHING 2027 — BUILDING DELIBERATELY</span>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════
-     STAT ZOOM 01 — Climate Variability (Apple scroll moment)
-══════════════════════════════════════════════════════ -->
+<!-- ══ STAT ZOOM 01 — Climate Variability ════════════════ -->
 <div class="stat-scene" id="stat1" style="height:260vh;background:var(--bg0);">
   <div class="stat-sticky">
     <div class="stat-bg-img">
-      <!-- Unsplash: rainy urban street. Free to use. -->
       <img src="https://images.unsplash.com/photo-1519744346361-7a029b427a59?w=1920&auto=format&fit=crop&q=80"
            class="p-img-dark" alt="Urban rain" loading="lazy">
     </div>
     <div class="stat-bg-overlay"></div>
     <div class="grain"></div>
-
-    <!-- Left annotation marker -->
     <div class="stat-marker">
       <div class="stat-marker-line"></div>
       <span class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.18em;text-transform:uppercase;">OBSERVED / CLIMATE</span>
     </div>
-    <!-- Right reference -->
     <div style="position:absolute;right:40px;top:50%;transform:translateY(-50%);z-index:5;text-align:right;">
       <p class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;">REF — VAR.01</p>
       <p class="mono" style="font-size:10px;color:var(--t1);line-height:1.8;">Urban thermal range<br>Single commute window<br>~4h exposure cycle</p>
     </div>
-
     <div id="s1-num" class="stat-num" style="will-change:transform,opacity;">8–14</div>
     <div id="s1-unit" class="stat-unit" style="opacity:0;">°C</div>
     <div id="s1-desc" class="stat-desc" style="opacity:0;">urban thermal variability per single commute cycle</div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     PROBLEM SECTION
-══════════════════════════════════════════════════════ -->
+<!-- ══ PROBLEM ════════════════════════════════════════════ -->
 <section id="problem" class="sec" style="background:var(--bg1);border-top:1px solid var(--b0);border-bottom:1px solid var(--b0);">
   <div class="ct">
     <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:72px;align-items:start;">
@@ -424,26 +392,20 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
         <h2 class="h2">The Friction of<br>Modern Outerwear.</h2>
         <hr class="rule-ac" style="margin:28px 0;">
         <p class="mono" style="font-size:11px;color:var(--t2);line-height:1.85;">Urban environments expose a structural gap between what outerwear claims to solve and what it actually addresses. This is not a design problem. It is a systems failure.</p>
-
-        <!-- Embedded figure photo -->
         <div style="margin-top:36px;position:relative;overflow:hidden;border:1px solid var(--b0);">
           <div style="height:240px;overflow:hidden;position:relative;">
-            <!-- Unsplash: jacket/outerwear detail. Free to use. -->
             <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&auto=format&fit=crop&q=80"
                  class="p-img" style="transition:transform .8s ease;" loading="lazy"
                  onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
           </div>
-          <!-- Photo annotation overlay -->
           <div style="position:absolute;bottom:0;left:0;right:0;padding:12px 14px;background:linear-gradient(to top,rgba(9,9,11,.95),transparent);z-index:2;">
             <p class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.12em;">FIG.01 — Conventional construction. Zero performance specification applied to thermal management or moisture response.</p>
           </div>
-          <!-- Corner markers -->
           <div style="position:absolute;top:10px;right:10px;width:16px;height:16px;border-top:1px solid var(--acd);border-right:1px solid var(--acd);z-index:3;"></div>
           <div style="position:absolute;bottom:40px;left:10px;width:16px;height:16px;border-bottom:1px solid var(--acd);border-left:1px solid var(--acd);z-index:3;"></div>
         </div>
         <p class="mono" style="font-size:9px;color:var(--t2);margin-top:8px;letter-spacing:.1em;padding-left:2px;">CLASSIFICATION: Fashion outerwear. Thermal performance: unspecified.</p>
       </div>
-
       <div style="display:flex;flex-direction:column;gap:36px;">
         <div class="pb fu">
           <p class="mono" style="font-size:10px;letter-spacing:.14em;color:var(--ac);margin-bottom:9px;text-transform:uppercase;">Variable 01 — Climate Variability</p>
@@ -466,13 +428,10 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════
-     STAT ZOOM 02 — Hydrostatic Target
-══════════════════════════════════════════════════════ -->
+<!-- ══ STAT ZOOM 02 — Hydrostatic Target ════════════════ -->
 <div class="stat-scene" id="stat2" style="height:240vh;background:var(--bg0);">
   <div class="stat-sticky">
     <div class="stat-bg-img">
-      <!-- Unsplash: fabric/textile macro. Free to use. -->
       <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&auto=format&fit=crop&q=80"
            class="p-img-dark" alt="Fabric macro" loading="lazy">
     </div>
@@ -485,7 +444,6 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
     <div style="position:absolute;right:40px;bottom:40px;z-index:5;text-align:right;">
       <p class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.12em;">ISO 811 / Hydrostatic pressure<br>test protocol applied</p>
     </div>
-
     <div style="position:relative;z-index:3;text-align:center;">
       <p class="mono" id="s2-pre" style="font-size:clamp(16px,2.5vw,24px);color:var(--ac);letter-spacing:.3em;margin-bottom:8px;opacity:0;">≥</p>
       <div id="s2-num" class="stat-num" style="will-change:transform,opacity;">15,000</div>
@@ -495,19 +453,15 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     ENGINEERING STORY — Single sticky 4-chapter section
-══════════════════════════════════════════════════════ -->
-<div id="engineering"></div><!-- nav anchor -->
+<!-- ══ ENGINEERING STORY ══════════════════════════════════ -->
+<div id="engineering"></div>
 <div id="eng-scene" style="height:520vh;background:var(--bg0);">
   <div id="eng-sticky">
     <div class="grain" style="z-index:4;"></div>
-
-    <!-- LEFT: Text panel -->
     <div id="eng-left">
       <p class="lbl" style="margin-bottom:6px;">SECTION 03 / Engineering Approach</p>
       <p id="eng-chapter-num" class="mono" style="font-size:11px;color:var(--t2);letter-spacing:.2em;margin-bottom:22px;">01 / 04 — MATERIAL SCIENCE</p>
-      <div id="eng-accent" style="width:36px;height:1px;background:var(--ac);margin-bottom:22px;"></div>
+      <div id="eng-accent"></div>
       <h3 id="eng-title" class="serif" style="font-size:clamp(30px,3.2vw,44px);font-weight:300;line-height:1.1;margin-bottom:22px;">Material Science</h3>
       <p id="eng-body" style="color:var(--t1);font-size:14px;line-height:1.85;max-width:440px;">
         Fabric selection driven by measurable performance matrices: hydrostatic pressure resistance (≥15,000mm), moisture vapor transmission rate (MVTR ≥10,000 g/m²/24h), and UV degradation coefficients. No material enters the spec until lab-validated against ISO standards. Face fabric, membrane, and backer are treated as a laminated system — not individual layers.
@@ -517,82 +471,63 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
         <span class="tag">DWR Chemistry</span>
         <span class="tag">Fiber Denier</span>
       </div>
-      <div id="eng-spec" style="margin-top:28px;padding:14px 18px;border:1px solid var(--acd);background:var(--acg);display:flex;align-items:baseline;gap:8px;max-width:260px;">
-        <span id="eng-spec-val" class="serif" style="font-size:34px;font-weight:300;color:var(--ac);">≥15,000mm</span>
-        <span class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.1em;">ISO 811</span>
+      <div id="eng-spec">
+        <span id="eng-spec-val">≥15,000mm</span>
+        <span id="eng-spec-lbl" class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.1em;">ISO 811</span>
       </div>
-
-      <!-- Chapter dots -->
-      <div id="eng-chapter-dots" style="position:absolute;bottom:28px;left:60px;display:flex;gap:10px;z-index:5;">
+      <div id="eng-chapter-dots">
         <div class="eng-dot a" id="edot0"></div>
         <div class="eng-dot" id="edot1"></div>
         <div class="eng-dot" id="edot2"></div>
         <div class="eng-dot" id="edot3"></div>
       </div>
     </div>
-
-    <!-- RIGHT: Photo panel -->
     <div id="eng-right">
-      <!-- Chapter 0: Fabric texture -->
       <div class="eng-photo-layer visible" id="ep0">
-        <!-- Unsplash: textile/fabric weave. Free to use. -->
         <img src="https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=1200&auto=format&fit=crop&q=80"
-             alt="Textile fabric weave" id="ep0-img" loading="eager">
+             alt="Textile fabric weave" loading="eager">
         <div class="eng-annotation">
           <p>FACE FABRIC — LAMINATE SYSTEM</p>
           <p>Denier: TBD / Weave: TBD</p>
           <p>ISO 811 CERTIFIED MEMBRANE</p>
         </div>
       </div>
-      <!-- Chapter 1: Pattern/technical drawing -->
       <div class="eng-photo-layer" id="ep1">
-        <!-- Unsplash: technical drawing / engineering lines. Free to use. -->
         <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&auto=format&fit=crop&q=80"
-             alt="Technical pattern engineering" id="ep1-img" loading="lazy">
+             alt="Technical pattern engineering" loading="lazy">
         <div class="eng-annotation">
           <p>PATTERN GRADE — TECHNICAL REVIEW</p>
           <p>Seam axis: motion-capture derived</p>
           <p>TOLERANCE: ±3mm ALL POINTS</p>
         </div>
       </div>
-      <!-- Chapter 2: Architectural grid / thermal abstraction -->
       <div class="eng-photo-layer" id="ep2">
-        <!-- Unsplash: architectural lines, climate abstraction. Free to use. -->
         <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1200&auto=format&fit=crop&q=80"
-             alt="Climate adaptation zones" id="ep2-img" loading="lazy">
+             alt="Climate adaptation zones" loading="lazy">
         <div class="eng-annotation">
           <p>THERMAL ZONE MAPPING</p>
           <p>Operative range: −5°C to +22°C</p>
           <p>MODULAR INSULATION SYSTEM</p>
         </div>
       </div>
-      <!-- Chapter 3: Manufacturing / sewing -->
       <div class="eng-photo-layer" id="ep3">
-        <!-- Unsplash: sewing / manufacturing precision. Free to use. -->
         <img src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=1200&auto=format&fit=crop&q=80"
-             alt="Precision manufacturing sewing" id="ep3-img" loading="lazy">
+             alt="Precision manufacturing sewing" loading="lazy">
         <div class="eng-annotation">
           <p>STRUCTURAL SEAM — SPI 12–14</p>
           <p>Double-fell construction</p>
           <p>ISO 13934-1 TENSILE TESTED</p>
         </div>
       </div>
-
-      <!-- Progress bar along bottom of photo -->
-      <div id="eng-progress-bar">
-        <div id="eng-progress-fill"></div>
-      </div>
+      <div id="eng-progress-bar"><div id="eng-progress-fill"></div></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     STAT ZOOM 03 — Stitch Density
-══════════════════════════════════════════════════════ -->
+<!-- ══ STAT ZOOM 03 — Stitch Density ════════════════════ -->
 <div class="stat-scene" id="stat3" style="height:220vh;background:var(--bg0);">
   <div class="stat-sticky">
     <div class="stat-bg-img">
-      <!-- Unsplash: close-up stitch / manufacturing. Free to use. -->
       <img src="https://media.licdn.com/dms/image/v2/D4E03AQHeM4Amfj_9Tg/profile-displayphoto-crop_800_800/B4EZsWM1WtHEAI-/0/1765604022383?e=1773273600&v=beta&t=KC6f8rV7Cbou2Zfx7lFZpBssvNbkNcOSTGS3MoLngVE"
            class="p-img-dark" alt="Stitch precision" loading="lazy">
     </div>
@@ -602,7 +537,6 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
       <div class="stat-marker-line"></div>
       <span class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.18em;text-transform:uppercase;">SPEC / MANUFACTURING</span>
     </div>
-
     <div style="position:relative;z-index:3;text-align:center;">
       <div id="s3-num" class="stat-num" style="will-change:transform,opacity;">12–14</div>
       <div id="s3-unit" class="stat-unit" style="opacity:0;">SPI — Stitches Per Inch</div>
@@ -611,72 +545,57 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     SIRCILLA — Clip-path horizontal reveal
-══════════════════════════════════════════════════════ -->
+<!-- ══ SIRCILLA ═══════════════════════════════════════════ -->
 <div id="sircilla" style="position:relative;">
   <div class="sir-scene" style="height:320vh;">
     <div class="sir-sticky">
-
-      <!-- LEFT: Photo reveals on scroll -->
       <div class="sir-photo">
         <div class="sir-photo-inner" id="sir-photo-inner">
-          <!-- Unsplash: textile loom / weaving. Free to use. -->
-          <img src="https://images.unsplash.com/photo-1660980041852-230420b8f99f?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          <img src="https://images.unsplash.com/photo-1660980041852-230420b8f99f?q=80&w=880&auto=format&fit=crop"
                alt="Textile loom Sircilla" id="sir-img" loading="lazy">
         </div>
-        <!-- Annotation marks -->
         <div class="sir-mark tl">18.3851° N<br>78.8232° E<br>SIRCILLA</div>
         <div class="sir-mark br">CLUSTER WORKFORCE<br>~120,000<br>TELANGANA, IN</div>
-        <!-- Corner markers -->
         <div style="position:absolute;top:20px;right:20px;width:20px;height:20px;border-top:1px solid var(--acd);border-right:1px solid var(--acd);z-index:5;"></div>
         <div style="position:absolute;bottom:20px;left:20px;width:20px;height:20px;border-bottom:1px solid var(--acd);border-left:1px solid var(--acd);z-index:5;"></div>
         <div class="grain"></div>
       </div>
-
-      <!-- RIGHT: Text -->
       <div class="sir-text">
-        <div id="sir-text-content">
-          <p class="lbl" style="margin-bottom:14px;">SECTION 04 / Manufacturing Origin</p>
-          <h2 class="h2" style="margin-bottom:28px;">Built Where Textile<br>Legacy Meets<br>Modern Precision.</h2>
-          <hr class="rule-ac" style="margin-bottom:28px;">
-          <p class="mono" style="font-size:10px;color:var(--t2);line-height:2;margin-bottom:24px;">
-            18.3851° N, 78.8232° E — Sircilla, Telangana<br>
-            Established textile cluster: ~2,000 registered looms<br>
-            Powerloom heritage: post-1970s industrialization
-          </p>
-          <p style="color:var(--t1);font-size:14px;line-height:1.85;margin-bottom:36px;">
-            Sircilla operates as one of India's most concentrated powerloom economies — a district whose industrial identity is inseparable from textile production. Decades of accumulated craft knowledge, combined with a skilled workforce, make it the logical anchor for a precision manufacturing operation positioned for global quality standards.
-          </p>
-          <div style="display:flex;flex-direction:column;gap:2px;">
-            <div style="border:1px solid var(--b0);padding:18px 20px;background:var(--bg2);">
-              <p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;margin-bottom:6px;">01 — Existing Skill Base</p>
-              <p style="color:var(--t1);font-size:13px;line-height:1.7;">Generational expertise in fabric construction, loom calibration, and finishing operations. Retrainable to technical outerwear standards with targeted upskilling in seam engineering and quality control systems.</p>
-            </div>
-            <div style="border:1px solid var(--b0);padding:18px 20px;background:var(--bg2);">
-              <p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;margin-bottom:6px;">02 — Modernization Intent</p>
-              <p style="color:var(--t1);font-size:13px;line-height:1.7;">Phase-wise introduction of automated cutting, CAD pattern digitization, and ISO-aligned QC infrastructure. Augmentation of existing capability — not replacement.</p>
-            </div>
-            <div style="border:1px solid var(--b0);padding:18px 20px;background:var(--bg2);">
-              <p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;margin-bottom:6px;">03 — Vertical Integration Target</p>
-              <p style="color:var(--t1);font-size:13px;line-height:1.7;">Consolidated facility integrating raw material processing, lamination, cut-and-sew, and QA within a single controlled environment. Reduces variability. Compresses lead times. Tighter tolerance enforcement.</p>
-            </div>
+        <p class="lbl" style="margin-bottom:14px;">SECTION 04 / Manufacturing Origin</p>
+        <h2 class="h2" style="margin-bottom:28px;">Built Where Textile<br>Legacy Meets<br>Modern Precision.</h2>
+        <hr class="rule-ac" style="margin-bottom:28px;">
+        <p class="mono" style="font-size:10px;color:var(--t2);line-height:2;margin-bottom:24px;">
+          18.3851° N, 78.8232° E — Sircilla, Telangana<br>
+          Established textile cluster: ~2,000 registered looms<br>
+          Powerloom heritage: post-1970s industrialization
+        </p>
+        <p style="color:var(--t1);font-size:14px;line-height:1.85;margin-bottom:36px;">
+          Sircilla operates as one of India's most concentrated powerloom economies — a district whose industrial identity is inseparable from textile production. Decades of accumulated craft knowledge, combined with a skilled workforce, make it the logical anchor for a precision manufacturing operation positioned for global quality standards.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <div style="border:1px solid var(--b0);padding:18px 20px;background:var(--bg2);">
+            <p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;margin-bottom:6px;">01 — Existing Skill Base</p>
+            <p style="color:var(--t1);font-size:13px;line-height:1.7;">Generational expertise in fabric construction, loom calibration, and finishing operations. Retrainable to technical outerwear standards with targeted upskilling in seam engineering and quality control systems.</p>
           </div>
-          <!-- Data grid -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-top:2px;background:var(--b0);">
-            <div style="background:var(--bg0);padding:16px;"><p class="mono" style="font-size:9px;color:var(--t2);margin-bottom:4px;">PORT DISTANCE</p><p class="mono" style="font-size:14px;color:var(--t0);">~340 km</p><p class="mono" style="font-size:9px;color:var(--t2);">Chennai (MAA)</p></div>
-            <div style="background:var(--bg0);padding:16px;"><p class="mono" style="font-size:9px;color:var(--t2);margin-bottom:4px;">STATUS</p><p class="mono" style="font-size:14px;color:var(--t0);">Phase 1</p><p class="mono" style="font-size:9px;color:var(--t2);">Vendor Assessment</p></div>
+          <div style="border:1px solid var(--b0);padding:18px 20px;background:var(--bg2);">
+            <p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;margin-bottom:6px;">02 — Modernization Intent</p>
+            <p style="color:var(--t1);font-size:13px;line-height:1.7;">Phase-wise introduction of automated cutting, CAD pattern digitization, and ISO-aligned QC infrastructure. Augmentation of existing capability — not replacement.</p>
+          </div>
+          <div style="border:1px solid var(--b0);padding:18px 20px;background:var(--bg2);">
+            <p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;margin-bottom:6px;">03 — Vertical Integration Target</p>
+            <p style="color:var(--t1);font-size:13px;line-height:1.7;">Consolidated facility integrating raw material processing, lamination, cut-and-sew, and QA within a single controlled environment. Reduces variability. Compresses lead times. Tighter tolerance enforcement.</p>
           </div>
         </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-top:2px;background:var(--b0);">
+          <div style="background:var(--bg0);padding:16px;"><p class="mono" style="font-size:9px;color:var(--t2);margin-bottom:4px;">PORT DISTANCE</p><p class="mono" style="font-size:14px;color:var(--t0);">~340 km</p><p class="mono" style="font-size:9px;color:var(--t2);">Chennai (MAA)</p></div>
+          <div style="background:var(--bg0);padding:16px;"><p class="mono" style="font-size:9px;color:var(--t2);margin-bottom:4px;">STATUS</p><p class="mono" style="font-size:14px;color:var(--t0);">Phase 1</p><p class="mono" style="font-size:9px;color:var(--t2);">Vendor Assessment</p></div>
+        </div>
       </div>
-
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     ROADMAP
-══════════════════════════════════════════════════════ -->
+<!-- ══ ROADMAP ════════════════════════════════════════════ -->
 <section id="roadmap" class="sec" style="background:var(--bg1);border-top:1px solid var(--b0);border-bottom:1px solid var(--b0);">
   <div class="ct">
     <div class="fu" style="margin-bottom:68px;">
@@ -742,11 +661,8 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════
-     METRICS
-══════════════════════════════════════════════════════ -->
+<!-- ══ METRICS ════════════════════════════════════════════ -->
 <section id="metrics" class="sec" style="background:var(--bg0);position:relative;border-top:1px solid var(--b0);">
-  <!-- Background fabric photo, ultra-dark -->
   <div class="metrics-bg">
     <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop&q=60"
          alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;filter:grayscale(100%);">
@@ -781,13 +697,10 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════
-     STAT ZOOM 04 — Lifecycle
-══════════════════════════════════════════════════════ -->
+<!-- ══ STAT ZOOM 04 — Lifecycle ══════════════════════════ -->
 <div class="stat-scene" id="stat4" style="height:220vh;background:var(--bg0);">
   <div class="stat-sticky">
     <div class="stat-bg-img">
-      <!-- Unsplash: dark industrial/architectural. Free to use. -->
       <img src="https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=1920&auto=format&fit=crop&q=80"
            class="p-img-dark" alt="Durability" loading="lazy">
     </div>
@@ -803,12 +716,9 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     CLOSING
-══════════════════════════════════════════════════════ -->
+<!-- ══ CLOSING ════════════════════════════════════════════ -->
 <div class="closing-scene">
   <div class="closing-bg" id="closing-bg">
-    <!-- Unsplash: Tokyo night street. Free to use. -->
     <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1920&auto=format&fit=crop&q=80"
          alt="Urban night" loading="lazy">
   </div>
@@ -820,18 +730,27 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
       <p class="lbl" style="margin-bottom:24px;">SECTION 07 / Launch Status</p>
       <p class="chl" style="color:var(--t0);">Launching 2027.<br><span style="color:var(--t2);font-style:italic;">Built Deliberately.</span></p>
       <hr class="rule" style="margin:44px 0;max-width:640px;">
-      <p style="color:var(--t1);font-size:15px;max-width:480px;line-height:1.85;margin-bottom:44px;">We are not racing to market. Every phase is gated on validated outputs. No previews. No hype. Specification updates when each phase closes.</p>
-      <div style="display:flex;max-width:460px;">
-        <input class="fi" type="email" placeholder="engineer@domain.com" style="flex:1;">
-        <button class="fb">Notify Me</button>
+      <p style="color:var(--t1);font-size:15px;max-width:480px;line-height:1.85;margin-bottom:32px;">We are not racing to market. Every phase is gated on validated outputs. No previews. No hype. Specification updates when each phase closes.</p>
+
+      <!-- CLOSING FORM — functional via Apps Script -->
+      <div id="closing-form-wrap" style="max-width:460px;">
+        <input class="fi" type="text" id="closing-name" placeholder="Full name (optional)" style="margin-bottom:2px;">
+        <div style="display:flex;">
+          <input class="fi" type="email" id="closing-email" placeholder="engineer@domain.com" style="flex:1;">
+          <button class="fb" id="closing-btn" onclick="submitForm('closing')">Notify Me</button>
+        </div>
+      </div>
+      <div class="form-success" id="closing-success" style="max-width:460px;">
+        <p class="mono" style="font-size:11px;color:var(--ac);letter-spacing:.1em;">✓ REGISTERED — You will be notified at launch.</p>
+      </div>
+      <div class="form-error" id="closing-error" style="max-width:460px;">
+        <p class="mono" style="font-size:11px;color:#c07878;letter-spacing:.1em;" id="closing-err-msg">Submission failed. Please try again.</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     PRINCIPAL
-══════════════════════════════════════════════════════ -->
+<!-- ══ PRINCIPAL ══════════════════════════════════════════ -->
 <section id="principal" class="sec" style="background:var(--bg1);border-top:1px solid var(--b0);">
   <div class="ct">
     <div class="fu" style="margin-bottom:52px;">
@@ -842,7 +761,6 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
       </div>
     </div>
 
-    <!-- Identity block -->
     <div class="fu" style="border:1px solid var(--b0);background:var(--bg2);padding:36px;margin-bottom:2px;">
       <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;align-items:start;">
         <div>
@@ -851,7 +769,7 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
           <p class="mono" style="font-size:11px;color:var(--t1);margin-bottom:16px;">Business Systems Analyst · Product Operations · Data-Driven Solutions</p>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
             <span class="tag">Cleveland, OH</span>
-            <a href="mailto:sumithgorityala23@gmail.com"><span class="tag" style="cursor:none;">sumithgorityala23@gmail.com</span></a>
+            <a href="mailto:sumithgorityala23@gmail.com"><span class="tag">sumithgorityala23@gmail.com</span></a>
             <span class="tag">(216) 415-4617</span>
           </div>
         </div>
@@ -874,7 +792,6 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
       </div>
     </div>
 
-    <!-- Skills -->
     <div class="fu" style="border:1px solid var(--b0);border-top:none;background:var(--bg0);padding:28px 36px;margin-bottom:2px;">
       <p class="mono" style="font-size:9px;letter-spacing:.18em;color:var(--t2);text-transform:uppercase;margin-bottom:22px;">Technical Capability Stack</p>
       <div class="gauto">
@@ -884,7 +801,6 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
       </div>
     </div>
 
-    <!-- Experience -->
     <div class="fu" style="border:1px solid var(--b0);border-top:none;background:var(--bg2);padding:28px 36px;margin-bottom:2px;">
       <p class="mono" style="font-size:9px;letter-spacing:.18em;color:var(--t2);text-transform:uppercase;margin-bottom:24px;">Operational Deployments — 5+ Years</p>
       <div class="er">
@@ -938,7 +854,6 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
       </div>
     </div>
 
-    <!-- CTA -->
     <div class="fu" style="border:1px solid var(--b0);border-top:none;padding:22px 36px;display:flex;justify-content:space-between;align-items:center;background:var(--acg);flex-wrap:wrap;gap:18px;">
       <div>
         <p class="mono" style="font-size:10px;color:var(--t2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;">Seeking — Product Owner · Business Systems · Product Operations</p>
@@ -952,53 +867,108 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════
-     FOOTER
-══════════════════════════════════════════════════════ -->
+<!-- ══ FOOTER ═════════════════════════════════════════════ -->
 <footer>
   <div class="fi2">
-    <div><p class="wm" style="font-size:12px;margin-bottom:7px;">SYSTEM THREADS™</p><p class="mono" style="font-size:10px;color:var(--t2);">Engineered Outerwear · Pre-Launch 2025</p></div>
+    <div><p class="wm" style="font-size:12px;margin-bottom:7px;">SYSTEM THREADS™</p><p class="mono" style="font-size:10px;color:var(--t2);">Engineered Outerwear · Pre-Launch 2026</p></div>
     <div style="text-align:center;"><p class="mono" style="font-size:10px;color:var(--t2);line-height:1.9;">sumithgorityala23@gmail.com<br>Sircilla, Telangana, India<br>Designed for Global Markets</p></div>
-    <div style="text-align:right;"><p class="mono" style="font-size:10px;color:var(--t2);line-height:1.9;">US · EU · IN<br>Brand System v0.1 · 2025<br>All rights reserved</p></div>
+    <div style="text-align:right;"><p class="mono" style="font-size:10px;color:var(--t2);line-height:1.9;">US · EU · IN<br>Brand System v0.1 · 2026<br>All rights reserved</p></div>
   </div>
 </footer>
 
-<!-- ══════════════════════════════════════════════════════
-     KEYFRAMES
-══════════════════════════════════════════════════════ -->
 <style>
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
 </style>
 
-<!-- ══════════════════════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════════════════════ -->
 <script>
 'use strict';
 
+/* ══════════════════════════════════════════════════════
+   APPS SCRIPT FORM SUBMISSION
+   ─────────────────────────────────────────────────────
+   1. Go to Google Sheets → Extensions → Apps Script
+   2. Paste the doPost function provided
+   3. Deploy → New Deployment → Web App
+      Execute as: Me | Who has access: Anyone
+   4. Copy the Web App URL and paste it below
+══════════════════════════════════════════════════════ */
+var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-XkuezGgFPDupAyI8zJfbBlTzcu1sNPvaAfQ7L3bmPDe7sBcSwbmhjgr-GxQ27OSd1w/exec';
+
+function submitForm(prefix) {
+  var nameEl    = document.getElementById(prefix + '-name');
+  var emailEl   = document.getElementById(prefix + '-email');
+  var btnEl     = document.getElementById(prefix + '-btn');
+  var wrapEl    = document.getElementById(prefix + '-form-wrap');
+  var successEl = document.getElementById(prefix + '-success');
+  var errorEl   = document.getElementById(prefix + '-error');
+  var errMsgEl  = document.getElementById(prefix + '-err-msg');
+
+  // Validate email
+  var email = emailEl ? emailEl.value.trim() : '';
+  if (!email || !email.includes('@') || !email.includes('.')) {
+    if (emailEl) {
+      emailEl.style.borderColor = '#c07878';
+      emailEl.focus();
+      setTimeout(function(){ emailEl.style.borderColor = ''; }, 2000);
+    }
+    return;
+  }
+
+  // Loading state
+  btnEl.textContent = '···';
+  btnEl.disabled = true;
+  if (errorEl) errorEl.style.display = 'none';
+
+  var payload = JSON.stringify({
+    fullname: (nameEl && nameEl.value.trim()) ? nameEl.value.trim() : 'Not Provided',
+    email: email
+  });
+
+  fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: payload
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.result === 'success') {
+      if (wrapEl)    wrapEl.style.display    = 'none';
+      if (successEl) successEl.style.display = 'block';
+    } else {
+      throw new Error(data.message || 'Server error');
+    }
+  })
+  .catch(function(err) {
+    btnEl.textContent = prefix === 'hero' ? 'Register' : 'Notify Me';
+    btnEl.disabled = false;
+    if (errorEl)  errorEl.style.display = 'block';
+    if (errMsgEl) errMsgEl.textContent  = 'Submission failed — ' + err.message;
+  });
+}
+
 /* ── Custom Cursor ────────────────────────────────────── */
 (function(){
-  var cur=document.getElementById('cursor');
-  var ring=document.getElementById('cursor-ring');
+  var cur = document.getElementById('cursor');
+  var ring = document.getElementById('cursor-ring');
   var mx=0,my=0,rx=0,ry=0;
   document.addEventListener('mousemove',function(e){
-    mx=e.clientX;my=e.clientY;
-    cur.style.left=mx+'px';cur.style.top=my+'px';
+    mx=e.clientX; my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
   },{passive:true});
   function followRing(){
-    rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
-    ring.style.left=rx+'px';ring.style.top=ry+'px';
+    rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
     requestAnimationFrame(followRing);
   }
   followRing();
   document.querySelectorAll('a,button,input').forEach(function(el){
     el.addEventListener('mouseenter',function(){
-      cur.style.width='4px';cur.style.height='4px';
-      ring.style.width='48px';ring.style.height='48px';
+      cur.style.width='4px'; cur.style.height='4px';
+      ring.style.width='48px'; ring.style.height='48px';
     });
     el.addEventListener('mouseleave',function(){
-      cur.style.width='8px';cur.style.height='8px';
-      ring.style.width='32px';ring.style.height='32px';
+      cur.style.width='8px'; cur.style.height='8px';
+      ring.style.width='32px'; ring.style.height='32px';
     });
   });
 })();
@@ -1036,15 +1006,6 @@ footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
 /* ── Scroll Engine ────────────────────────────────────── */
 var bindings=[];
 function bind(el,fn){if(el)bindings.push({el:el,fn:fn});}
-
-function getP(el,s,e){
-  var r=el.getBoundingClientRect(),vh=window.innerHeight;
-  var raw=(vh-r.top)/(vh+r.height);
-  var clamped=Math.max(0,Math.min(1,raw));
-  if(s===undefined)return clamped;
-  return Math.max(0,Math.min(1,(clamped-s)/(e-s)));
-}
-
 var ticking=false;
 function onScroll(){
   if(!ticking){
@@ -1061,18 +1022,15 @@ function onScroll(){
   }
 }
 window.addEventListener('scroll',onScroll,{passive:true});
-// Initial call
 setTimeout(onScroll,100);
 
 /* ── Hero Photo Parallax ──────────────────────────────── */
 (function(){
   var hp=document.getElementById('hero-photo');
-  bind(hp,function(p){
-    hp.style.transform='translateY('+(p*60)+'px)';
-  });
+  bind(hp,function(p){hp.style.transform='translateY('+(p*60)+'px)';});
 })();
 
-/* ── STAT ZOOM function ───────────────────────────────── */
+/* ── STAT ZOOM ────────────────────────────────────────── */
 function makeStatZoom(sceneId,numId,unitId,descId,preId){
   var scene=document.getElementById(sceneId);
   var num=document.getElementById(numId);
@@ -1080,25 +1038,13 @@ function makeStatZoom(sceneId,numId,unitId,descId,preId){
   var desc=document.getElementById(descId);
   var pre=preId?document.getElementById(preId):null;
   if(!scene||!num)return;
-
   bind(scene,function(p){
     var scale,opNum,opSub;
-    // p=0: enter from bottom, p=1: exit from top
-    if(p<0.08){
-      scale=0.25;opNum=0;opSub=0;
-    } else if(p<0.35){
-      var pp=(p-0.08)/0.27;
-      scale=0.25+pp*0.75; // 0.25→1.0
-      opNum=pp;opSub=0;
-    } else if(p<0.6){
-      scale=1;opNum=1;opSub=Math.min(1,(p-0.35)/0.15);
-    } else if(p<0.85){
-      var pp=(p-0.6)/0.25;
-      scale=1+pp*4.5; // 1→5.5 (zoom through)
-      opNum=1-pp*1.3;opSub=1-pp;
-    } else {
-      scale=5.5;opNum=0;opSub=0;
-    }
+    if(p<0.08){scale=0.25;opNum=0;opSub=0;}
+    else if(p<0.35){var pp=(p-0.08)/0.27;scale=0.25+pp*0.75;opNum=pp;opSub=0;}
+    else if(p<0.6){scale=1;opNum=1;opSub=Math.min(1,(p-0.35)/0.15);}
+    else if(p<0.85){var pp=(p-0.6)/0.25;scale=1+pp*4.5;opNum=1-pp*1.3;opSub=1-pp;}
+    else{scale=5.5;opNum=0;opSub=0;}
     num.style.transform='scale('+Math.max(0.1,scale)+')';
     num.style.opacity=Math.max(0,opNum);
     if(unit){unit.style.opacity=Math.max(0,opSub);}
@@ -1106,7 +1052,6 @@ function makeStatZoom(sceneId,numId,unitId,descId,preId){
     if(pre){pre.style.opacity=Math.max(0,opNum);}
   });
 }
-
 makeStatZoom('stat1','s1-num','s1-unit','s1-desc');
 makeStatZoom('stat2','s2-num','s2-unit','s2-desc','s2-pre');
 makeStatZoom('stat3','s3-num','s3-unit','s3-desc');
@@ -1116,108 +1061,61 @@ makeStatZoom('stat4','s4-num','s4-unit','s4-desc');
 (function(){
   var scene=document.getElementById('eng-scene');
   if(!scene)return;
-
   var chapters=[
-    {
-      num:'01 / 04 — MATERIAL SCIENCE',
-      title:'Material Science',
-      body:'Fabric selection driven by measurable performance matrices: hydrostatic pressure resistance (≥15,000mm), moisture vapor transmission rate (MVTR ≥10,000 g/m²/24h), and UV degradation coefficients. No material enters the spec until lab-validated against ISO standards. Face fabric, membrane, and backer treated as a laminated system — not individual layers.',
-      tags:['Laminate Architecture','DWR Chemistry','Fiber Denier Optimization'],
-      spec:'≥15,000mm',specLbl:'ISO 811',
-      photoId:'ep0'
-    },
-    {
-      num:'02 / 04 — PATTERN ENGINEERING',
-      title:'Pattern Engineering',
-      body:'Construction patterns derived from motion-capture data of urban use cases: seated transit, cycling posture, shoulder bag load distribution, elevated arm reach. Seam placement calculated around strain axes, not aesthetic convention. Pattern grading accounts for thermal expansion of composite fabrics across a −5°C to +22°C operating window.',
-      tags:['Ergonomic Seam Mapping','Motion Axis Analysis','Grade Logic'],
-      spec:'±3mm',specLbl:'Dimensional Tolerance',
-      photoId:'ep1'
-    },
-    {
-      num:'03 / 04 — CLIMATE ADAPTATION',
-      title:'Climate Adaptation',
-      body:'Each garment addresses a defined thermal band with modular extension capability. Ventilation zones positioned at mapped heat-flux points. Insulation baffles follow body heat distribution models, not symmetrical aesthetic grids. Target operative temperature range is treated as a specification requirement, not a marketing claim.',
-      tags:['Thermal Band Zoning','Venting Architecture','Modular Insulation'],
-      spec:'−5°C to +22°C',specLbl:'Operating Window',
-      photoId:'ep2'
-    },
-    {
-      num:'04 / 04 — MANUFACTURING PRECISION',
-      title:'Manufacturing Precision',
-      body:'Stitch density targets of 12–14 SPI across all structural seams. Critical stress points reinforced with double-fell construction minimum. ISO 13934-1 tensile testing protocols applied at each seam class. Every batch sampled against a dimensional spec sheet — tolerances held to ±3mm on all measured points across the garment.',
-      tags:['SPI Standards','ISO 13934-1','Dimensional QC Protocol'],
-      spec:'12–14 SPI',specLbl:'Stitch Density',
-      photoId:'ep3'
-    }
+    {num:'01 / 04 — MATERIAL SCIENCE',title:'Material Science',
+     body:'Fabric selection driven by measurable performance matrices: hydrostatic pressure resistance (≥15,000mm), moisture vapor transmission rate (MVTR ≥10,000 g/m²/24h), and UV degradation coefficients. No material enters the spec until lab-validated against ISO standards. Face fabric, membrane, and backer treated as a laminated system — not individual layers.',
+     tags:['Laminate Architecture','DWR Chemistry','Fiber Denier Optimization'],spec:'≥15,000mm',specLbl:'ISO 811',photoId:'ep0'},
+    {num:'02 / 04 — PATTERN ENGINEERING',title:'Pattern Engineering',
+     body:'Construction patterns derived from motion-capture data of urban use cases: seated transit, cycling posture, shoulder bag load distribution, elevated arm reach. Seam placement calculated around strain axes, not aesthetic convention. Pattern grading accounts for thermal expansion of composite fabrics across a −5°C to +22°C operating window.',
+     tags:['Ergonomic Seam Mapping','Motion Axis Analysis','Grade Logic'],spec:'±3mm',specLbl:'Dimensional Tolerance',photoId:'ep1'},
+    {num:'03 / 04 — CLIMATE ADAPTATION',title:'Climate Adaptation',
+     body:'Each garment addresses a defined thermal band with modular extension capability. Ventilation zones positioned at mapped heat-flux points. Insulation baffles follow body heat distribution models, not symmetrical aesthetic grids. Target operative temperature range is treated as a specification requirement, not a marketing claim.',
+     tags:['Thermal Band Zoning','Venting Architecture','Modular Insulation'],spec:'−5°C to +22°C',specLbl:'Operating Window',photoId:'ep2'},
+    {num:'04 / 04 — MANUFACTURING PRECISION',title:'Manufacturing Precision',
+     body:'Stitch density targets of 12–14 SPI across all structural seams. Critical stress points reinforced with double-fell construction minimum. ISO 13934-1 tensile testing protocols applied at each seam class. Every batch sampled against a dimensional spec sheet — tolerances held to ±3mm on all measured points across the garment.',
+     tags:['SPI Standards','ISO 13934-1','Dimensional QC Protocol'],spec:'12–14 SPI',specLbl:'Stitch Density',photoId:'ep3'}
   ];
-
   var numEl=document.getElementById('eng-chapter-num');
   var titleEl=document.getElementById('eng-title');
   var bodyEl=document.getElementById('eng-body');
   var tagsEl=document.getElementById('eng-tags');
   var specValEl=document.getElementById('eng-spec-val');
-  var specLblEl=document.querySelector('#eng-spec .mono');
+  var specLblEl=document.getElementById('eng-spec-lbl');
   var progressFill=document.getElementById('eng-progress-fill');
-  var dots=[
-    document.getElementById('edot0'),document.getElementById('edot1'),
-    document.getElementById('edot2'),document.getElementById('edot3')
-  ];
+  var dots=[document.getElementById('edot0'),document.getElementById('edot1'),
+            document.getElementById('edot2'),document.getElementById('edot3')];
   var currentChapter=-1;
 
   function setChapter(idx){
     if(idx===currentChapter)return;
     currentChapter=idx;
     var ch=chapters[idx];
-
-    // Fade out, update, fade in
     var els=[numEl,titleEl,bodyEl,tagsEl,specValEl];
     els.forEach(function(el){if(el){el.style.opacity='0';el.style.transform='translateY(12px)';}});
-
     setTimeout(function(){
       if(numEl)numEl.textContent=ch.num;
       if(titleEl)titleEl.textContent=ch.title;
       if(bodyEl)bodyEl.textContent=ch.body;
-      if(tagsEl){
-        tagsEl.innerHTML='';
-        ch.tags.forEach(function(t){
-          var s=document.createElement('span');s.className='tag';s.textContent=t;
-          tagsEl.appendChild(s);
-        });
-      }
+      if(tagsEl){tagsEl.innerHTML='';ch.tags.forEach(function(t){var s=document.createElement('span');s.className='tag';s.textContent=t;tagsEl.appendChild(s);});}
       if(specValEl)specValEl.textContent=ch.spec;
       if(specLblEl)specLblEl.textContent=ch.specLbl;
-
-      // Photo crossfade
-      chapters.forEach(function(c,i){
-        var ph=document.getElementById(c.photoId);
-        if(ph){ph.classList.toggle('visible',i===idx);}
-      });
-
-      // Dots
+      chapters.forEach(function(c,i){var ph=document.getElementById(c.photoId);if(ph){ph.classList.toggle('visible',i===idx);}});
       dots.forEach(function(d,i){if(d)d.classList.toggle('a',i===idx);});
-
       setTimeout(function(){
         els.forEach(function(el){if(el){el.style.transition='opacity .5s ease,transform .5s ease';el.style.opacity='1';el.style.transform='none';}});
       },30);
     },220);
   }
 
-  // Photo zoom on scroll
   function zoomPhoto(photoId,p){
     var img=document.querySelector('#'+photoId+' img');
     if(img){img.style.transform='scale('+(1.15-p*0.15)+')';}
   }
 
   bind(scene,function(p){
-    // Chapter selection — each takes 25% of scroll
     var chIdx=Math.min(3,Math.floor(p*4));
     setChapter(chIdx);
-
-    // Progress bar
     if(progressFill)progressFill.style.width=(p*100)+'%';
-
-    // Photo zoom within current chapter
     var chP=(p*4)%1;
     zoomPhoto(chapters[chIdx].photoId,chP);
   });
@@ -1229,9 +1127,8 @@ makeStatZoom('stat4','s4-num','s4-unit','s4-desc');
   var inner=document.getElementById('sir-photo-inner');
   var img=document.getElementById('sir-img');
   if(!scene||!inner)return;
-
   bind(scene,function(p){
-    var reveal=Math.min(1,p*3.5); // fast reveal
+    var reveal=Math.min(1,p*3.5);
     inner.style.clipPath='inset(0 '+(100-reveal*100)+'% 0 0)';
     if(img){img.style.transform='scale('+(1.1-reveal*0.1)+')';}
   });
@@ -1241,9 +1138,7 @@ makeStatZoom('stat4','s4-num','s4-unit','s4-desc');
 (function(){
   var cb=document.getElementById('closing-bg');
   if(!cb)return;
-  bind(cb,function(p){
-    cb.style.transform='translateY('+(p*-60)+'px)';
-  });
+  bind(cb,function(p){cb.style.transform='translateY('+(p*-60)+'px)';});
 })();
 
 /* ── Fade-up on scroll ────────────────────────────────── */
@@ -1282,9 +1177,7 @@ makeStatZoom('stat4','s4-num','s4-unit','s4-desc');
   var nio=new IntersectionObserver(function(entries){
     entries.forEach(function(e){
       if(e.isIntersecting){
-        links.forEach(function(l){
-          l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id);
-        });
+        links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id);});
       }
     });
   },{rootMargin:'-45% 0px -45% 0px'});

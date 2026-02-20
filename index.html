@@ -388,19 +388,20 @@ document.getElementById("waitlist-form").addEventListener("submit", function(e) 
 
   var email = document.getElementById("email").value;
 
-  fetch("https://script.google.com/macros/s/AKfycbx8pV154mYChTje3yDfadN-U3tMrR9pTYxWrsTPhAsTc6IR3ITb7eFWoSt7n4MAPha4VA/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbxuwpYtmAa3YjMPrQPcqYaEVfhJWnudJ4DqiS4n2tfY/dev", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({
       fullname: "Not Provided",
       email: email
     })
-  }).then(function() {
-    alert("Registered successfully.");
-    document.getElementById("waitlist-form").reset();
-  }).catch(function() {
-    alert("Something went wrong.");
   });
+
+  alert("Registered successfully.");
+  document.getElementById("waitlist-form").reset();
 });
 </script>
       </div>

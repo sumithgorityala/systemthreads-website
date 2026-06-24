@@ -1,1188 +1,893 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SYSTEM THREADS — Engineered Outerwear</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Cormorant:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..500&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SYSTEM THREADS — Engineered Outerwear for Urban Variability</title>
+<meta name="description" content="Systems engineering applied to outerwear. Performance is measured against published test protocols or it does not exist. Built in Sircilla, Telangana. Designed for global markets — US · EU · IN." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
-/* ─── RESET ───────────────────────────────────────────── */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
+  /* ============================================================
+     SYSTEM THREADS — Brand System v0.2
+     Palette: indigo (India's heritage dye) x drafting-sheet ink.
+     Type: Archivo (display) / IBM Plex Sans (body) / IBM Plex Mono (data).
+     Signature: the engineering "spec plate" + drawing title block.
+     ============================================================ */
 
-/* ─── TOKENS ──────────────────────────────────────────── */
-:root{
-  --bg0:#09090b;--bg1:#0f1014;--bg2:#141719;
-  --b0:#1e2128;--b1:#272c36;
-  --t0:#e4e6ea;--t1:#7d8390;--t2:#40454f;
-  --ac:#7c9ab5;--acd:#3a5870;--acg:rgba(124,154,181,.08);
-  --ac2:rgba(124,154,181,.5);
-}
+  :root{
+    --ink:        #13152A;   /* deep indigo-navy — primary dark ground */
+    --ink-2:      #181B33;   /* raised panel */
+    --ink-3:      #1F2240;   /* hover / lifted panel */
+    --paper:      #ECEAE2;   /* drafting paper — the document insert */
+    --paper-2:    #E4E2D8;   /* recessed paper panel */
 
-/* ─── BASE ────────────────────────────────────────────── */
-body{font-family:'DM Sans','Segoe UI',sans-serif;font-weight:300;
-  font-size:15px;line-height:1.7;background:var(--bg0);color:var(--t0);
-  overflow-x:hidden;cursor:none;}
-a{text-decoration:none;color:inherit;}
+    --text-ink:   #ECEAE2;   /* text on ink */
+    --muted-ink:  #888BA4;   /* muted on ink */
+    --text-paper: #1A1B26;   /* text on paper */
+    --muted-paper:#69675D;   /* muted on paper */
 
-/* ─── CUSTOM CURSOR ───────────────────────────────────── */
-#cursor{position:fixed;width:8px;height:8px;background:var(--ac);border-radius:50%;
-  pointer-events:none;z-index:9999;transform:translate(-50%,-50%);
-  transition:width .2s,height .2s,opacity .2s;}
-#cursor-ring{position:fixed;width:32px;height:32px;border:1px solid var(--ac2);
-  border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);
-  transition:transform .12s ease,width .2s,height .2s,opacity .2s;}
+    --line-dark:  #2B2E4D;   /* hairline on ink */
+    --line-light: #CFCCBF;   /* hairline on paper */
+    --grid:       rgba(136,139,164,0.07);
 
-/* ─── GRAIN OVERLAY ───────────────────────────────────── */
-.grain{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.035;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size:180px 180px;}
+    --indigo:     #716DF2;   /* accent on ink */
+    --indigo-2:   #4039C2;   /* accent on paper */
+    --thread:     #D86A3C;   /* madder/rust — live status ONLY */
 
-/* ─── TYPE ────────────────────────────────────────────── */
-.mono{font-family:'IBM Plex Mono',monospace;}
-.serif{font-family:'Cormorant',Georgia,serif;}
-.lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ac);}
-.h2{font-family:'Cormorant',Georgia,serif;font-weight:300;font-size:clamp(28px,4.5vw,52px);line-height:1.1;letter-spacing:-.01em;}
-.wm{font-family:'IBM Plex Mono',monospace;font-weight:600;letter-spacing:.25em;font-size:13px;text-transform:uppercase;}
+    --maxw: 1180px;
+    --gut: clamp(1.25rem, 5vw, 4rem);
+    --sec: clamp(5rem, 10vw, 8.5rem);
+  }
 
-/* ─── PHOTO BASE TREATMENT ────────────────────────────── */
-.p-img{width:100%;height:100%;object-fit:cover;display:block;
-  filter:grayscale(100%) contrast(1.08) brightness(.6);}
-.p-img-dark{filter:grayscale(100%) contrast(1.1) brightness(.35);}
-.p-img-mid{filter:grayscale(100%) contrast(1.05) brightness(.55);}
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--ink); color:var(--text-ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif;
+    font-size:clamp(1rem,0.55vw + 0.9rem,1.1rem); line-height:1.62;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  a{ color:inherit; }
+  ::selection{ background:var(--indigo); color:#fff; }
+  :focus-visible{ outline:2px solid var(--indigo); outline-offset:3px; border-radius:2px; }
 
-/* ─── NAV ─────────────────────────────────────────────── */
-#nav{position:fixed;top:0;left:0;right:0;z-index:500;
-  background:rgba(9,9,11,.9);border-bottom:1px solid var(--b0);backdrop-filter:blur(16px);}
-#nav .ni{max-width:1320px;margin:0 auto;padding:0 40px;
-  display:flex;align-items:center;justify-content:space-between;height:56px;}
-.nav-a{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--t2);transition:color .25s;}
-.nav-a:hover,.nav-a.active{color:var(--ac);}
-.nav-links{display:flex;gap:28px;}
+  .wrap{ max-width:var(--maxw); margin-inline:auto; padding-inline:var(--gut); }
 
-/* ─── SECTION WRAPPER ─────────────────────────────────── */
-.sec{padding:120px 40px;}
-.ct{max-width:1320px;margin:0 auto;}
-.rule{border:none;border-top:1px solid var(--b0);}
-.rule-ac{border:none;border-top:1px solid var(--acd);}
+  /* ---- type primitives ---- */
+  .mono{ font-family:"IBM Plex Mono", monospace; }
+  .eyebrow{
+    font-family:"IBM Plex Mono", monospace; font-size:.72rem; font-weight:500;
+    letter-spacing:.2em; text-transform:uppercase; color:var(--muted-ink);
+    display:inline-flex; align-items:center; gap:.6em;
+  }
+  h1,h2,h3{ font-family:"Archivo", sans-serif; font-weight:800; line-height:1.0;
+    letter-spacing:-0.02em; margin:0; }
+  .display{ font-size:clamp(2.7rem, 7.2vw, 5.9rem); }
+  .h-sec{ font-size:clamp(2rem, 4.6vw, 3.5rem); font-weight:700; letter-spacing:-0.015em; }
+  .lead{ font-size:clamp(1.08rem,0.6vw + 1rem,1.3rem); line-height:1.55; color:var(--text-ink); }
+  p{ margin:0 0 1.1em; }
+  .muted{ color:var(--muted-ink); }
 
-/* ─── CHIPS ───────────────────────────────────────────── */
-.chip{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;
-  border:1px solid var(--b1);background:rgba(9,9,11,.8);
-  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--t1);}
-.dot{width:5px;height:5px;border-radius:50%;background:var(--ac);
-  animation:pulse 2.5s ease-in-out infinite;}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.3;transform:scale(.6);}}
+  /* register crosshair mark */
+  .xmark{ position:relative; display:inline-block; width:9px; height:9px; flex:0 0 auto; }
+  .xmark::before,.xmark::after{ content:""; position:absolute; background:var(--indigo); }
+  .xmark::before{ left:0; right:0; top:50%; height:1px; transform:translateY(-50%); }
+  .xmark::after{ top:0; bottom:0; left:50%; width:1px; transform:translateX(-50%); }
 
-/* ─── FORM ELEMENTS ───────────────────────────────────── */
-.fi{background:rgba(20,23,26,.95);border:1px solid var(--b1);color:var(--t0);
-  font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.04em;
-  padding:14px 18px;outline:none;width:100%;transition:border-color .25s;}
-.fi::placeholder{color:var(--t2);}.fi:focus{border-color:var(--ac);}
-.fb{background:var(--ac);color:var(--bg0);font-family:'IBM Plex Mono',monospace;
-  font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
-  padding:14px 28px;border:none;cursor:pointer;
-  transition:background .25s,transform .15s;white-space:nowrap;}
-.fb:hover{background:#9ab8d0;transform:translateY(-1px);}
-.fb:disabled{opacity:.5;cursor:default;transform:none;}
-.fbg{background:transparent;border:1px solid var(--ac);color:var(--ac);
-  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;
-  letter-spacing:.18em;text-transform:uppercase;padding:14px 28px;
-  cursor:none;transition:background .25s;white-space:nowrap;}
-.fbg:hover{background:var(--acg);}
+  /* ---- sheet header bar (drawing border) ---- */
+  .sheetbar{
+    position:sticky; top:0; z-index:50; background:rgba(19,21,42,.82);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--line-dark);
+  }
+  .sheetbar .wrap{ display:flex; justify-content:space-between; align-items:center;
+    gap:1rem; height:46px; }
+  .brandmark{ font-family:"Archivo",sans-serif; font-weight:800; letter-spacing:.02em;
+    font-size:.92rem; display:inline-flex; align-items:center; gap:.55rem; }
+  .brandmark sup{ font-size:.5em; top:-.7em; color:var(--muted-ink); }
+  .sheetbar .ref{ font-family:"IBM Plex Mono",monospace; font-size:.7rem;
+    letter-spacing:.14em; color:var(--muted-ink); text-transform:uppercase; }
+  @media (max-width:620px){ .sheetbar .ref{ display:none; } }
 
-/* ─── FORM FEEDBACK ───────────────────────────────────── */
-.form-success{display:none;padding:13px 18px;border:1px solid var(--acd);background:var(--acg);margin-top:2px;}
-.form-error{display:none;padding:13px 18px;border:1px solid rgba(180,80,80,.4);background:rgba(180,80,80,.06);margin-top:2px;}
+  /* ============ HERO ============ */
+  .hero{ position:relative; padding:clamp(3.5rem,8vw,6rem) 0 clamp(3rem,6vw,5rem); }
+  .hero::before{
+    content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:46px 46px;
+    -webkit-mask-image:radial-gradient(120% 90% at 78% 8%, #000 0%, transparent 72%);
+            mask-image:radial-gradient(120% 90% at 78% 8%, #000 0%, transparent 72%);
+  }
+  .hero .wrap{ position:relative; z-index:1; }
+  .hero-grid{ display:grid; grid-template-columns:1.15fr .85fr; gap:clamp(2rem,5vw,4.5rem);
+    align-items:end; }
+  @media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; gap:2.5rem; } }
 
-/* ─── CARD ────────────────────────────────────────────── */
-.card{background:var(--bg2);border:1px solid var(--b0);transition:border-color .3s;}
-.card:hover{border-color:var(--acd);}
-.tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;
-  padding:4px 10px;border:1px solid var(--b1);color:var(--t1);}
-.tac{border-color:var(--acd);color:var(--ac);background:var(--acg);}
+  .kicker-row{ display:flex; align-items:center; gap:1rem; margin-bottom:1.4rem; flex-wrap:wrap; }
+  .display{ margin:.2em 0 .55em; }
+  .display .thin{ color:var(--muted-ink); }
+  .hero-lead{ max-width:46ch; }
+  .cta-row{ display:flex; flex-wrap:wrap; gap:.85rem; margin-top:1.9rem; }
 
-/* ─── FADE UP ─────────────────────────────────────────── */
-.fu{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
-.fu.on{opacity:1;transform:none;}
+  .btn{ font-family:"IBM Plex Mono",monospace; font-size:.82rem; letter-spacing:.08em;
+    text-transform:uppercase; text-decoration:none; display:inline-flex; align-items:center;
+    gap:.6em; padding:.85em 1.3em; border:1px solid var(--line-dark);
+    transition:background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease; }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn-primary{ background:var(--text-ink); color:var(--ink); border-color:var(--text-ink); }
+  .btn-primary:hover{ background:#fff; border-color:#fff; }
+  .btn-ghost:hover{ background:var(--ink-3); border-color:var(--indigo); }
+  .btn .arr{ transition:transform .18s ease; }
+  .btn:hover .arr{ transform:translateX(3px); }
 
-/* ═══════════════════════════════════════════════════════
-   HERO
-═══════════════════════════════════════════════════════ */
-#hero{position:relative;height:100vh;overflow:hidden;
-  display:flex;flex-direction:column;justify-content:flex-end;}
-#hero-photo{position:absolute;inset:0;z-index:0;will-change:transform;}
-#hero-photo img{width:100%;height:110%;object-fit:cover;
-  filter:grayscale(100%) contrast(1.1) brightness(.12);display:block;}
-#hcv{position:absolute;inset:0;width:100%;height:100%;z-index:1;}
-.hero-c{position:relative;z-index:3;max-width:1320px;
-  margin:0 auto;width:100%;padding:0 40px 80px;}
-.hero-hl{font-family:'Cormorant',Georgia,serif;font-weight:300;font-style:italic;
-  font-size:clamp(42px,7.5vw,96px);line-height:1.03;color:var(--t0);letter-spacing:-.015em;}
+  /* drawing title block */
+  .titleblock{ border:1px solid var(--line-dark); background:var(--ink-2);
+    display:grid; grid-template-columns:repeat(2,1fr); }
+  .tb-cell{ padding:.7rem .85rem; border-right:1px solid var(--line-dark);
+    border-bottom:1px solid var(--line-dark); }
+  .tb-cell:nth-child(2n){ border-right:0; }
+  .tb-cell.wide{ grid-column:1 / -1; }
+  .tb-k{ font-family:"IBM Plex Mono",monospace; font-size:.6rem; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--muted-ink); display:block; margin-bottom:.25rem; }
+  .tb-v{ font-family:"IBM Plex Mono",monospace; font-size:.86rem; letter-spacing:.02em;
+    color:var(--text-ink); }
 
-/* ═══════════════════════════════════════════════════════
-   STAT ZOOM SECTIONS
-═══════════════════════════════════════════════════════ */
-.stat-scene{position:relative;}
-.stat-sticky{position:sticky;top:0;height:100vh;overflow:hidden;
-  display:flex;align-items:center;justify-content:center;flex-direction:column;}
-.stat-bg-img{position:absolute;inset:0;z-index:0;}
-.stat-bg-img img{width:100%;height:100%;object-fit:cover;}
-.stat-bg-overlay{position:absolute;inset:0;z-index:1;background:rgba(9,9,11,.82);}
-.stat-num{font-family:'Cormorant',Georgia,serif;font-weight:300;
-  font-size:clamp(80px,16vw,220px);line-height:.9;color:var(--t0);
-  letter-spacing:-.03em;will-change:transform,opacity;position:relative;z-index:3;
-  text-align:center;}
-.stat-unit{font-family:'IBM Plex Mono',monospace;font-size:clamp(12px,2vw,18px);
-  color:var(--ac);letter-spacing:.25em;text-transform:uppercase;
-  position:relative;z-index:3;margin-top:20px;text-align:center;}
-.stat-desc{font-family:'IBM Plex Mono',monospace;font-size:11px;
-  color:var(--t2);letter-spacing:.14em;text-transform:uppercase;
-  position:relative;z-index:3;margin-top:14px;text-align:center;max-width:400px;}
-.stat-marker{position:absolute;top:50%;left:40px;z-index:4;
-  display:flex;align-items:center;gap:14px;transform:translateY(-50%);}
-.stat-marker-line{width:32px;height:1px;background:var(--acd);}
+  /* signature: SPEC PLATE */
+  .plate{ position:relative; border-top:1px solid var(--line-dark); padding:1.15rem 0 .2rem;
+    background:transparent; }
+  .plate--box{ border:1px solid var(--line-dark); padding:1.15rem 1.15rem 1rem;
+    background:var(--ink-2); }
+  .plate-ref{ display:flex; align-items:center; gap:.55em; margin-bottom:.7rem; }
+  .plate-ref span{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--muted-ink); }
+  .plate-val{ font-family:"Archivo",sans-serif; font-weight:800; line-height:.92;
+    font-size:clamp(2.6rem,6.5vw,4.4rem); letter-spacing:-0.02em; font-variant-numeric:tabular-nums; }
+  .plate-val .u{ font-size:.34em; font-weight:600; color:var(--muted-ink); margin-left:.35em;
+    letter-spacing:0; }
+  .plate-label{ margin-top:.55rem; font-weight:600; font-size:.98rem; line-height:1.3; }
+  .plate-note{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--muted-ink);
+    letter-spacing:.04em; margin-top:.35rem; }
 
-/* ═══════════════════════════════════════════════════════
-   PROBLEM
-═══════════════════════════════════════════════════════ */
-.pb{border-left:2px solid var(--b1);padding-left:24px;transition:border-color .3s;}
-.pb:hover{border-left-color:var(--ac);}
+  /* hero secondary climate strip */
+  .climate{ margin-top:clamp(2.4rem,5vw,3.6rem); display:flex; align-items:center;
+    gap:clamp(1rem,3vw,2.4rem); flex-wrap:wrap; border-top:1px solid var(--line-dark);
+    padding-top:1.4rem; }
+  .climate .big{ font-family:"Archivo",sans-serif; font-weight:800; font-size:clamp(2rem,5vw,3.1rem);
+    letter-spacing:-0.02em; font-variant-numeric:tabular-nums; }
+  .climate .big .u{ font-size:.36em; color:var(--muted-ink); font-weight:600; margin-left:.2em; }
+  .climate p{ margin:0; max-width:34ch; }
 
-/* ═══════════════════════════════════════════════════════
-   ENGINEERING STORY
-═══════════════════════════════════════════════════════ */
-#eng-scene{position:relative;}
-#eng-sticky{position:sticky;top:0;height:100vh;overflow:hidden;
-  display:grid;grid-template-columns:1fr 1fr;background:var(--bg0);}
-#eng-left{position:relative;z-index:2;display:flex;flex-direction:column;
-  justify-content:center;padding:80px 60px;border-right:1px solid var(--b0);}
-#eng-chapter-num{font-family:'IBM Plex Mono',monospace;font-size:11px;
-  color:var(--ac);letter-spacing:.2em;margin-bottom:24px;transition:opacity .5s ease;}
-#eng-title{font-family:'Cormorant',Georgia,serif;font-size:clamp(32px,3.5vw,48px);
-  font-weight:300;line-height:1.1;margin-bottom:24px;
-  transition:opacity .5s ease,transform .5s ease;}
-#eng-accent{width:36px;height:1px;background:var(--ac);margin-bottom:24px;transition:opacity .5s ease;}
-#eng-body{color:var(--t1);font-size:14px;line-height:1.85;max-width:440px;transition:opacity .5s ease;}
-#eng-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:28px;transition:opacity .5s ease;}
-#eng-spec{margin-top:32px;padding:16px 20px;border:1px solid var(--acd);
-  background:var(--acg);display:flex;align-items:baseline;gap:8px;
-  max-width:280px;transition:opacity .5s ease;}
-#eng-spec-val{font-family:'Cormorant',Georgia,serif;font-size:36px;font-weight:300;color:var(--ac);}
-#eng-spec-lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--t2);letter-spacing:.1em;}
-#eng-progress-bar{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--b0);z-index:5;}
-#eng-progress-fill{height:100%;background:var(--ac);width:0%;transition:width .1s linear;}
-#eng-chapter-dots{position:absolute;bottom:20px;left:60px;display:flex;gap:10px;z-index:5;}
-.eng-dot{width:6px;height:6px;border-radius:50%;background:var(--b1);transition:background .3s,transform .3s;}
-.eng-dot.a{background:var(--ac);transform:scale(1.3);}
-#eng-right{position:relative;overflow:hidden;}
-.eng-photo-layer{position:absolute;inset:0;transition:opacity .6s ease;opacity:0;}
-.eng-photo-layer.visible{opacity:1;}
-.eng-photo-layer img{width:100%;height:100%;object-fit:cover;
-  filter:grayscale(100%) contrast(1.08) brightness(.65);display:block;will-change:transform;}
-.eng-annotation{position:absolute;z-index:3;bottom:32px;right:32px;text-align:right;}
-.eng-annotation p{font-family:'IBM Plex Mono',monospace;font-size:9px;
-  color:rgba(124,154,181,.6);letter-spacing:.12em;line-height:1.8;}
-#eng-right::before{content:'';position:absolute;top:24px;right:24px;
-  width:24px;height:24px;border-top:1px solid var(--acd);border-right:1px solid var(--acd);z-index:3;}
-#eng-right::after{content:'';position:absolute;bottom:24px;left:24px;
-  width:24px;height:24px;border-bottom:1px solid var(--acd);border-left:1px solid var(--acd);z-index:3;}
+  /* ============ SECTIONS ============ */
+  .section{ padding:var(--sec) 0; border-top:1px solid var(--line-dark); position:relative; }
+  .section--paper{ background:var(--paper); color:var(--text-paper); border-top:0; }
+  .section--paper .eyebrow,.section--paper .muted,.section--paper .plate-ref span,
+  .section--paper .plate-note,.section--paper .tb-k{ color:var(--muted-paper); }
+  .section--paper .xmark::before,.section--paper .xmark::after{ background:var(--indigo-2); }
+  .section--paper .plate{ border-top-color:var(--line-light); }
+  .section--paper .plate--box{ border-color:var(--line-light); background:var(--paper-2); }
+  .section--paper .plate-val .u{ color:var(--muted-paper); }
 
-/* ═══════════════════════════════════════════════════════
-   SIRCILLA
-═══════════════════════════════════════════════════════ */
-.sir-scene{position:relative;}
-.sir-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;}
-.sir-photo{position:relative;overflow:hidden;background:var(--bg1);}
-.sir-photo-inner{position:absolute;inset:0;will-change:clip-path;}
-.sir-photo-inner img{width:100%;height:100%;object-fit:cover;
-  filter:grayscale(100%) contrast(1.1) brightness(.55);display:block;will-change:transform;}
-.sir-mark{position:absolute;z-index:4;font-family:'IBM Plex Mono',monospace;
-  font-size:9px;color:rgba(124,154,181,.65);letter-spacing:.12em;}
-.sir-mark.tl{top:24px;left:24px;border-left:1px solid var(--acd);padding-left:10px;}
-.sir-mark.br{bottom:24px;right:24px;text-align:right;border-right:1px solid var(--acd);padding-right:10px;}
-.sir-text{background:var(--bg1);padding:80px 60px;
-  display:flex;flex-direction:column;justify-content:center;border-left:1px solid var(--b0);}
+  .sec-head{ max-width:64ch; margin-bottom:clamp(2.4rem,5vw,3.6rem); }
+  .sec-head .eyebrow{ margin-bottom:1.1rem; }
+  .sec-head .h-sec{ margin-bottom:.7rem; }
+  .sec-head .lead{ color:inherit; }
+  .section--paper .lead{ color:var(--text-paper); }
 
-/* ═══════════════════════════════════════════════════════
-   ROADMAP
-═══════════════════════════════════════════════════════ */
-.rmt{position:relative;display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;margin-bottom:56px;}
-.rmt::before{content:'';position:absolute;top:4px;left:0;right:0;height:1px;background:var(--b1);}
-.pd{width:10px;height:10px;border-radius:50%;border:2px solid var(--b1);background:var(--bg0);
-  margin:0 auto 20px;position:relative;z-index:1;transition:border-color .3s,box-shadow .3s;}
-.pd.a{border-color:var(--ac);background:var(--ac);box-shadow:0 0 16px rgba(124,154,181,.5);}
+  /* problem variables grid */
+  .vargrid{ display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--line-dark);
+    border:1px solid var(--line-dark); }
+  @media (max-width:760px){ .vargrid{ grid-template-columns:1fr; } }
+  .varcell{ background:var(--ink); padding:clamp(1.5rem,3vw,2.2rem); }
+  .var-no{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--indigo); margin-bottom:.9rem; display:flex;
+    justify-content:space-between; align-items:center; }
+  .var-no .tag{ color:var(--muted-ink); }
+  .varcell h3{ font-size:1.32rem; font-weight:700; letter-spacing:-0.01em; margin-bottom:.6rem; }
+  .varcell p{ color:var(--muted-ink); margin:0; font-size:.98rem; }
 
-/* ═══════════════════════════════════════════════════════
-   METRICS
-═══════════════════════════════════════════════════════ */
-.metrics-wrap{position:relative;}
-.metrics-bg{position:absolute;right:0;top:0;bottom:0;width:42%;overflow:hidden;opacity:.08;}
-.metrics-bg img{width:100%;height:100%;object-fit:cover;filter:grayscale(100%);}
-.mr{display:grid;grid-template-columns:1fr 140px auto;align-items:center;
-  gap:20px;padding:20px 0;border-bottom:1px solid var(--b0);}
-.mr:last-child{border-bottom:none;}
-.mbt{width:100%;height:2px;background:var(--b1);position:relative;overflow:hidden;}
-.mbf{position:absolute;top:0;left:0;height:100%;background:var(--ac);
-  width:0;transition:width 1.4s cubic-bezier(.16,1,.3,1);}
-.mbf.go{width:var(--w);}
+  /* position columns */
+  .cols3{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(1.5rem,3vw,2.6rem); }
+  @media (max-width:820px){ .cols3{ grid-template-columns:1fr; gap:2rem; } }
+  .col h3{ font-size:1.18rem; font-weight:700; margin-bottom:.7rem; padding-top:1rem;
+    border-top:1px solid var(--line-dark); }
+  .section--paper .col h3{ border-top-color:var(--line-light); }
+  .col p{ color:var(--muted-ink); margin:0; font-size:.98rem; }
+  .section--paper .col p{ color:var(--muted-paper); }
 
-/* ═══════════════════════════════════════════════════════
-   CLOSING
-═══════════════════════════════════════════════════════ */
-.closing-scene{position:relative;height:100vh;overflow:hidden;display:flex;align-items:flex-end;}
-.closing-bg{position:absolute;inset:0;z-index:0;will-change:transform;}
-.closing-bg img{width:100%;height:115%;object-fit:cover;
-  filter:grayscale(100%) brightness(.2) contrast(1.1);display:block;}
-.closing-grad{position:absolute;inset:0;z-index:1;
-  background:linear-gradient(to bottom,rgba(9,9,11,.3) 0%,rgba(9,9,11,.9) 70%,var(--bg0) 100%);}
-.closing-content{position:relative;z-index:2;width:100%;padding:0 40px 80px;}
-.chl{font-family:'Cormorant',Georgia,serif;font-weight:300;
-  font-size:clamp(36px,6.5vw,84px);line-height:1.02;letter-spacing:-.02em;}
+  /* engineering split */
+  .eng-split{ display:grid; grid-template-columns:.92fr 1.08fr; gap:clamp(2rem,5vw,4rem);
+    align-items:start; }
+  @media (max-width:880px){ .eng-split{ grid-template-columns:1fr; gap:2.5rem; } }
+  .schematic{ width:100%; height:auto; display:block; }
+  .schem-cap{ font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--muted-ink); margin-top:.9rem; text-align:center; }
+  .plate-stack{ display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(1.2rem,2.5vw,1.8rem); }
+  @media (max-width:520px){ .plate-stack{ grid-template-columns:1fr; } }
+  .eng-copy h3{ font-size:1.22rem; font-weight:700; margin:1.6rem 0 .55rem; }
+  .eng-copy h3:first-child{ margin-top:0; }
+  .eng-copy p{ color:var(--muted-ink); }
+  .chips{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.4rem; }
+  .chip{ font-family:"IBM Plex Mono",monospace; font-size:.7rem; letter-spacing:.06em;
+    padding:.45em .8em; border:1px solid var(--line-dark); color:var(--muted-ink); }
 
-/* ═══════════════════════════════════════════════════════
-   PRINCIPAL
-═══════════════════════════════════════════════════════ */
-.ct2{padding:10px 14px;border:1px solid var(--b0);display:flex;flex-direction:column;gap:2px;}
-.ct2.h{border-color:var(--acd);background:var(--acg);}
-.er{display:grid;grid-template-columns:170px 1fr auto;gap:28px;
-  align-items:start;padding:24px 0;border-bottom:1px solid var(--b0);}
-.er:last-child{border-bottom:none;}
-.etg{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0;}
-.stg{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
-.gauto{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px;}
+  /* quality spec table */
+  .spectable{ width:100%; border-collapse:collapse; border-top:1px solid var(--line-dark); }
+  .spectable th,.spectable td{ text-align:left; padding:1.05rem .4rem; border-bottom:1px solid var(--line-dark);
+    vertical-align:baseline; }
+  .spectable thead th{ font-family:"IBM Plex Mono",monospace; font-size:.66rem; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--muted-ink); font-weight:500; padding-bottom:.7rem; }
+  .spectable .metric{ font-weight:600; font-size:1.02rem; width:42%; }
+  .spectable .proto{ font-family:"IBM Plex Mono",monospace; font-size:.78rem; color:var(--muted-ink); }
+  .spectable .target{ font-family:"Archivo",sans-serif; font-weight:800; font-size:1.5rem;
+    letter-spacing:-0.01em; font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap; }
+  .spectable .target .u{ font-size:.62rem; font-family:"IBM Plex Mono",monospace; color:var(--muted-ink);
+    font-weight:500; margin-left:.4em; letter-spacing:.04em; }
+  .std-row{ display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:clamp(2rem,4vw,3rem); }
+  @media (max-width:680px){
+    .spectable .metric{ width:auto; }
+    .spectable thead{ display:none; }
+    .spectable tr{ display:grid; grid-template-columns:1fr auto; gap:.2rem 1rem; padding:1rem 0; border-bottom:1px solid var(--line-dark); }
+    .spectable td{ border:0; padding:0; }
+    .spectable .proto{ grid-column:1; }
+    .spectable .target{ grid-row:1 / span 2; align-self:center; }
+  }
 
-/* ─── GRID BACKGROUNDS ────────────────────────────────── */
-.gbg{background-image:linear-gradient(var(--b0) 1px,transparent 1px),
-  linear-gradient(90deg,var(--b0) 1px,transparent 1px);background-size:60px 60px;}
-.gbgf{background-image:linear-gradient(rgba(30,33,40,.7) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(30,33,40,.7) 1px,transparent 1px);background-size:20px 20px;}
+  /* provenance */
+  .prov-lead{ max-width:62ch; }
+  .heritage-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--line-light); border:1px solid var(--line-light); margin:clamp(2rem,4vw,3rem) 0; }
+  @media (max-width:760px){ .heritage-row{ grid-template-columns:1fr; } }
+  .heritage-cell{ background:var(--paper); padding:clamp(1.4rem,3vw,2rem); }
+  .heritage-cell .v{ font-family:"Archivo",sans-serif; font-weight:800; font-size:clamp(1.7rem,4vw,2.5rem);
+    letter-spacing:-0.02em; line-height:1; }
+  .heritage-cell .k{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; letter-spacing:.05em;
+    color:var(--muted-paper); margin-top:.7rem; line-height:1.4; }
+  .prov-block{ max-width:64ch; }
+  .prov-block h3{ font-size:1.3rem; font-weight:700; margin:2.4rem 0 .6rem; }
+  .prov-block p{ color:var(--text-paper); }
+  .prov-sub{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(1.4rem,3vw,2.4rem);
+    margin-top:clamp(2rem,4vw,3rem); }
+  @media (max-width:820px){ .prov-sub{ grid-template-columns:1fr; gap:1.8rem; } }
 
-/* ─── FOOTER ──────────────────────────────────────────── */
-footer{border-top:1px solid var(--b0);padding:36px 40px;background:var(--bg0);}
-.fi2{max-width:1320px;margin:0 auto;display:grid;
-  grid-template-columns:1fr auto 1fr;align-items:center;gap:32px;}
+  /* roadmap */
+  .phase{ border-top:1px solid var(--line-light); padding:clamp(1.8rem,4vw,2.6rem) 0;
+    display:grid; grid-template-columns:.28fr 1fr; gap:clamp(1.2rem,3vw,2.4rem); }
+  @media (max-width:760px){ .phase{ grid-template-columns:1fr; gap:1rem; } }
+  .phase-meta .ph-no{ font-family:"Archivo",sans-serif; font-weight:800; font-size:clamp(2rem,5vw,3rem);
+    letter-spacing:-0.02em; line-height:1; }
+  .phase-meta .ph-name{ font-weight:700; font-size:1.18rem; margin:.5rem 0 .3rem; }
+  .phase-meta .ph-when{ font-family:"IBM Plex Mono",monospace; font-size:.78rem; color:var(--muted-paper); }
+  .status{ display:inline-flex; align-items:center; gap:.5em; font-family:"IBM Plex Mono",monospace;
+    font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; margin-top:.8rem; }
+  .dot{ width:7px; height:7px; border-radius:50%; background:var(--muted-paper); flex:0 0 auto; }
+  .dot.live{ background:var(--thread); box-shadow:0 0 0 0 rgba(216,106,60,.55); animation:pulse 2.4s infinite; }
+  @keyframes pulse{ 70%{ box-shadow:0 0 0 7px rgba(216,106,60,0); } 100%{ box-shadow:0 0 0 0 rgba(216,106,60,0); } }
+  .steps{ list-style:none; margin:0 0 1.2rem; padding:0; }
+  .steps li{ display:grid; grid-template-columns:auto 1fr; gap:.7em; padding:.5rem 0;
+    border-bottom:1px dotted var(--line-light); color:var(--text-paper); font-size:.98rem; }
+  .steps li:last-child{ border-bottom:0; }
+  .steps .ar{ color:var(--indigo-2); }
+  .gate{ font-family:"IBM Plex Mono",monospace; font-size:.78rem; letter-spacing:.04em;
+    background:var(--paper-2); border:1px solid var(--line-light); padding:.8em 1em; display:flex;
+    gap:.7em; align-items:flex-start; }
+  .gate b{ color:var(--indigo-2); font-weight:600; letter-spacing:.08em; flex:0 0 auto; }
 
-/* ─── RESPONSIVE ──────────────────────────────────────── */
-@media(max-width:960px){
-  #eng-sticky,.sir-sticky{grid-template-columns:1fr;}
-  #eng-right,.sir-photo{display:none;}
-  .sec{padding:80px 24px;}
-  .hero-c{padding:0 24px 60px;}
-  .nav-links{display:none;}
-  .mr{grid-template-columns:1fr auto;}.mbt{display:none;}
-  .fi2{grid-template-columns:1fr;text-align:center;}
-  .rmt{grid-template-columns:1fr;}.rmt::before{display:none;}
-  .er{grid-template-columns:1fr;}.etg{display:none;}
-  .stat-marker{display:none;}
-  .closing-content{padding:0 24px 60px;}
-}
-@media(max-width:600px){
-  .gauto{grid-template-columns:1fr;}
-  .stat-num{font-size:clamp(60px,18vw,120px);}
-}
+  /* launch / notify */
+  .notify{ max-width:560px; }
+  .field{ display:flex; gap:.6rem; margin-top:1.6rem; flex-wrap:wrap; }
+  .field input{ flex:1 1 220px; background:var(--ink-2); border:1px solid var(--line-dark);
+    color:var(--text-ink); font-family:"IBM Plex Mono",monospace; font-size:.86rem;
+    padding:.95em 1em; }
+  .field input::placeholder{ color:var(--muted-ink); }
+  .field input:focus{ border-color:var(--indigo); outline:none; }
+  .field button{ cursor:pointer; flex:0 0 auto; }
+  .notice{ font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--muted-ink);
+    letter-spacing:.04em; margin-top:.9rem; }
+  .ok{ color:var(--indigo); }
+
+  /* operator */
+  .operator{ display:grid; grid-template-columns:auto 1fr auto; gap:clamp(1.2rem,3vw,2.4rem);
+    align-items:center; }
+  @media (max-width:760px){ .operator{ grid-template-columns:1fr; gap:1.4rem; text-align:left; } }
+  .op-name{ font-family:"Archivo",sans-serif; font-weight:800; font-size:clamp(1.6rem,3.5vw,2.3rem);
+    letter-spacing:-0.02em; }
+  .op-role{ font-family:"IBM Plex Mono",monospace; font-size:.78rem; color:var(--muted-ink);
+    letter-spacing:.06em; margin-top:.5rem; }
+
+  /* footer */
+  footer{ border-top:1px solid var(--line-dark); padding:clamp(3rem,6vw,4.5rem) 0 clamp(2rem,4vw,3rem); }
+  .foot-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:2rem;
+    flex-wrap:wrap; margin-bottom:2.5rem; }
+  .foot-brand .brandmark{ font-size:1.05rem; }
+  .foot-tagline{ font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--muted-ink);
+    letter-spacing:.06em; margin-top:.7rem; }
+  .foot-links{ display:flex; gap:1.4rem; font-family:"IBM Plex Mono",monospace; font-size:.76rem;
+    letter-spacing:.06em; text-transform:uppercase; flex-wrap:wrap; }
+  .foot-links a{ text-decoration:none; color:var(--muted-ink); transition:color .15s; }
+  .foot-links a:hover{ color:var(--text-ink); }
+  .foot-bot{ display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+    border-top:1px solid var(--line-dark); padding-top:1.4rem;
+    font-family:"IBM Plex Mono",monospace; font-size:.68rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--muted-ink); }
+
+  /* reveal animation */
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .7s cubic-bezier(.2,.7,.2,1),
+    transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in{ opacity:1; transform:none; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+    .reveal{ opacity:1 !important; transform:none !important; }
+    .dot.live{ box-shadow:none; }
+  }
 </style>
 </head>
 <body>
 
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
-
-<!-- ══ NAV ═══════════════════════════════════════════════ -->
-<nav id="nav">
-  <div class="ni">
-    <span class="wm">SYSTEM THREADS</span>
-    <div class="nav-links">
-      <a href="#problem" class="nav-a">Problem</a>
-      <a href="#engineering" class="nav-a">Approach</a>
-      <a href="#sircilla" class="nav-a">Origin</a>
-      <a href="#roadmap" class="nav-a">Roadmap</a>
-      <a href="#metrics" class="nav-a">Metrics</a>
-      <a href="#principal" class="nav-a">Principal</a>
-    </div>
-  </div>
-</nav>
-
-<!-- ══ HERO ══════════════════════════════════════════════ -->
-<section id="hero">
-  <div id="hero-photo">
-    <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1920&auto=format&fit=crop&q=80"
-         alt="Urban nightscape" loading="eager">
-  </div>
-  <canvas id="hcv"></canvas>
-  <div class="grain"></div>
-
-  <div class="hero-c">
-    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:56px;">
-      <span class="chip"><span class="dot"></span>Pre-launch · Validation 2026</span>
-      <span class="chip">Telangana, India — 18.3851°N 78.8232°E</span>
-      <span class="chip">Export-Oriented Regions: US / EU / IN</span>
-    </div>
-    <div style="max-width:860px;">
-      <p class="lbl" style="margin-bottom:20px;opacity:0;animation:fadeUp .8s .3s forwards;">REF-001 / Brand System Overview</p>
-      <h1 class="hero-hl" style="opacity:0;animation:fadeUp .9s .5s forwards;">
-        Engineered Outerwear<br>for Urban Variability.
-      </h1>
-      <hr class="rule" style="margin:28px 0;opacity:0;animation:fadeUp .6s .8s forwards;">
-      <p style="color:var(--t1);font-size:15px;max-width:540px;line-height:1.85;opacity:0;animation:fadeUp .7s 1s forwards;">
-        SYSTEM THREADS applies systems engineering methodology to outerwear — treating every garment as an assembly of interdependent performance modules. Form is a derivative of function.
-      </p>
-    </div>
-
-    <!-- HERO FORM — functional via Apps Script -->
-    <div style="margin-top:44px;max-width:460px;opacity:0;animation:fadeUp .7s 1.2s forwards;">
-      <p class="mono" style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--t2);margin-bottom:11px;">Request Specification Sheet / Notify on Launch</p>
-      <div id="hero-form-wrap">
-        <input class="fi" type="text" id="hero-name" placeholder="Full name (optional)" style="margin-bottom:2px;">
-        <div style="display:flex;">
-          <input class="fi" type="email" id="hero-email" placeholder="engineer@domain.com" style="flex:1;">
-          <button class="fb" id="hero-btn" onclick="submitForm('hero')">Register</button>
-        </div>
-      </div>
-      <div class="form-success" id="hero-success">
-        <p class="mono" style="font-size:11px;color:var(--ac);letter-spacing:.1em;">✓ REGISTERED — Specification updates will follow.</p>
-      </div>
-      <div class="form-error" id="hero-error">
-        <p class="mono" style="font-size:11px;color:#c07878;letter-spacing:.1em;" id="hero-err-msg">Submission failed. Please try again.</p>
-      </div>
-      <p class="mono" style="font-size:10px;color:var(--t2);margin-top:9px;">No marketing. Specification updates only.</p>
-    </div>
-
-    <hr class="rule" style="margin-top:60px;opacity:0;animation:fadeUp .5s 1.4s forwards;">
-    <div style="display:flex;justify-content:space-between;padding-top:16px;flex-wrap:wrap;gap:10px;opacity:0;animation:fadeUp .5s 1.5s forwards;">
-      <span class="mono" style="font-size:10px;color:var(--t2);letter-spacing:.1em;">SYSTEM THREADS™ — BRAND SYSTEM v0.1</span>
-      <span class="mono" style="font-size:10px;color:var(--t2);letter-spacing:.1em;">LAUNCHING 2027 — BUILDING DELIBERATELY</span>
-    </div>
-  </div>
-</section>
-
-<!-- ══ STAT ZOOM 01 — Climate Variability ════════════════ -->
-<div class="stat-scene" id="stat1" style="height:260vh;background:var(--bg0);">
-  <div class="stat-sticky">
-    <div class="stat-bg-img">
-      <img src="https://images.unsplash.com/photo-1519744346361-7a029b427a59?w=1920&auto=format&fit=crop&q=80"
-           class="p-img-dark" alt="Urban rain" loading="lazy">
-    </div>
-    <div class="stat-bg-overlay"></div>
-    <div class="grain"></div>
-    <div class="stat-marker">
-      <div class="stat-marker-line"></div>
-      <span class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.18em;text-transform:uppercase;">OBSERVED / CLIMATE</span>
-    </div>
-    <div style="position:absolute;right:40px;top:50%;transform:translateY(-50%);z-index:5;text-align:right;">
-      <p class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;">REF — VAR.01</p>
-      <p class="mono" style="font-size:10px;color:var(--t1);line-height:1.8;">Urban thermal range<br>Single commute window<br>~4h exposure cycle</p>
-    </div>
-    <div id="s1-num" class="stat-num" style="will-change:transform,opacity;">8–14</div>
-    <div id="s1-unit" class="stat-unit" style="opacity:0;">°C</div>
-    <div id="s1-desc" class="stat-desc" style="opacity:0;">urban thermal variability per single commute cycle</div>
+<!-- ===== sheet header ===== -->
+<div class="sheetbar">
+  <div class="wrap">
+    <span class="brandmark">SYSTEM THREADS<sup>™</sup></span>
+    <span class="ref">REF-001 · BRAND SYSTEM v0.2 · BUILDING DELIBERATELY</span>
   </div>
 </div>
 
-<!-- ══ PROBLEM ════════════════════════════════════════════ -->
-<section id="problem" class="sec" style="background:var(--bg1);border-top:1px solid var(--b0);border-bottom:1px solid var(--b0);">
-  <div class="ct">
-    <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:72px;align-items:start;">
-      <div class="fu">
-        <p class="lbl" style="margin-bottom:14px;">SECTION 02 / Problem Frame</p>
-        <h2 class="h2">The Friction of<br>Modern Outerwear.</h2>
-        <hr class="rule-ac" style="margin:28px 0;">
-        <p class="mono" style="font-size:11px;color:var(--t2);line-height:1.85;">Urban environments expose a structural gap between what outerwear claims to solve and what it actually addresses. This is not a design problem. It is a systems failure.</p>
-        <div style="margin-top:36px;position:relative;overflow:hidden;border:1px solid var(--b0);">
-          <div style="height:240px;overflow:hidden;position:relative;">
-            <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&auto=format&fit=crop&q=80"
-                 class="p-img" style="transition:transform .8s ease;" loading="lazy"
-                 onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-          </div>
-          <div style="position:absolute;bottom:0;left:0;right:0;padding:12px 14px;background:linear-gradient(to top,rgba(9,9,11,.95),transparent);z-index:2;">
-            <p class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.12em;">FIG.01 — Conventional construction. Zero performance specification applied to thermal management or moisture response.</p>
-          </div>
-          <div style="position:absolute;top:10px;right:10px;width:16px;height:16px;border-top:1px solid var(--acd);border-right:1px solid var(--acd);z-index:3;"></div>
-          <div style="position:absolute;bottom:40px;left:10px;width:16px;height:16px;border-bottom:1px solid var(--acd);border-left:1px solid var(--acd);z-index:3;"></div>
-        </div>
-        <p class="mono" style="font-size:9px;color:var(--t2);margin-top:8px;letter-spacing:.1em;padding-left:2px;">CLASSIFICATION: Fashion outerwear. Thermal performance: unspecified.</p>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:36px;">
-        <div class="pb fu">
-          <p class="mono" style="font-size:10px;letter-spacing:.14em;color:var(--ac);margin-bottom:9px;text-transform:uppercase;">Variable 01 — Climate Variability</p>
-          <p style="color:var(--t1);font-size:14px;line-height:1.8;">Urban microclimates shift 8–14°C within a single commute cycle. Most outerwear is spec'd for a static thermal scenario — offering zero adaptability across that range. The result: layering chaos or comfort compromise.</p>
-        </div>
-        <div class="pb fu">
-          <p class="mono" style="font-size:10px;letter-spacing:.14em;color:var(--ac);margin-bottom:9px;text-transform:uppercase;">Variable 02 — Over-engineered Outdoor Gear</p>
-          <p style="color:var(--t1);font-size:14px;line-height:1.8;">Technical outdoor brands optimize for 6,000m altitude that 99.3% of purchasers never encounter. Structural redundancy built into every seam — weight and bulk without proportional urban utility. Misaligned specification targets.</p>
-        </div>
-        <div class="pb fu">
-          <p class="mono" style="font-size:10px;letter-spacing:.14em;color:var(--ac);margin-bottom:9px;text-transform:uppercase;">Variable 03 — Under-engineered Fashion Jackets</p>
-          <p style="color:var(--t1);font-size:14px;line-height:1.8;">Premium fashion outerwear treats construction as aesthetic variable. Seam integrity, thermal retention, and abrasion resistance are afterthoughts — subordinated to 18-month silhouette season cycles with no performance specification targets.</p>
-        </div>
-        <div class="pb fu">
-          <p class="mono" style="font-size:10px;letter-spacing:.14em;color:var(--ac);margin-bottom:9px;text-transform:uppercase;">Variable 04 — Absence of System Thinking</p>
-          <p style="color:var(--t1);font-size:14px;line-height:1.8;">The modern wardrobe is assembled, not designed. No consideration for thermal layering stacks, modular compatibility, or performance interaction between garments. Each purchase is a standalone artifact in a space that demands a coherent system.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<main>
 
-<!-- ══ STAT ZOOM 02 — Hydrostatic Target ════════════════ -->
-<div class="stat-scene" id="stat2" style="height:240vh;background:var(--bg0);">
-  <div class="stat-sticky">
-    <div class="stat-bg-img">
-      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&auto=format&fit=crop&q=80"
-           class="p-img-dark" alt="Fabric macro" loading="lazy">
-    </div>
-    <div class="stat-bg-overlay"></div>
-    <div class="grain"></div>
-    <div class="stat-marker">
-      <div class="stat-marker-line"></div>
-      <span class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.18em;text-transform:uppercase;">TARGET / MATERIAL SPEC</span>
-    </div>
-    <div style="position:absolute;right:40px;bottom:40px;z-index:5;text-align:right;">
-      <p class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.12em;">ISO 811 / Hydrostatic pressure<br>test protocol applied</p>
-    </div>
-    <div style="position:relative;z-index:3;text-align:center;">
-      <p class="mono" id="s2-pre" style="font-size:clamp(16px,2.5vw,24px);color:var(--ac);letter-spacing:.3em;margin-bottom:8px;opacity:0;">≥</p>
-      <div id="s2-num" class="stat-num" style="will-change:transform,opacity;">15,000</div>
-      <div id="s2-unit" class="stat-unit" style="opacity:0;">mm — Hydrostatic Pressure Resistance</div>
-      <div id="s2-desc" class="stat-desc" style="opacity:0;">minimum target · ISO 811 water column test · laminate system</div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ ENGINEERING STORY ══════════════════════════════════ -->
-<div id="engineering"></div>
-<div id="eng-scene" style="height:520vh;background:var(--bg0);">
-  <div id="eng-sticky">
-    <div class="grain" style="z-index:4;"></div>
-    <div id="eng-left">
-      <p class="lbl" style="margin-bottom:6px;">SECTION 03 / Engineering Approach</p>
-      <p id="eng-chapter-num" class="mono" style="font-size:11px;color:var(--t2);letter-spacing:.2em;margin-bottom:22px;">01 / 04 — MATERIAL SCIENCE</p>
-      <div id="eng-accent"></div>
-      <h3 id="eng-title" class="serif" style="font-size:clamp(30px,3.2vw,44px);font-weight:300;line-height:1.1;margin-bottom:22px;">Material Science</h3>
-      <p id="eng-body" style="color:var(--t1);font-size:14px;line-height:1.85;max-width:440px;">
-        Fabric selection driven by measurable performance matrices: hydrostatic pressure resistance (≥15,000mm), moisture vapor transmission rate (MVTR ≥10,000 g/m²/24h), and UV degradation coefficients. No material enters the spec until lab-validated against ISO standards. Face fabric, membrane, and backer are treated as a laminated system — not individual layers.
-      </p>
-      <div id="eng-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:24px;">
-        <span class="tag">Laminate Architecture</span>
-        <span class="tag">DWR Chemistry</span>
-        <span class="tag">Fiber Denier</span>
-      </div>
-      <div id="eng-spec">
-        <span id="eng-spec-val">≥15,000mm</span>
-        <span id="eng-spec-lbl" class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.1em;">ISO 811</span>
-      </div>
-      <div id="eng-chapter-dots">
-        <div class="eng-dot a" id="edot0"></div>
-        <div class="eng-dot" id="edot1"></div>
-        <div class="eng-dot" id="edot2"></div>
-        <div class="eng-dot" id="edot3"></div>
-      </div>
-    </div>
-    <div id="eng-right">
-      <div class="eng-photo-layer visible" id="ep0">
-        <img src="https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=1200&auto=format&fit=crop&q=80"
-             alt="Textile fabric weave" loading="eager">
-        <div class="eng-annotation">
-          <p>FACE FABRIC — LAMINATE SYSTEM</p>
-          <p>Denier: TBD / Weave: TBD</p>
-          <p>ISO 811 CERTIFIED MEMBRANE</p>
-        </div>
-      </div>
-      <div class="eng-photo-layer" id="ep1">
-        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&auto=format&fit=crop&q=80"
-             alt="Technical pattern engineering" loading="lazy">
-        <div class="eng-annotation">
-          <p>PATTERN GRADE — TECHNICAL REVIEW</p>
-          <p>Seam axis: motion-capture derived</p>
-          <p>TOLERANCE: ±3mm ALL POINTS</p>
-        </div>
-      </div>
-      <div class="eng-photo-layer" id="ep2">
-        <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1200&auto=format&fit=crop&q=80"
-             alt="Climate adaptation zones" loading="lazy">
-        <div class="eng-annotation">
-          <p>THERMAL ZONE MAPPING</p>
-          <p>Operative range: −5°C to +22°C</p>
-          <p>MODULAR INSULATION SYSTEM</p>
-        </div>
-      </div>
-      <div class="eng-photo-layer" id="ep3">
-        <img src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=1200&auto=format&fit=crop&q=80"
-             alt="Precision manufacturing sewing" loading="lazy">
-        <div class="eng-annotation">
-          <p>STRUCTURAL SEAM — SPI 12–14</p>
-          <p>Double-fell construction</p>
-          <p>ISO 13934-1 TENSILE TESTED</p>
-        </div>
-      </div>
-      <div id="eng-progress-bar"><div id="eng-progress-fill"></div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ STAT ZOOM 03 — Stitch Density ════════════════════ -->
-<div class="stat-scene" id="stat3" style="height:220vh;background:var(--bg0);">
-  <div class="stat-sticky">
-    <div class="stat-bg-img">
-      <img src="https://media.licdn.com/dms/image/v2/D4E03AQHeM4Amfj_9Tg/profile-displayphoto-crop_800_800/B4EZsWM1WtHEAI-/0/1765604022383?e=1773273600&v=beta&t=KC6f8rV7Cbou2Zfx7lFZpBssvNbkNcOSTGS3MoLngVE"
-           class="p-img-dark" alt="Stitch precision" loading="lazy">
-    </div>
-    <div class="stat-bg-overlay"></div>
-    <div class="grain"></div>
-    <div class="stat-marker">
-      <div class="stat-marker-line"></div>
-      <span class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.18em;text-transform:uppercase;">SPEC / MANUFACTURING</span>
-    </div>
-    <div style="position:relative;z-index:3;text-align:center;">
-      <div id="s3-num" class="stat-num" style="will-change:transform,opacity;">12–14</div>
-      <div id="s3-unit" class="stat-unit" style="opacity:0;">SPI — Stitches Per Inch</div>
-      <div id="s3-desc" class="stat-desc" style="opacity:0;">structural seam density target · all load-bearing seam classes</div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ SIRCILLA ═══════════════════════════════════════════ -->
-<div id="sircilla" style="position:relative;">
-  <div class="sir-scene" style="height:320vh;">
-    <div class="sir-sticky">
-      <div class="sir-photo">
-        <div class="sir-photo-inner" id="sir-photo-inner">
-          <img src="https://images.unsplash.com/photo-1660980041852-230420b8f99f?q=80&w=880&auto=format&fit=crop"
-               alt="Textile loom Sircilla" id="sir-img" loading="lazy">
-        </div>
-        <div class="sir-mark tl">18.3851° N<br>78.8232° E<br>SIRCILLA</div>
-        <div class="sir-mark br">CLUSTER WORKFORCE<br>~120,000<br>TELANGANA, IN</div>
-        <div style="position:absolute;top:20px;right:20px;width:20px;height:20px;border-top:1px solid var(--acd);border-right:1px solid var(--acd);z-index:5;"></div>
-        <div style="position:absolute;bottom:20px;left:20px;width:20px;height:20px;border-bottom:1px solid var(--acd);border-left:1px solid var(--acd);z-index:5;"></div>
-        <div class="grain"></div>
-      </div>
-      <div class="sir-text">
-        <p class="lbl" style="margin-bottom:14px;">SECTION 04 / Manufacturing Origin</p>
-        <h2 class="h2" style="margin-bottom:28px;">Built Where Textile<br>Legacy Meets<br>Modern Precision.</h2>
-        <hr class="rule-ac" style="margin-bottom:28px;">
-        <p class="mono" style="font-size:10px;color:var(--t2);line-height:2;margin-bottom:24px;">
-          18.3851° N, 78.8232° E — Sircilla, Telangana<br>
-          Established textile cluster: ~2,000 registered looms<br>
-          Powerloom heritage: post-1970s industrialization
-        </p>
-        <p style="color:var(--t1);font-size:14px;line-height:1.85;margin-bottom:36px;">
-          Sircilla operates as one of India's most concentrated powerloom economies — a district whose industrial identity is inseparable from textile production. Decades of accumulated craft knowledge, combined with a skilled workforce, make it the logical anchor for a precision manufacturing operation positioned for global quality standards.
-        </p>
-        <div style="display:flex;flex-direction:column;gap:2px;">
-          <div style="border:1px solid var(--b0);padding:18px 20px;background:var(--bg2);">
-            <p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;margin-bottom:6px;">01 — Existing Skill Base</p>
-            <p style="color:var(--t1);font-size:13px;line-height:1.7;">Generational expertise in fabric construction, loom calibration, and finishing operations. Retrainable to technical outerwear standards with targeted upskilling in seam engineering and quality control systems.</p>
-          </div>
-          <div style="border:1px solid var(--b0);padding:18px 20px;background:var(--bg2);">
-            <p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;margin-bottom:6px;">02 — Modernization Intent</p>
-            <p style="color:var(--t1);font-size:13px;line-height:1.7;">Phase-wise introduction of automated cutting, CAD pattern digitization, and ISO-aligned QC infrastructure. Augmentation of existing capability — not replacement.</p>
-          </div>
-          <div style="border:1px solid var(--b0);padding:18px 20px;background:var(--bg2);">
-            <p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;margin-bottom:6px;">03 — Vertical Integration Target</p>
-            <p style="color:var(--t1);font-size:13px;line-height:1.7;">Consolidated facility integrating raw material processing, lamination, cut-and-sew, and QA within a single controlled environment. Reduces variability. Compresses lead times. Tighter tolerance enforcement.</p>
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-top:2px;background:var(--b0);">
-          <div style="background:var(--bg0);padding:16px;"><p class="mono" style="font-size:9px;color:var(--t2);margin-bottom:4px;">PORT DISTANCE</p><p class="mono" style="font-size:14px;color:var(--t0);">~340 km</p><p class="mono" style="font-size:9px;color:var(--t2);">Chennai (MAA)</p></div>
-          <div style="background:var(--bg0);padding:16px;"><p class="mono" style="font-size:9px;color:var(--t2);margin-bottom:4px;">STATUS</p><p class="mono" style="font-size:14px;color:var(--t0);">Phase 1</p><p class="mono" style="font-size:9px;color:var(--t2);">Vendor Assessment</p></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ ROADMAP ════════════════════════════════════════════ -->
-<section id="roadmap" class="sec" style="background:var(--bg1);border-top:1px solid var(--b0);border-bottom:1px solid var(--b0);">
-  <div class="ct">
-    <div class="fu" style="margin-bottom:68px;">
-      <p class="lbl" style="margin-bottom:14px;">SECTION 05 / Development Phases</p>
-      <h2 class="h2">Product Roadmap.</h2>
-      <p style="color:var(--t1);font-size:14px;margin-top:16px;max-width:480px;line-height:1.8;">Three structured phases. Each gate-controlled. No acceleration without evidence from the prior phase.</p>
-    </div>
-    <div class="rmt fu">
-      <div style="text-align:center;"><div class="pd a"></div></div>
-      <div style="text-align:center;"><div class="pd"></div></div>
-      <div style="text-align:center;"><div class="pd"></div></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;">
-      <div class="card fu" style="padding:36px 28px;border-top:2px solid var(--ac);">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
-          <div><p class="mono" style="font-size:9px;letter-spacing:.18em;color:var(--ac);text-transform:uppercase;margin-bottom:4px;">Phase 01 — Active</p><h3 class="serif" style="font-size:24px;font-weight:400;">Validation</h3></div>
-          <span class="mono" style="font-size:10px;color:var(--t2);">2026</span>
-        </div>
-        <hr class="rule" style="margin-bottom:20px;">
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Market signal collection — professional interviews, wardrobe audit data, size curve research</p></div>
-          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Vendor assessment in Sircilla — capability audit, stitch quality sampling, compliance check</p></div>
-          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Prototype build: 3 silhouettes × 2 fabric systems — internal destructive testing</p></div>
-          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Brand system architecture — positioning, visual language, spec sheet framework</p></div>
-        </div>
-        <div style="margin-top:22px;padding:11px 14px;background:var(--acg);border:1px solid var(--acd);">
-          <p class="mono" style="font-size:10px;color:var(--ac);">GATE: Prototype approval + 2 confirmed production partners</p>
-        </div>
-      </div>
-      <div class="card fu" style="padding:36px 28px;">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
-          <div><p class="mono" style="font-size:9px;letter-spacing:.18em;color:var(--t2);text-transform:uppercase;margin-bottom:4px;">Phase 02 — Pending</p><h3 class="serif" style="font-size:24px;font-weight:400;">Controlled Production</h3></div>
-          <span class="mono" style="font-size:10px;color:var(--t2);">2026–27</span>
-        </div>
-        <hr class="rule" style="margin-bottom:20px;">
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--t2);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t2);font-size:13px;line-height:1.6;">Initial run: 150–300 units. SKU-controlled. Direct-to-professional distribution (US/EU)</p></div>
-          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--t2);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t2);font-size:13px;line-height:1.6;">Dimensional QC — 100% batch inspection against tolerance spec. ±3mm on all measured points</p></div>
-          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--t2);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t2);font-size:13px;line-height:1.6;">Post-purchase feedback loop — structured 90-day, 180-day user data collection</p></div>
-          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--t2);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t2);font-size:13px;line-height:1.6;">Financial model validation — landed cost, margin stack, pricing elasticity by market</p></div>
-        </div>
-        <div style="margin-top:22px;padding:11px 14px;border:1px solid var(--b0);">
-          <p class="mono" style="font-size:10px;color:var(--t2);">GATE: ≥85% QC pass rate + positive unit economics confirmed</p>
-        </div>
-      </div>
-      <div class="card fu" style="padding:36px 28px;">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
-          <div><p class="mono" style="font-size:9px;letter-spacing:.18em;color:var(--t2);text-transform:uppercase;margin-bottom:4px;">Phase 03 — Planned</p><h3 class="serif" style="font-size:24px;font-weight:400;">Vertical Integration</h3></div>
-          <span class="mono" style="font-size:10px;color:var(--t2);">2028–30</span>
-        </div>
-        <hr class="rule" style="margin-bottom:20px;">
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--t2);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t2);font-size:13px;line-height:1.6;">Consolidated Sircilla facility — fabric treatment, lamination, cut-and-sew, finishing under one roof</p></div>
-          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--t2);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t2);font-size:13px;line-height:1.6;">Automated CAD/CAM cutting integration — ±1.5mm tolerance target on critical seams</p></div>
-          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--t2);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t2);font-size:13px;line-height:1.6;">Proprietary fabric blends with regional fiber suppliers. IP registration.</p></div>
-          <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--t2);font-size:11px;flex-shrink:0;margin-top:1px;">→</span><p style="color:var(--t2);font-size:13px;line-height:1.6;">Export infrastructure: FTZ registration, CE compliance, B2B wholesale activation</p></div>
-        </div>
-        <div style="margin-top:22px;padding:11px 14px;border:1px solid var(--b0);">
-          <p class="mono" style="font-size:10px;color:var(--t2);">GATE: Series A / strategic partnership closed</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ METRICS ════════════════════════════════════════════ -->
-<section id="metrics" class="sec" style="background:var(--bg0);position:relative;border-top:1px solid var(--b0);">
-  <div class="metrics-bg">
-    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&auto=format&fit=crop&q=60"
-         alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;filter:grayscale(100%);">
-  </div>
-  <div class="ct" style="position:relative;z-index:1;">
-    <div style="display:grid;grid-template-columns:1fr 1.6fr;gap:80px;align-items:start;">
-      <div class="fu">
-        <p class="lbl" style="margin-bottom:14px;">SECTION 06 / Quality Specification</p>
-        <h2 class="h2">Measured,<br>Not Marketed.</h2>
-        <hr class="rule-ac" style="margin:28px 0;">
-        <p style="color:var(--t1);font-size:14px;line-height:1.8;margin-bottom:28px;">Performance claims are quantified or they don't exist. Every metric maps to a standardized test protocol. Target values are floors, not aspirations.</p>
-        <p class="mono" style="font-size:10px;color:var(--t2);margin-bottom:10px;">TESTING STANDARDS</p>
-        <div style="display:flex;flex-direction:column;gap:5px;">
-          <p class="mono" style="font-size:11px;color:var(--t1);">ISO 811 — Water resistance</p>
-          <p class="mono" style="font-size:11px;color:var(--t1);">ISO 13934-1 — Tensile strength</p>
-          <p class="mono" style="font-size:11px;color:var(--t1);">ASTM D4966 — Abrasion (Martindale)</p>
-          <p class="mono" style="font-size:11px;color:var(--t1);">ISO 6941 — Seam integrity</p>
-          <p class="mono" style="font-size:11px;color:var(--t1);">AATCC 135 — Dimensional stability</p>
-        </div>
-      </div>
-      <div id="mets" class="fu">
-        <div class="mr"><div><p style="font-size:14px;color:var(--t0);margin-bottom:2px;">Hydrostatic Pressure Resistance</p><p class="mono" style="font-size:10px;color:var(--t2);">ISO 811 · Water column (mm)</p></div><div class="mbt"><div class="mbf" style="--w:88%;"></div></div><p class="mono" style="font-size:13px;color:var(--ac);white-space:nowrap;">≥ 15,000 mm</p></div>
-        <div class="mr"><div><p style="font-size:14px;color:var(--t0);margin-bottom:2px;">Moisture Vapor Transmission Rate</p><p class="mono" style="font-size:10px;color:var(--t2);">ISO 11092 · g/m²/24h</p></div><div class="mbt"><div class="mbf" style="--w:72%;"></div></div><p class="mono" style="font-size:13px;color:var(--ac);white-space:nowrap;">≥ 10,000 g</p></div>
-        <div class="mr"><div><p style="font-size:14px;color:var(--t0);margin-bottom:2px;">Abrasion Resistance — Face Fabric</p><p class="mono" style="font-size:10px;color:var(--t2);">ASTM D4966 · Martindale cycles</p></div><div class="mbt"><div class="mbf" style="--w:80%;"></div></div><p class="mono" style="font-size:13px;color:var(--ac);white-space:nowrap;">≥ 50,000 cy</p></div>
-        <div class="mr"><div><p style="font-size:14px;color:var(--t0);margin-bottom:2px;">Stitch Density — Structural Seams</p><p class="mono" style="font-size:10px;color:var(--t2);">SPI · Stitches per inch</p></div><div class="mbt"><div class="mbf" style="--w:65%;"></div></div><p class="mono" style="font-size:13px;color:var(--ac);white-space:nowrap;">12–14 SPI</p></div>
-        <div class="mr"><div><p style="font-size:14px;color:var(--t0);margin-bottom:2px;">Seam Tensile Strength</p><p class="mono" style="font-size:10px;color:var(--t2);">ISO 13934-1 · Newtons (N)</p></div><div class="mbt"><div class="mbf" style="--w:76%;"></div></div><p class="mono" style="font-size:13px;color:var(--ac);white-space:nowrap;">≥ 450 N</p></div>
-        <div class="mr"><div><p style="font-size:14px;color:var(--t0);margin-bottom:2px;">DWR Retention — Post 20 Washes</p><p class="mono" style="font-size:10px;color:var(--t2);">AATCC 22 · Rating /100</p></div><div class="mbt"><div class="mbf" style="--w:60%;"></div></div><p class="mono" style="font-size:13px;color:var(--ac);white-space:nowrap;">≥ 80/100</p></div>
-        <div class="mr"><div><p style="font-size:14px;color:var(--t0);margin-bottom:2px;">Lifecycle Durability Target</p><p class="mono" style="font-size:10px;color:var(--t2);">Simulated wear · Urban use profile</p></div><div class="mbt"><div class="mbf" style="--w:95%;"></div></div><p class="mono" style="font-size:13px;color:var(--ac);white-space:nowrap;">7+ years</p></div>
-        <div class="mr"><div><p style="font-size:14px;color:var(--t0);margin-bottom:2px;">Dimensional Tolerance — All Points</p><p class="mono" style="font-size:10px;color:var(--t2);">Batch QC · Millimetre deviation</p></div><div class="mbt"><div class="mbf" style="--w:100%;"></div></div><p class="mono" style="font-size:13px;color:var(--ac);white-space:nowrap;">± 3 mm max</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ STAT ZOOM 04 — Lifecycle ══════════════════════════ -->
-<div class="stat-scene" id="stat4" style="height:220vh;background:var(--bg0);">
-  <div class="stat-sticky">
-    <div class="stat-bg-img">
-      <img src="https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=1920&auto=format&fit=crop&q=80"
-           class="p-img-dark" alt="Durability" loading="lazy">
-    </div>
-    <div class="stat-bg-overlay"></div>
-    <div class="grain"></div>
-    <div class="stat-marker">
-      <div class="stat-marker-line"></div>
-      <span class="mono" style="font-size:9px;color:var(--t2);letter-spacing:.18em;text-transform:uppercase;">TARGET / LIFECYCLE</span>
-    </div>
-    <div id="s4-num" class="stat-num" style="will-change:transform,opacity;">7+</div>
-    <div id="s4-unit" class="stat-unit" style="opacity:0;">Years — Lifecycle Durability</div>
-    <div id="s4-desc" class="stat-desc" style="opacity:0;">simulated wear cycles · urban use profile · anti-planned-obsolescence</div>
-  </div>
-</div>
-
-<!-- ══ CLOSING ════════════════════════════════════════════ -->
-<div class="closing-scene">
-  <div class="closing-bg" id="closing-bg">
-    <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1920&auto=format&fit=crop&q=80"
-         alt="Urban night" loading="lazy">
-  </div>
-  <div class="closing-grad"></div>
-  <div class="grain" style="z-index:2;opacity:.025;"></div>
-
-  <div class="closing-content ct" style="max-width:none;">
-    <div style="max-width:1320px;margin:0 auto;">
-      <p class="lbl" style="margin-bottom:24px;">SECTION 07 / Launch Status</p>
-      <p class="chl" style="color:var(--t0);">Launching 2027.<br><span style="color:var(--t2);font-style:italic;">Building Deliberately.</span></p>
-      <hr class="rule" style="margin:44px 0;max-width:640px;">
-      <p style="color:var(--t1);font-size:15px;max-width:480px;line-height:1.85;margin-bottom:32px;">We are not racing to market. Every phase is gated on validated outputs. No previews. No hype. Specification updates when each phase closes.</p>
-
-      <!-- CLOSING FORM — functional via Apps Script -->
-      <div id="closing-form-wrap" style="max-width:460px;">
-        <input class="fi" type="text" id="closing-name" placeholder="Full name (optional)" style="margin-bottom:2px;">
-        <div style="display:flex;">
-          <input class="fi" type="email" id="closing-email" placeholder="engineer@domain.com" style="flex:1;">
-          <button class="fb" id="closing-btn" onclick="submitForm('closing')">Notify Me</button>
-        </div>
-      </div>
-      <div class="form-success" id="closing-success" style="max-width:460px;">
-        <p class="mono" style="font-size:11px;color:var(--ac);letter-spacing:.1em;">✓ REGISTERED — You will be notified at launch.</p>
-      </div>
-      <div class="form-error" id="closing-error" style="max-width:460px;">
-        <p class="mono" style="font-size:11px;color:#c07878;letter-spacing:.1em;" id="closing-err-msg">Submission failed. Please try again.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ PRINCIPAL ══════════════════════════════════════════ -->
-<section id="principal" class="sec" style="background:var(--bg1);border-top:1px solid var(--b0);">
-  <div class="ct">
-    <div class="fu" style="margin-bottom:52px;">
-      <p class="lbl" style="margin-bottom:14px;">SECTION 08 / Principal</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:end;">
-        <h2 class="h2">The Operator<br>Behind the System.</h2>
-        <p style="color:var(--t1);font-size:14px;line-height:1.85;">SYSTEM THREADS is designed and led by a product operations and business systems professional with 5+ years translating complex technical requirements into structured, scalable solutions — across enterprise software, aerospace manufacturing, and cloud infrastructure. The same methodology applied here.</p>
-      </div>
-    </div>
-
-    <div class="fu" style="border:1px solid var(--b0);background:var(--bg2);padding:36px;margin-bottom:2px;">
-      <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;align-items:start;">
+  <!-- ===================== HERO ===================== -->
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
         <div>
-          <p class="mono" style="font-size:9px;letter-spacing:.18em;color:var(--ac);text-transform:uppercase;margin-bottom:10px;">Principal Identifier</p>
-          <p class="serif" style="font-size:30px;font-weight:300;color:var(--t0);letter-spacing:-.01em;margin-bottom:6px;">Sumith Gorityala</p>
-          <p class="mono" style="font-size:11px;color:var(--t1);margin-bottom:16px;">Business Systems Analyst · Product Operations · Data-Driven Solutions</p>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <span class="tag">Cleveland, OH</span>
-            <a href="mailto:sumithgorityala23@gmail.com"><span class="tag">sumithgorityala23@gmail.com</span></a>
-            <span class="tag">(216) 415-4617</span>
+          <div class="kicker-row">
+            <span class="eyebrow"><span class="xmark"></span>Engineered outerwear · urban variability</span>
+          </div>
+          <h1 class="display">Form is a<br>derivative of<br><span class="thin">function.</span></h1>
+          <p class="lead hero-lead">System Threads applies systems-engineering methodology to outerwear — every garment treated as an assembly of interdependent performance modules, specified to the climate it actually meets: the city.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#notify">Request specification sheet</a>
+            <a class="btn btn-ghost" href="#problem">Read the system <span class="arr">→</span></a>
           </div>
         </div>
+
         <div>
-          <p class="mono" style="font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px;">Education</p>
-          <p class="mono" style="font-size:12px;color:var(--t0);margin-bottom:2px;">MS, Information Systems</p>
-          <p class="mono" style="font-size:10px;color:var(--ac);margin-bottom:2px;">STEM · Dec 2025</p>
-          <p class="mono" style="font-size:10px;color:var(--t2);margin-bottom:14px;">Cleveland State University</p>
-          <p class="mono" style="font-size:12px;color:var(--t0);margin-bottom:2px;">BTech, Mechanical Eng.</p>
-          <p class="mono" style="font-size:10px;color:var(--t2);">JNTU Hyderabad</p>
+          <!-- drawing title block -->
+          <div class="titleblock" aria-hidden="true">
+            <div class="tb-cell"><span class="tb-k">Ref</span><span class="tb-v">REF-001</span></div>
+            <div class="tb-cell"><span class="tb-k">Rev</span><span class="tb-v">v0.2 / 2026</span></div>
+            <div class="tb-cell"><span class="tb-k">Sheet</span><span class="tb-v">01 — Overview</span></div>
+            <div class="tb-cell"><span class="tb-k">Scale</span><span class="tb-v">1:1 · As-spec'd</span></div>
+            <div class="tb-cell wide"><span class="tb-k">Origin coordinate</span><span class="tb-v">18.3851° N  78.8232° E — Sircilla, IN</span></div>
+            <div class="tb-cell wide"><span class="tb-k">Markets</span><span class="tb-v">US · EU · IN — export-oriented</span></div>
+          </div>
+
+          <!-- hero spec plate -->
+          <div class="plate plate--box" style="margin-top:1.4rem;">
+            <div class="plate-ref"><span class="xmark"></span><span>REF — VAR.01 / Material target</span></div>
+            <div class="plate-val">≥ <span data-count-to="15000">15,000</span><span class="u">mm</span></div>
+            <div class="plate-label">Hydrostatic pressure resistance</div>
+            <div class="plate-note">ISO 811 · water-column test · laminate system</div>
+          </div>
         </div>
-        <div>
-          <p class="mono" style="font-size:9px;color:var(--t2);text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px;">Certifications</p>
-          <div style="display:flex;flex-direction:column;gap:6px;">
-            <div class="ct2 h"><span class="mono" style="font-size:11px;color:var(--ac);">CSPO®</span><span class="mono" style="font-size:9px;color:var(--t2);">Scrum Alliance · 2026</span></div>
-            <div class="ct2"><span class="mono" style="font-size:11px;color:var(--t1);">AWS SAA</span><span class="mono" style="font-size:9px;color:var(--t2);">In Progress</span></div>
-            <div class="ct2"><span class="mono" style="font-size:11px;color:var(--t1);">AZ-900 / OCI</span><span class="mono" style="font-size:9px;color:var(--t2);">In Progress</span></div>
+      </div>
+
+      <!-- climate strip -->
+      <div class="climate">
+        <div class="big">8–14<span class="u">°C</span></div>
+        <p class="muted">Observed urban thermal swing across a single ~4-hour commute cycle. Most outerwear is specified for one static point on that range. The gap is the product.</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== 01 PROBLEM ===================== -->
+  <section class="section" id="problem" aria-labelledby="problem-h">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="eyebrow"><span class="xmark"></span>Section 01 / Problem frame</div>
+        <h2 class="h-sec" id="problem-h">The friction of modern outerwear.</h2>
+        <p class="lead">Urban environments expose a structural gap between what outerwear claims and what it delivers. This is not a styling problem. It is a specification failure — four variables, repeating across the category.</p>
+      </div>
+
+      <div class="vargrid reveal">
+        <div class="varcell">
+          <div class="var-no"><span>Variable 01</span><span class="tag">Climate variability</span></div>
+          <h3>Spec'd for a static scenario.</h3>
+          <p>Urban microclimates move 8–14°C inside one commute. Garments engineered for a single thermal point offer zero adaptability across that band. The result is layering chaos or comfort compromise — neither of which the buyer chose.</p>
+        </div>
+        <div class="varcell">
+          <div class="var-no"><span>Variable 02</span><span class="tag">Over-engineered gear</span></div>
+          <h3>Built for a summit no one climbs.</h3>
+          <p>Technical outdoor brands optimise for 6,000 m altitude that the overwhelming majority of owners never reach. Redundancy is built into every seam — weight and bulk without proportional urban utility. Misaligned specification targets.</p>
+        </div>
+        <div class="varcell">
+          <div class="var-no"><span>Variable 03</span><span class="tag">Under-engineered fashion</span></div>
+          <h3>Construction as an afterthought.</h3>
+          <p>Premium fashion treats construction as an aesthetic variable. Seam integrity, thermal retention and abrasion resistance are subordinated to an 18-month silhouette cycle, with no published performance target anywhere on the garment.</p>
+        </div>
+        <div class="varcell">
+          <div class="var-no"><span>Variable 04</span><span class="tag">No system thinking</span></div>
+          <h3>Wardrobes assembled, not designed.</h3>
+          <p>The modern wardrobe is a stack of standalone artifacts — no thermal layering logic, no modular compatibility, no performance interaction between garments. Each purchase ignores the system it has to live inside.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 02 POSITION ===================== -->
+  <section class="section" aria-labelledby="pos-h">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="eyebrow"><span class="xmark"></span>Section 02 / Position</div>
+        <h2 class="h-sec" id="pos-h">Specified for the city.<br>Not the summit.</h2>
+        <p class="lead">The market offers two failures: gear over-built for altitude almost no one climbs, and fashion under-built for the weather everyone actually walks through. System Threads occupies the gap between them — performance set to the urban duty cycle and documented to the same standard as the tools its wearers already trust.</p>
+      </div>
+
+      <div class="cols3 reveal">
+        <div class="col">
+          <h3>Who it's for</h3>
+          <p>People who read the spec sheet. Engineers, builders and technical professionals who evaluate a jacket the way they evaluate a system — on measured performance, not seasonal narrative. Designed for that mindset, anywhere it works: US, EU, IN.</p>
+        </div>
+        <div class="col">
+          <h3>Why it's premium</h3>
+          <p>Price is a function of performance and lifespan. A garment specified to a 7-year duty cycle and tested against published floors is a capital purchase, not a disposable one. For measured goods, premium is the honest position — not a markup, a consequence.</p>
+        </div>
+        <div class="col">
+          <h3>The wedge</h3>
+          <p>Urban thermal range, not alpine. Commute abrasion, not expedition. Every target is set to where the garment is actually used — −5°C to +22°C, a wet platform, a loaded shoulder strap — and then verified against a standard, never simply claimed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 03 ENGINEERING ===================== -->
+  <section class="section" aria-labelledby="eng-h">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="eyebrow"><span class="xmark"></span>Section 03 / Engineering approach</div>
+        <h2 class="h-sec" id="eng-h">The garment as an assembly.</h2>
+        <p class="lead">Four module classes, each with its own target and its own test protocol. The shell resists water. The seams resist load. The face resists abrasion. The zones manage heat. Nothing is decorative until it has first done its job.</p>
+      </div>
+
+      <div class="eng-split">
+        <div class="reveal">
+          <!-- garment schematic (self-contained SVG) -->
+          <svg class="schematic" viewBox="0 0 440 470" role="img" aria-labelledby="schemtitle">
+            <title id="schemtitle">Technical schematic of a System Threads jacket annotated with performance modules and tolerances.</title>
+            <defs>
+              <marker id="ah" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+                <path d="M0.5 1 L7 4 L0.5 7" fill="none" stroke="var(--indigo)" stroke-width="1"/>
+              </marker>
+            </defs>
+            <g stroke="var(--text-ink)" stroke-width="1.4" fill="none" stroke-linejoin="round" stroke-linecap="round">
+              <!-- left sleeve -->
+              <path d="M152 132 L120 142 L96 274 L126 266 Z"/>
+              <!-- right sleeve -->
+              <path d="M288 132 L320 142 L344 274 L314 266 Z"/>
+              <!-- body -->
+              <path d="M152 132 L152 350 Q152 360 162 360 L278 360 Q288 360 288 350 L288 132"/>
+              <!-- shoulders -->
+              <path d="M152 132 L176 120 M288 132 L264 120"/>
+              <!-- collar -->
+              <path d="M176 120 L184 98 Q200 90 200 90 Q200 90 216 98 L264 120"/>
+              <path d="M188 116 Q200 108 212 116" stroke-width="1"/>
+              <!-- cuffs -->
+              <path d="M99 258 L121 251 M341 258 L319 251" stroke-width="1"/>
+            </g>
+            <!-- zip -->
+            <line x1="220" y1="120" x2="220" y2="358" stroke="var(--indigo)" stroke-width="1.2" stroke-dasharray="2 4"/>
+            <!-- pockets -->
+            <g stroke="var(--muted-ink)" stroke-width="1" fill="none">
+              <rect x="166" y="262" width="42" height="34" rx="3"/>
+              <rect x="232" y="262" width="42" height="34" rx="3"/>
+              <line x1="172" y1="148" x2="208" y2="148"/>
+              <line x1="232" y1="148" x2="268" y2="148"/>
+            </g>
+            <!-- hem detail -->
+            <line x1="156" y1="346" x2="284" y2="346" stroke="var(--muted-ink)" stroke-width="1"/>
+
+            <!-- leader lines + callouts -->
+            <g stroke="var(--indigo)" stroke-width="1">
+              <path d="M200 94 L200 60 L300 60" fill="none"/>
+              <path d="M255 200 L360 200" fill="none"/>
+              <path d="M152 175 L70 175" fill="none"/>
+              <path d="M110 230 L70 230 L70 300" fill="none" opacity="0"/>
+            </g>
+            <g font-family="'IBM Plex Mono', monospace" fill="var(--text-ink)">
+              <text x="304" y="56" font-size="9" letter-spacing="1">THERMAL ZONE</text>
+              <text x="304" y="68" font-size="8.5" fill="var(--muted-ink)">−5°C → +22°C</text>
+
+              <text x="364" y="196" font-size="9" letter-spacing="1">HYDROSTATIC</text>
+              <text x="364" y="208" font-size="8.5" fill="var(--muted-ink)">≥15,000 mm · ISO 811</text>
+
+              <text x="66" y="171" font-size="9" letter-spacing="1" text-anchor="end">SEAM</text>
+              <text x="66" y="183" font-size="8.5" fill="var(--muted-ink)" text-anchor="end">12–14 SPI · double-fell</text>
+            </g>
+
+            <!-- dimension line ±3mm under hem -->
+            <g stroke="var(--muted-ink)" stroke-width="1">
+              <line x1="162" y1="392" x2="278" y2="392" marker-start="url(#ah)" marker-end="url(#ah)"/>
+              <line x1="162" y1="386" x2="162" y2="398"/>
+              <line x1="278" y1="386" x2="278" y2="398"/>
+            </g>
+            <text x="220" y="410" font-size="8.5" letter-spacing="1" text-anchor="middle"
+              font-family="'IBM Plex Mono', monospace" fill="var(--muted-ink)">DIMENSIONAL TOLERANCE · ±3 mm · ALL POINTS</text>
+          </svg>
+          <div class="schem-cap">FIG.01 — Performance-module map · not to final pattern</div>
+        </div>
+
+        <div class="eng-copy reveal">
+          <h3>Manufacturing precision</h3>
+          <p>Stitch density held at 12–14 SPI across every structural seam. Critical stress points reinforced with double-fell construction as a minimum. Each seam class is pulled to ISO 13934-1 tensile protocol, and every batch is sampled against a dimensional spec sheet — tolerances enforced to ±3 mm on all measured points.</p>
+
+          <h3>Material system</h3>
+          <p>A laminate shell built to an ISO 811 floor, paired with a moisture-vapour transmission target so the membrane breathes as hard as it blocks. Face denier and weave remain open spec while testing closes — published only once the number is real. Honest blanks beat invented ones.</p>
+
+          <div class="plate-stack" style="margin-top:1.8rem;">
+            <div class="plate">
+              <div class="plate-ref"><span class="xmark"></span><span>Spec · seam density</span></div>
+              <div class="plate-val">12–14<span class="u">SPI</span></div>
+              <div class="plate-note">all load-bearing seam classes</div>
+            </div>
+            <div class="plate">
+              <div class="plate-ref"><span class="xmark"></span><span>Spec · QC tolerance</span></div>
+              <div class="plate-val">±3<span class="u">mm</span></div>
+              <div class="plate-note">batch QC · every measured point</div>
+            </div>
+          </div>
+
+          <div class="chips">
+            <span class="chip">ISO 811</span>
+            <span class="chip">ISO 13934-1</span>
+            <span class="chip">ASTM D4966</span>
+            <span class="chip">ISO 11092</span>
+            <span class="chip">Thermal zone −5→+22°C</span>
+            <span class="chip">Modular insulation</span>
           </div>
         </div>
       </div>
     </div>
+  </section>
 
-    <div class="fu" style="border:1px solid var(--b0);border-top:none;background:var(--bg0);padding:28px 36px;margin-bottom:2px;">
-      <p class="mono" style="font-size:9px;letter-spacing:.18em;color:var(--t2);text-transform:uppercase;margin-bottom:22px;">Technical Capability Stack</p>
-      <div class="gauto">
-        <div><p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;letter-spacing:.12em;">Product &amp; Agile</p><div class="stg"><span class="tag">Jira</span><span class="tag">Azure DevOps</span><span class="tag">Confluence</span><span class="tag">Figma</span><span class="tag">RICE / MoSCoW</span><span class="tag">Scrum</span><span class="tag">Backlog Mgmt</span><span class="tag">Wireframing</span></div></div>
-        <div><p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;letter-spacing:.12em;">Enterprise Systems</p><div class="stg"><span class="tag">SAP</span><span class="tag">Oracle ERP</span><span class="tag">Salesforce</span><span class="tag">AWS</span><span class="tag">Azure</span><span class="tag">T2 Systems</span><span class="tag">VDI</span></div></div>
-        <div><p class="mono" style="font-size:10px;color:var(--ac);text-transform:uppercase;letter-spacing:.12em;">Data &amp; Analytics</p><div class="stg"><span class="tag">SQL</span><span class="tag">Python</span><span class="tag">Power BI</span><span class="tag">Tableau</span><span class="tag">Excel / VBA</span><span class="tag">A/B Testing</span><span class="tag">KPI Tracking</span></div></div>
+  <!-- ===================== 04 QUALITY SPEC ===================== -->
+  <section class="section" aria-labelledby="qual-h">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="eyebrow"><span class="xmark"></span>Section 04 / Quality specification</div>
+        <h2 class="h-sec" id="qual-h">Measured, not marketed.</h2>
+        <p class="lead">A performance claim is quantified against a standardized test or it does not exist. Every target below is a floor, not an aspiration — and every floor maps to a named protocol that anyone can check.</p>
+      </div>
+
+      <div class="std-row reveal">
+        <span class="chip">ISO 811 — Water resistance</span>
+        <span class="chip">ISO 13934-1 — Tensile</span>
+        <span class="chip">ASTM D4966 — Abrasion</span>
+        <span class="chip">ISO 6941 — Seam integrity</span>
+        <span class="chip">AATCC 135 — Dimensional</span>
+      </div>
+
+      <table class="spectable reveal">
+        <thead>
+          <tr><th>Property</th><th>Protocol</th><th style="text-align:right;">Target floor</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="metric">Hydrostatic pressure resistance</td>
+            <td class="proto">ISO 811 · water column</td>
+            <td class="target">≥ 15,000<span class="u">mm</span></td>
+          </tr>
+          <tr>
+            <td class="metric">Moisture vapour transmission</td>
+            <td class="proto">ISO 11092 · g/m²/24h</td>
+            <td class="target">≥ 10,000<span class="u">g</span></td>
+          </tr>
+          <tr>
+            <td class="metric">Abrasion resistance — face fabric</td>
+            <td class="proto">ASTM D4966 · Martindale</td>
+            <td class="target">≥ <span data-count-to="50000">50,000</span><span class="u">cy</span></td>
+          </tr>
+          <tr>
+            <td class="metric">Stitch density — structural seams</td>
+            <td class="proto">SPI · stitches per inch</td>
+            <td class="target">12–14<span class="u">SPI</span></td>
+          </tr>
+          <tr>
+            <td class="metric">Seam tensile strength</td>
+            <td class="proto">ISO 13934-1 · Newtons</td>
+            <td class="target">≥ 450<span class="u">N</span></td>
+          </tr>
+          <tr>
+            <td class="metric">DWR retention — post 20 washes</td>
+            <td class="proto">AATCC 22 · rating /100</td>
+            <td class="target">≥ 80<span class="u">/100</span></td>
+          </tr>
+          <tr>
+            <td class="metric">Lifecycle durability target</td>
+            <td class="proto">Simulated wear · urban profile</td>
+            <td class="target">7+<span class="u">yrs</span></td>
+          </tr>
+          <tr>
+            <td class="metric">Dimensional tolerance — all points</td>
+            <td class="proto">Batch QC · mm deviation</td>
+            <td class="target">±3<span class="u">mm</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================== 05 PROVENANCE (paper insert) ===================== -->
+  <section class="section section--paper" aria-labelledby="prov-h">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="eyebrow"><span class="xmark"></span>Section 05 / Provenance</div>
+        <h2 class="h-sec" id="prov-h">Built in Sircilla. On five thousand<br>years of textile authority.</h2>
+        <p class="lead prov-lead">Before the Industrial Revolution, the subcontinent clothed the world. This brand doesn't borrow that heritage as decoration — it industrialises the part of it that was always engineering.</p>
+      </div>
+
+      <div class="prov-block reveal">
+        <p>Indian cotton set the global standard for centuries. <em>Calico</em> took its name from Calicut; <em>chintz</em> from the Hindi word for "sprinkled." The finest muslin out of Dhaka was so sheer that traders reached for physics, not adjectives, to grade it — woven air, flowing water, evening dew. Those were thread-count classifications: performance, described precisely, long before anyone called it a spec. India still operates the largest handloom sector on Earth. The discipline never left; it was waiting for new tools.</p>
+      </div>
+
+      <div class="heritage-row reveal">
+        <div class="heritage-cell">
+          <div class="v">~5,000<span style="font-size:.5em;"> yrs</span></div>
+          <div class="k">Continuous cotton craft —<br>Indus Valley to this morning</div>
+        </div>
+        <div class="heritage-cell">
+          <div class="v">4.3M</div>
+          <div class="k">Handloom households —<br>the largest such sector anywhere</div>
+        </div>
+        <div class="heritage-cell">
+          <div class="v">Indigo</div>
+          <div class="k">India's signature dye and export —<br>the heritage thread in this brand's palette</div>
+        </div>
+      </div>
+
+      <div class="prov-block reveal">
+        <h3>The anchor: Sircilla, Telangana</h3>
+        <p>System Threads anchors at 18.3851° N, 78.8232° E — Sircilla, one of India's most concentrated powerloom economies and a town whose identity is inseparable from cloth. More than 40,000 looms run here, worked by a weaving community whose craft is generational. The cluster already produces at national scale: on government order it turns out on the order of ten million metres of festival saree cloth a year. Capability is not the open question. What this base has never been pointed at is engineered technical outerwear for export — which is precisely the gap this brand industrialises.</p>
+      </div>
+
+      <div class="heritage-row reveal">
+        <div class="heritage-cell">
+          <div class="v">40,000+</div>
+          <div class="k">Powerlooms in the Sircilla cluster —<br>Telangana's largest textile hub</div>
+        </div>
+        <div class="heritage-cell">
+          <div class="v">~10M<span style="font-size:.5em;"> m/yr</span></div>
+          <div class="k">Proven cluster output —<br>demonstrated production capacity</div>
+        </div>
+        <div class="heritage-cell">
+          <div class="v">~340<span style="font-size:.5em;"> km</span></div>
+          <div class="k">To Chennai (MAA) port —<br>export logistics in reach</div>
+        </div>
+      </div>
+
+      <div class="prov-block reveal">
+        <h3>This is a tailwind, not nostalgia</h3>
+        <p>India's technical-textiles sector is roughly a US$29 billion market — the fifth largest in the world, and a net exporter since 2021. National programmes are pushing hard in exactly this direction: the National Technical Textiles Mission and the PM MITRA mega-park scheme (Telangana among the chosen states) are explicitly building the country into a global leader in performance fabric, including phase-change thermal systems engineered for variable climates — the same problem this brand specifies against. Heritage supplies the craft base. Policy supplies the momentum. System Threads supplies the engineering discipline and the brand.</p>
+      </div>
+
+      <div class="prov-sub reveal">
+        <div class="col">
+          <h3>Existing skill base</h3>
+          <p>Generational expertise in fabric construction, loom calibration and finishing — retrainable to technical-outerwear standards with targeted upskilling in seam engineering and quality-control systems.</p>
+        </div>
+        <div class="col">
+          <h3>Modernization intent</h3>
+          <p>Phased introduction of automated cutting, CAD pattern digitization and ISO-aligned QC infrastructure. This augments existing capability; it does not replace the people who hold it.</p>
+        </div>
+        <div class="col">
+          <h3>Vertical-integration target</h3>
+          <p>A consolidated facility — raw-material processing, lamination, cut-and-sew and QA inside one controlled environment. Less variability, shorter lead times, tighter tolerance enforcement.</p>
+        </div>
       </div>
     </div>
+  </section>
 
-    <div class="fu" style="border:1px solid var(--b0);border-top:none;background:var(--bg2);padding:28px 36px;margin-bottom:2px;">
-      <p class="mono" style="font-size:9px;letter-spacing:.18em;color:var(--t2);text-transform:uppercase;margin-bottom:24px;">Operational Deployments — 5+ Years</p>
-      <div class="er">
-        <div><p class="mono" style="font-size:10px;color:var(--ac);">Jan 2024 – Dec 2025</p><p class="mono" style="font-size:9px;color:var(--t2);margin-top:3px;">Cleveland, OH</p></div>
-        <div>
-          <p style="font-size:14px;color:var(--t0);font-weight:400;margin-bottom:2px;">Business Systems Analyst</p>
-          <p class="mono" style="font-size:11px;color:var(--t1);margin-bottom:12px;">Cleveland State University</p>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Owned end-to-end operations for multi-platform enterprise parking ecosystem (T2 Systems SaaS, LPR cameras, custom web apps) serving 5,000+ daily users — improved operational efficiency 30%</p></div>
-            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Reduced average incident resolution time 75% (48h → 12h) via systems analysis, workflow audits, and data-driven process redesign</p></div>
-            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Maintained 99.5%+ system uptime for 15,000+ campus users; reduced support ticket volume 40% through documentation and self-service tooling</p></div>
-          </div>
-        </div>
-        <div class="etg"><span class="tag tac">Enterprise SaaS</span><span class="tag">Agile / Scrum</span><span class="tag">Stakeholder Mgmt</span></div>
+  <!-- ===================== 06 ROADMAP / GTM (paper) ===================== -->
+  <section class="section section--paper" id="roadmap" aria-labelledby="road-h" style="border-top:1px solid var(--line-light);">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="eyebrow"><span class="xmark"></span>Section 06 / Roadmap &amp; go-to-market</div>
+        <h2 class="h-sec" id="road-h">Three phases. Each gate-controlled.</h2>
+        <p class="lead">No phase accelerates without evidence from the one before it. The go-to-market is deliberately narrow first — direct to professionals, SKU-controlled — and widens only once the unit economics and the quality data clear their gates.</p>
       </div>
-      <div class="er">
-        <div><p class="mono" style="font-size:10px;color:var(--ac);">Nov 2022 – Jul 2023</p><p class="mono" style="font-size:9px;color:var(--t2);margin-top:3px;">Hyderabad, India</p></div>
-        <div>
-          <p style="font-size:14px;color:var(--t0);font-weight:400;margin-bottom:2px;">Solutions Analyst</p>
-          <p class="mono" style="font-size:11px;color:var(--t1);margin-bottom:12px;">Aerotronic Technologies</p>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Translated enterprise requirements into technical specifications for aerospace/defense products — temperature sensors, wiring harnesses, CNC-machined components</p></div>
-            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Competitive analysis across industrial, railway, and aerospace segments contributed to 25% enterprise revenue growth</p></div>
+
+      <div class="phases reveal">
+        <!-- phase 1 -->
+        <div class="phase">
+          <div class="phase-meta">
+            <div class="ph-no">01</div>
+            <div class="ph-name">Validation</div>
+            <div class="ph-when">2026 — active</div>
+            <div class="status"><span class="dot live"></span>Active phase</div>
+          </div>
+          <div>
+            <ul class="steps">
+              <li><span class="ar">→</span><span>Market-signal collection — professional interviews, wardrobe-audit data, size-curve research.</span></li>
+              <li><span class="ar">→</span><span>Vendor assessment in Sircilla — capability audit, stitch-quality sampling, compliance check.</span></li>
+              <li><span class="ar">→</span><span>Prototype build: 3 silhouettes × 2 fabric systems, with internal destructive testing.</span></li>
+              <li><span class="ar">→</span><span>Brand-system architecture — positioning, visual language, spec-sheet framework.</span></li>
+            </ul>
+            <div class="gate"><b>GATE</b><span>Prototype approval + 2 confirmed production partners.</span></div>
           </div>
         </div>
-        <div class="etg"><span class="tag">Aerospace / Defense</span><span class="tag">Req. Engineering</span></div>
-      </div>
-      <div class="er">
-        <div><p class="mono" style="font-size:10px;color:var(--ac);">Sep 2021 – Nov 2022</p><p class="mono" style="font-size:9px;color:var(--t2);margin-top:3px;">Hyderabad, India</p></div>
-        <div>
-          <p style="font-size:14px;color:var(--t0);font-weight:400;margin-bottom:2px;">IT Systems Analyst</p>
-          <p class="mono" style="font-size:11px;color:var(--t1);margin-bottom:12px;">Ampler Technologies Pvt Ltd</p>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Delivered cloud migration (AWS/Azure), VDI, networking and endpoint security solutions to 50+ enterprise clients</p></div>
-            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Expanded solution portfolio via OEM onboarding; informed product positioning through usage analysis and market research</p></div>
+
+        <!-- phase 2 -->
+        <div class="phase">
+          <div class="phase-meta">
+            <div class="ph-no">02</div>
+            <div class="ph-name">Controlled production</div>
+            <div class="ph-when">2026–27 — pending</div>
+            <div class="status"><span class="dot"></span>Pending gate 01</div>
+          </div>
+          <div>
+            <ul class="steps">
+              <li><span class="ar">→</span><span>Initial run: 150–300 units, SKU-controlled, direct-to-professional distribution (US / EU).</span></li>
+              <li><span class="ar">→</span><span>Dimensional QC — 100% batch inspection against tolerance spec, ±3 mm on all points.</span></li>
+              <li><span class="ar">→</span><span>Post-purchase feedback loop — structured 90-day and 180-day user-data collection.</span></li>
+              <li><span class="ar">→</span><span>Financial-model validation — landed cost, margin stack, pricing elasticity by market.</span></li>
+            </ul>
+            <div class="gate"><b>GATE</b><span>≥85% QC pass rate + positive unit economics confirmed.</span></div>
           </div>
         </div>
-        <div class="etg"><span class="tag">Cloud / Infra</span><span class="tag">AWS · Azure</span></div>
-      </div>
-      <div class="er" style="border-bottom:none;">
-        <div><p class="mono" style="font-size:10px;color:var(--ac);">Dec 2019 – Aug 2021</p><p class="mono" style="font-size:9px;color:var(--t2);margin-top:3px;">Bangalore, India</p></div>
-        <div>
-          <p style="font-size:14px;color:var(--t0);font-weight:400;margin-bottom:2px;">Product Analyst</p>
-          <p class="mono" style="font-size:11px;color:var(--t1);margin-bottom:12px;">Well Ergon</p>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Built integrated workplace wellness product ecosystem via strategic tech partnerships — Freespace, Dormakaba, Shycocan</p></div>
-            <div style="display:flex;gap:9px;"><span class="mono" style="color:var(--ac);font-size:10px;flex-shrink:0;margin-top:2px;">→</span><p style="color:var(--t1);font-size:13px;line-height:1.6;">Drove 35% increase in enterprise client base through market research, competitive positioning, and stakeholder-driven requirements translation</p></div>
+
+        <!-- phase 3 -->
+        <div class="phase">
+          <div class="phase-meta">
+            <div class="ph-no">03</div>
+            <div class="ph-name">Vertical integration</div>
+            <div class="ph-when">2028–30 — planned</div>
+            <div class="status"><span class="dot"></span>Planned</div>
+          </div>
+          <div>
+            <ul class="steps">
+              <li><span class="ar">→</span><span>Consolidated Sircilla facility — fabric treatment, lamination, cut-and-sew, finishing under one roof.</span></li>
+              <li><span class="ar">→</span><span>Automated CAD/CAM cutting — ±1.5 mm tolerance target on critical seams.</span></li>
+              <li><span class="ar">→</span><span>Proprietary fabric blends with regional fibre suppliers; IP registration.</span></li>
+              <li><span class="ar">→</span><span>Export infrastructure — FTZ registration, CE compliance, B2B wholesale activation.</span></li>
+            </ul>
+            <div class="gate"><b>GATE</b><span>Series A or strategic partnership closed.</span></div>
           </div>
         </div>
-        <div class="etg"><span class="tag">Product Strategy</span><span class="tag">Smart Office / IoT</span></div>
       </div>
     </div>
+  </section>
 
-    <div class="fu" style="border:1px solid var(--b0);border-top:none;padding:22px 36px;display:flex;justify-content:space-between;align-items:center;background:var(--acg);flex-wrap:wrap;gap:18px;">
-      <div>
-        <p class="mono" style="font-size:10px;color:var(--t2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;">Seeking — Product Owner · Business Systems · Product Operations</p>
-        <p style="font-size:13px;color:var(--t1);">Available for high-growth environments where systems thinking, operational rigor, and engineering fluency are non-negotiable.</p>
-      </div>
-      <div style="display:flex;gap:10px;flex-shrink:0;">
-        <a href="mailto:sumithgorityala23@gmail.com"><button class="fb">Email</button></a>
-        <a href="https://www.linkedin.com/in/sumith-gorityala-318574192" target="_blank"><button class="fbg">LinkedIn →</button></a>
+  <!-- ===================== 07 LAUNCH / NOTIFY ===================== -->
+  <section class="section" id="notify" aria-labelledby="launch-h">
+    <div class="wrap">
+      <div class="sec-head reveal" style="margin-bottom:0;">
+        <div class="eyebrow"><span class="xmark"></span>Section 07 / Launch status</div>
+        <h2 class="h-sec" id="launch-h">Launching 2027.<br>Building deliberately.</h2>
+        <p class="lead">No race to market. Every phase is gated on validated output. No previews, no hype — a specification update lands when each gate closes. Register for those updates only.</p>
+
+        <form class="notify" id="notifyForm" novalidate>
+          <div class="field">
+            <input type="text" id="nameInput" name="name" placeholder="Full name (optional)" autocomplete="name" aria-label="Full name (optional)" />
+            <input type="email" id="emailInput" name="email" placeholder="engineer@domain.com" autocomplete="email" aria-label="Email address" required />
+            <button class="btn btn-primary" type="submit">Register</button>
+          </div>
+          <p class="notice" id="notifyNote">No marketing. Specification updates only.</p>
+        </form>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ══ FOOTER ═════════════════════════════════════════════ -->
+  <!-- ===================== 08 OPERATOR ===================== -->
+  <section class="section" aria-labelledby="op-h">
+    <div class="wrap">
+      <div class="sec-head reveal" style="margin-bottom:2.2rem;">
+        <div class="eyebrow"><span class="xmark"></span>Section 08 / Operator</div>
+        <h2 class="h-sec" id="op-h">The operator behind the system.</h2>
+      </div>
+      <div class="operator reveal">
+        <div>
+          <div class="op-name">Sumith Gorityala</div>
+          <div class="op-role">Product operations · business systems · data-driven solutions</div>
+        </div>
+        <p class="muted" style="max-width:42ch; margin:0;">System Threads is designed and led by a product-and-systems operator who spends his day job turning complex technical requirements into structured, scalable solutions. Same methodology, applied to outerwear.</p>
+        <a class="btn btn-ghost" href="https://sumithgorityala.com" target="_blank" rel="noopener">Full background → portfolio</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
 <footer>
-  <div class="fi2">
-    <div><p class="wm" style="font-size:12px;margin-bottom:7px;">SYSTEM THREADS™</p><p class="mono" style="font-size:10px;color:var(--t2);">Engineered Outerwear · Pre-Launch 2026</p></div>
-    <div style="text-align:center;"><p class="mono" style="font-size:10px;color:var(--t2);line-height:1.9;">sumithgorityala23@gmail.com<br> US | IN | UK <br>Designed for Global Markets</p></div>
-    <div style="text-align:right;"><p class="mono" style="font-size:10px;color:var(--t2);line-height:1.9;">US · EU · IN<br>Brand System v0.1 · 2026<br>All rights reserved</p></div>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <span class="brandmark">SYSTEM THREADS<sup>™</sup></span>
+        <div class="foot-tagline">Engineered outerwear · pre-launch · building deliberately</div>
+      </div>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="#problem">Problem</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#notify">Notify</a>
+        <a href="https://sumithgorityala.com" target="_blank" rel="noopener">Portfolio</a>
+      </nav>
+    </div>
+    <div class="foot-bot">
+      <span>Designed for global markets · US · EU · IN</span>
+      <span>Brand System v0.2 · 2026 · All rights reserved</span>
+    </div>
   </div>
 </footer>
 
-<style>
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
-</style>
-
 <script>
-'use strict';
+  (function(){
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ══════════════════════════════════════════════════════
-   APPS SCRIPT FORM SUBMISSION
-   ─────────────────────────────────────────────────────
-   1. Go to Google Sheets → Extensions → Apps Script
-   2. Paste the doPost function provided
-   3. Deploy → New Deployment → Web App
-      Execute as: Me | Who has access: Anyone
-   4. Copy the Web App URL and paste it below
-══════════════════════════════════════════════════════ */
-var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-XkuezGgFPDupAyI8zJfbBlTzcu1sNPvaAfQ7L3bmPDe7sBcSwbmhjgr-GxQ27OSd1w/exec';
-
-function submitForm(prefix) {
-  var nameEl    = document.getElementById(prefix + '-name');
-  var emailEl   = document.getElementById(prefix + '-email');
-  var btnEl     = document.getElementById(prefix + '-btn');
-  var wrapEl    = document.getElementById(prefix + '-form-wrap');
-  var successEl = document.getElementById(prefix + '-success');
-  var errorEl   = document.getElementById(prefix + '-error');
-  var errMsgEl  = document.getElementById(prefix + '-err-msg');
-
-  // Validate email
-  var email = emailEl ? emailEl.value.trim() : '';
-  if (!email || !email.includes('@') || !email.includes('.')) {
-    if (emailEl) {
-      emailEl.style.borderColor = '#c07878';
-      emailEl.focus();
-      setTimeout(function(){ emailEl.style.borderColor = ''; }, 2000);
-    }
-    return;
-  }
-
-  // Loading state
-  btnEl.textContent = '···';
-  btnEl.disabled = true;
-  if (errorEl) errorEl.style.display = 'none';
-
-  var payload = JSON.stringify({
-    fullname: (nameEl && nameEl.value.trim()) ? nameEl.value.trim() : 'Not Provided',
-    email: email
-  });
-
-  fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: payload
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    if (data.result === 'success') {
-      if (wrapEl)    wrapEl.style.display    = 'none';
-      if (successEl) successEl.style.display = 'block';
+    /* ---- scroll reveals ---- */
+    var reveals = document.querySelectorAll('.reveal');
+    if (reduce || !('IntersectionObserver' in window)){
+      reveals.forEach(function(el){ el.classList.add('in'); });
     } else {
-      throw new Error(data.message || 'Server error');
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { threshold:0.12, rootMargin:'0px 0px -8% 0px' });
+      reveals.forEach(function(el){ io.observe(el); });
     }
-  })
-  .catch(function(err) {
-    btnEl.textContent = prefix === 'hero' ? 'Register' : 'Notify Me';
-    btnEl.disabled = false;
-    if (errorEl)  errorEl.style.display = 'block';
-    if (errMsgEl) errMsgEl.textContent  = 'Submission failed — ' + err.message;
-  });
-}
 
-/* ── Custom Cursor ────────────────────────────────────── */
-(function(){
-  var cur = document.getElementById('cursor');
-  var ring = document.getElementById('cursor-ring');
-  var mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',function(e){
-    mx=e.clientX; my=e.clientY;
-    cur.style.left=mx+'px'; cur.style.top=my+'px';
-  },{passive:true});
-  function followRing(){
-    rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
-    ring.style.left=rx+'px'; ring.style.top=ry+'px';
-    requestAnimationFrame(followRing);
-  }
-  followRing();
-  document.querySelectorAll('a,button,input').forEach(function(el){
-    el.addEventListener('mouseenter',function(){
-      cur.style.width='4px'; cur.style.height='4px';
-      ring.style.width='48px'; ring.style.height='48px';
-    });
-    el.addEventListener('mouseleave',function(){
-      cur.style.width='8px'; cur.style.height='8px';
-      ring.style.width='32px'; ring.style.height='32px';
-    });
-  });
-})();
-
-/* ── Hero Canvas Grid ─────────────────────────────────── */
-(function(){
-  var cv=document.getElementById('hcv');
-  if(!cv)return;
-  var ctx=cv.getContext('2d');
-  var W,H,fr=0;
-  function rsz(){W=cv.width=cv.offsetWidth||window.innerWidth;H=cv.height=cv.offsetHeight||window.innerHeight;}
-  function drw(){
-    ctx.clearRect(0,0,W,H);
-    var cell=60,t=fr*0.0025,cols=Math.ceil(W/cell)+1,rows=Math.ceil(H/cell)+1;
-    ctx.strokeStyle='rgba(30,33,40,0.8)';ctx.lineWidth=1;
-    for(var x=0;x<=cols;x++){ctx.beginPath();ctx.moveTo(x*cell,0);ctx.lineTo(x*cell,H);ctx.stroke();}
-    for(var y=0;y<=rows;y++){ctx.beginPath();ctx.moveTo(0,y*cell);ctx.lineTo(W,y*cell);ctx.stroke();}
-    for(var x=0;x<=cols;x++){for(var y=0;y<=rows;y++){
-      var v=Math.sin(t+x*0.45+y*0.3);
-      if(v>0.86){ctx.beginPath();ctx.arc(x*cell,y*cell,1.5,0,Math.PI*2);
-        ctx.fillStyle='rgba(124,154,181,'+(((v-0.86)/0.14)*0.55)+')';ctx.fill();}
-    }}
-    var sx=((fr*0.35)%(W+200))-100;
-    var sg=ctx.createLinearGradient(sx-80,0,sx+80,0);
-    sg.addColorStop(0,'rgba(124,154,181,0)');sg.addColorStop(.5,'rgba(124,154,181,0.022)');sg.addColorStop(1,'rgba(124,154,181,0)');
-    ctx.fillStyle=sg;ctx.fillRect(sx-80,0,160,H);
-    var fg=ctx.createLinearGradient(0,H*.35,0,H);
-    fg.addColorStop(0,'rgba(9,9,11,0)');fg.addColorStop(1,'rgba(9,9,11,1)');
-    ctx.fillStyle=fg;ctx.fillRect(0,0,W,H);
-    fr++;requestAnimationFrame(drw);
-  }
-  window.addEventListener('resize',rsz);rsz();drw();
-})();
-
-/* ── Scroll Engine ────────────────────────────────────── */
-var bindings=[];
-function bind(el,fn){if(el)bindings.push({el:el,fn:fn});}
-var ticking=false;
-function onScroll(){
-  if(!ticking){
-    requestAnimationFrame(function(){
-      var vh=window.innerHeight;
-      bindings.forEach(function(b){
-        var r=b.el.getBoundingClientRect();
-        var raw=(vh-r.top)/(vh+r.height);
-        b.fn(Math.max(0,Math.min(1,raw)),r,vh);
-      });
-      ticking=false;
-    });
-    ticking=true;
-  }
-}
-window.addEventListener('scroll',onScroll,{passive:true});
-setTimeout(onScroll,100);
-
-/* ── Hero Photo Parallax ──────────────────────────────── */
-(function(){
-  var hp=document.getElementById('hero-photo');
-  bind(hp,function(p){hp.style.transform='translateY('+(p*60)+'px)';});
-})();
-
-/* ── STAT ZOOM ────────────────────────────────────────── */
-function makeStatZoom(sceneId,numId,unitId,descId,preId){
-  var scene=document.getElementById(sceneId);
-  var num=document.getElementById(numId);
-  var unit=document.getElementById(unitId);
-  var desc=document.getElementById(descId);
-  var pre=preId?document.getElementById(preId):null;
-  if(!scene||!num)return;
-  bind(scene,function(p){
-    var scale,opNum,opSub;
-    if(p<0.08){scale=0.25;opNum=0;opSub=0;}
-    else if(p<0.35){var pp=(p-0.08)/0.27;scale=0.25+pp*0.75;opNum=pp;opSub=0;}
-    else if(p<0.6){scale=1;opNum=1;opSub=Math.min(1,(p-0.35)/0.15);}
-    else if(p<0.85){var pp=(p-0.6)/0.25;scale=1+pp*4.5;opNum=1-pp*1.3;opSub=1-pp;}
-    else{scale=5.5;opNum=0;opSub=0;}
-    num.style.transform='scale('+Math.max(0.1,scale)+')';
-    num.style.opacity=Math.max(0,opNum);
-    if(unit){unit.style.opacity=Math.max(0,opSub);}
-    if(desc){desc.style.opacity=Math.max(0,opSub*0.8);}
-    if(pre){pre.style.opacity=Math.max(0,opNum);}
-  });
-}
-makeStatZoom('stat1','s1-num','s1-unit','s1-desc');
-makeStatZoom('stat2','s2-num','s2-unit','s2-desc','s2-pre');
-makeStatZoom('stat3','s3-num','s3-unit','s3-desc');
-makeStatZoom('stat4','s4-num','s4-unit','s4-desc');
-
-/* ── Engineering Story ────────────────────────────────── */
-(function(){
-  var scene=document.getElementById('eng-scene');
-  if(!scene)return;
-  var chapters=[
-    {num:'01 / 04 — MATERIAL SCIENCE',title:'Material Science',
-     body:'Fabric selection driven by measurable performance matrices: hydrostatic pressure resistance (≥15,000mm), moisture vapor transmission rate (MVTR ≥10,000 g/m²/24h), and UV degradation coefficients. No material enters the spec until lab-validated against ISO standards. Face fabric, membrane, and backer treated as a laminated system — not individual layers.',
-     tags:['Laminate Architecture','DWR Chemistry','Fiber Denier Optimization'],spec:'≥15,000mm',specLbl:'ISO 811',photoId:'ep0'},
-    {num:'02 / 04 — PATTERN ENGINEERING',title:'Pattern Engineering',
-     body:'Construction patterns derived from motion-capture data of urban use cases: seated transit, cycling posture, shoulder bag load distribution, elevated arm reach. Seam placement calculated around strain axes, not aesthetic convention. Pattern grading accounts for thermal expansion of composite fabrics across a −5°C to +22°C operating window.',
-     tags:['Ergonomic Seam Mapping','Motion Axis Analysis','Grade Logic'],spec:'±3mm',specLbl:'Dimensional Tolerance',photoId:'ep1'},
-    {num:'03 / 04 — CLIMATE ADAPTATION',title:'Climate Adaptation',
-     body:'Each garment addresses a defined thermal band with modular extension capability. Ventilation zones positioned at mapped heat-flux points. Insulation baffles follow body heat distribution models, not symmetrical aesthetic grids. Target operative temperature range is treated as a specification requirement, not a marketing claim.',
-     tags:['Thermal Band Zoning','Venting Architecture','Modular Insulation'],spec:'−5°C to +22°C',specLbl:'Operating Window',photoId:'ep2'},
-    {num:'04 / 04 — MANUFACTURING PRECISION',title:'Manufacturing Precision',
-     body:'Stitch density targets of 12–14 SPI across all structural seams. Critical stress points reinforced with double-fell construction minimum. ISO 13934-1 tensile testing protocols applied at each seam class. Every batch sampled against a dimensional spec sheet — tolerances held to ±3mm on all measured points across the garment.',
-     tags:['SPI Standards','ISO 13934-1','Dimensional QC Protocol'],spec:'12–14 SPI',specLbl:'Stitch Density',photoId:'ep3'}
-  ];
-  var numEl=document.getElementById('eng-chapter-num');
-  var titleEl=document.getElementById('eng-title');
-  var bodyEl=document.getElementById('eng-body');
-  var tagsEl=document.getElementById('eng-tags');
-  var specValEl=document.getElementById('eng-spec-val');
-  var specLblEl=document.getElementById('eng-spec-lbl');
-  var progressFill=document.getElementById('eng-progress-fill');
-  var dots=[document.getElementById('edot0'),document.getElementById('edot1'),
-            document.getElementById('edot2'),document.getElementById('edot3')];
-  var currentChapter=-1;
-
-  function setChapter(idx){
-    if(idx===currentChapter)return;
-    currentChapter=idx;
-    var ch=chapters[idx];
-    var els=[numEl,titleEl,bodyEl,tagsEl,specValEl];
-    els.forEach(function(el){if(el){el.style.opacity='0';el.style.transform='translateY(12px)';}});
-    setTimeout(function(){
-      if(numEl)numEl.textContent=ch.num;
-      if(titleEl)titleEl.textContent=ch.title;
-      if(bodyEl)bodyEl.textContent=ch.body;
-      if(tagsEl){tagsEl.innerHTML='';ch.tags.forEach(function(t){var s=document.createElement('span');s.className='tag';s.textContent=t;tagsEl.appendChild(s);});}
-      if(specValEl)specValEl.textContent=ch.spec;
-      if(specLblEl)specLblEl.textContent=ch.specLbl;
-      chapters.forEach(function(c,i){var ph=document.getElementById(c.photoId);if(ph){ph.classList.toggle('visible',i===idx);}});
-      dots.forEach(function(d,i){if(d)d.classList.toggle('a',i===idx);});
-      setTimeout(function(){
-        els.forEach(function(el){if(el){el.style.transition='opacity .5s ease,transform .5s ease';el.style.opacity='1';el.style.transform='none';}});
-      },30);
-    },220);
-  }
-
-  function zoomPhoto(photoId,p){
-    var img=document.querySelector('#'+photoId+' img');
-    if(img){img.style.transform='scale('+(1.15-p*0.15)+')';}
-  }
-
-  bind(scene,function(p){
-    var chIdx=Math.min(3,Math.floor(p*4));
-    setChapter(chIdx);
-    if(progressFill)progressFill.style.width=(p*100)+'%';
-    var chP=(p*4)%1;
-    zoomPhoto(chapters[chIdx].photoId,chP);
-  });
-})();
-
-/* ── Sircilla Clip-path reveal ────────────────────────── */
-(function(){
-  var scene=document.querySelector('.sir-scene');
-  var inner=document.getElementById('sir-photo-inner');
-  var img=document.getElementById('sir-img');
-  if(!scene||!inner)return;
-  bind(scene,function(p){
-    var reveal=Math.min(1,p*3.5);
-    inner.style.clipPath='inset(0 '+(100-reveal*100)+'% 0 0)';
-    if(img){img.style.transform='scale('+(1.1-reveal*0.1)+')';}
-  });
-})();
-
-/* ── Closing Parallax ─────────────────────────────────── */
-(function(){
-  var cb=document.getElementById('closing-bg');
-  if(!cb)return;
-  bind(cb,function(p){cb.style.transform='translateY('+(p*-60)+'px)';});
-})();
-
-/* ── Fade-up on scroll ────────────────────────────────── */
-(function(){
-  var fels=document.querySelectorAll('.fu');
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(entries){
-      entries.forEach(function(e,i){
-        if(e.isIntersecting){setTimeout(function(){e.target.classList.add('on');},i*70);io.unobserve(e.target);}
-      });
-    },{threshold:0.07});
-    fels.forEach(function(el){io.observe(el);});
-  } else {fels.forEach(function(el){el.classList.add('on');});}
-})();
-
-/* ── Metric bars ──────────────────────────────────────── */
-(function(){
-  var mt=document.getElementById('mets');
-  if(!mt)return;
-  if('IntersectionObserver' in window){
-    var mio=new IntersectionObserver(function(entries){
-      if(entries[0].isIntersecting){
-        document.querySelectorAll('.mbf').forEach(function(b,i){setTimeout(function(){b.classList.add('go');},i*120);});
-        mio.disconnect();
+    /* ---- count-up for spec values ---- */
+    function fmt(n){ return n.toLocaleString('en-US'); }
+    function animateCount(el){
+      var target = parseInt(el.getAttribute('data-count-to'), 10);
+      if (isNaN(target)) return;
+      if (reduce){ el.textContent = fmt(target); return; }
+      var dur = 1150, start = null;
+      function step(ts){
+        if (!start) start = ts;
+        var p = Math.min((ts - start) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = fmt(Math.round(target * eased));
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = fmt(target);
       }
-    },{threshold:0.15});
-    mio.observe(mt);
-  } else {document.querySelectorAll('.mbf').forEach(function(b){b.classList.add('go');});}
-})();
+      requestAnimationFrame(step);
+    }
+    var counters = document.querySelectorAll('[data-count-to]');
+    if (reduce || !('IntersectionObserver' in window)){
+      counters.forEach(animateCount);
+    } else {
+      var co = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if (e.isIntersecting){ animateCount(e.target); co.unobserve(e.target); }
+        });
+      }, { threshold:0.6 });
+      counters.forEach(function(el){ co.observe(el); });
+    }
 
-/* ── Active nav ───────────────────────────────────────── */
-(function(){
-  var secs=document.querySelectorAll('section[id],div[id]');
-  var links=document.querySelectorAll('.nav-a');
-  if(!('IntersectionObserver' in window))return;
-  var nio=new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){
-        links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id);});
-      }
-    });
-  },{rootMargin:'-45% 0px -45% 0px'});
-  secs.forEach(function(s){if(s.id)nio.observe(s);});
-})();
+    /* ---- notify form: front-end confirmation only (no backend / no data exposed) ---- */
+    var form = document.getElementById('notifyForm');
+    if (form){
+      form.addEventListener('submit', function(ev){
+        ev.preventDefault();
+        var email = document.getElementById('emailInput');
+        var note = document.getElementById('notifyNote');
+        var val = (email.value || '').trim();
+        var valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+        if (!valid){
+          note.textContent = 'Enter a valid email to register for specification updates.';
+          note.classList.remove('ok');
+          email.focus();
+          return;
+        }
+        form.querySelector('.field').style.display = 'none';
+        note.innerHTML = '<span class="ok">Registered — REF logged.</span> Specification updates only. No marketing.';
+        note.classList.add('ok');
+      });
+    }
+  })();
 </script>
 </body>
 </html>
